@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Array | BiliSland</title><meta name="keywords" content="JS"><meta name="author" content="Ze-d"><meta name="copyright" content="Ze-d"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="JS中的数组每个槽位可以储存不同类型的数组,而且数组是动态大小的,会随着数据的添加自动增加. 创建数组let AR &#x3D;new Array(n);let AR &#x3D;new Array(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;);&#x2F;&#x2F;以对象的方式创建数组,new可以省略.let AR &#x3D;[&quot;a&quot;,&quot;b&quot;,&quot;c&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Array">
+<meta property="og:url" content="https://ze-d.github.io/2021/11/11/Array/index.html">
+<meta property="og:site_name" content="BiliSland">
+<meta property="og:description" content="JS中的数组每个槽位可以储存不同类型的数组,而且数组是动态大小的,会随着数据的添加自动增加. 创建数组let AR &#x3D;new Array(n);let AR &#x3D;new Array(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;);&#x2F;&#x2F;以对象的方式创建数组,new可以省略.let AR &#x3D;[&quot;a&quot;,&quot;b&quot;,&quot;c&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2021-11-11T10:48:47.000Z">
+<meta property="article:modified_time" content="2021-12-03T06:55:03.118Z">
+<meta property="article:author" content="Ze-d">
+<meta property="article:tag" content="JS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/icon.ico"><link rel="canonical" href="https://ze-d.github.io/2021/11/11/Array/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Array',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-12-03 14:55:03'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="BiliSland" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">34</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/upadte/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> Myself</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/%E5%85%B3%E4%BA%8E"><i class="fa-fw /about/"></i><span> 0</span></a></li><li><a class="site-page child" href="/butterfly%E4%B8%BB%E9%A2%98"><i class="fa-fw https://github.com/jerryc127/hexo-theme-butterfly/"></i><span> 1</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">BiliSland</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/upadte/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> Myself</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/%E5%85%B3%E4%BA%8E"><i class="fa-fw /about/"></i><span> 0</span></a></li><li><a class="site-page child" href="/butterfly%E4%B8%BB%E9%A2%98"><i class="fa-fw https://github.com/jerryc127/hexo-theme-butterfly/"></i><span> 1</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Array</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-11-11T10:48:47.000Z" title="发表于 2021-11-11 18:48:47">2021-11-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-03T06:55:03.118Z" title="更新于 2021-12-03 14:55:03">2021-12-03</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Array"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p> JS中的数组每个槽位可以储存不同类型的数组,而且数组是动态大小的,会随着数据的添加自动增加.</p>
+<h3 id="创建数组"><a href="#创建数组" class="headerlink" title="创建数组"></a>创建数组</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> AR =<span class="keyword">new</span> <span class="built_in">Array</span>(n);</span><br><span class="line"><span class="keyword">let</span> AR =<span class="keyword">new</span> <span class="built_in">Array</span>(<span class="string">&quot;a&quot;</span>,<span class="string">&quot;b&quot;</span>,<span class="string">&quot;c&quot;</span>);<span class="comment">//以对象的方式创建数组,new可以省略.</span></span><br><span class="line"><span class="keyword">let</span> AR =[<span class="string">&quot;a&quot;</span>,<span class="string">&quot;b&quot;</span>,<span class="string">&quot;c&quot;</span>];<span class="comment">//数组字面量的方法</span></span><br></pre></td></tr></table></figure>
+
+<p>ES6中提供了两种创建数组的静态方法:form&amp;of.</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> AR=<span class="built_in">Array</span>.from(object, mapFunction, thisValue)</span><br></pre></td></tr></table></figure>
+
+<p>第一个参数是类数组对象,<strong>即任何可迭代的结构或者是一个有length属性和可索引元素的结构</strong></p>
+<p>第二个参数相当于map方法,这样就不必要创建中间数组Array.from().map().</p>
+<p>第三个参数用于指定map方法中this的值,注意不可以在箭头函数里重写this的值.</p>
+<h3 id="迭代器方法"><a href="#迭代器方法" class="headerlink" title="迭代器方法"></a>迭代器方法</h3><p>ES6中Array原型上有三个用于检索数组内容的方法:keys();values();entries();</p>
+<p><strong>keys()返回数组索引的迭代器;values()返回数组元素的迭代器;entries()返回索引/值对的迭代器</strong></p>
+<h3 id="复制和填充方法"><a href="#复制和填充方法" class="headerlink" title="复制和填充方法"></a>复制和填充方法</h3><p><strong>批量复制方法</strong>:fill(a,b,c):参数包括填充的数据,起始位置,终止位置.</p>
+<p>如果未指定起始终止位置,默认为全填充</p>
+<p>起始位置参数要求:b&lt;c;如果b,c为负数,应该加上数组长度;如果两者都超出数组长度范围,则为无效填充,部分超出则部分填充</p>
+<p><strong>填充数组方法</strong>:copyWithin(a,b,c):a表示插入开始的位置,b,c表示复制索引的开始和结束的位置</p>
+<h3 id="栈方法"><a href="#栈方法" class="headerlink" title="栈方法"></a>栈方法</h3><p>push(a),将a推入栈顶;pop()弹出栈顶返回</p>
+<h3 id="队列方法"><a href="#队列方法" class="headerlink" title="队列方法"></a>队列方法</h3><p>push(a),将a推入队尾;shift()弹出队首返回.</p>
+<p>同样:unshift(a),将a推入队首;pop()弹出队尾返回.</p>
+<h3 id="排序方法"><a href="#排序方法" class="headerlink" title="排序方法"></a>排序方法</h3><p>reverse()方法将数组反向</p>
+<p>sort(sortfunction),比较函数接收两个参数,如果第一个参数应该排在第二个参数的前面则返回负值,反之亦然.</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> value=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">2</span>];</span><br><span class="line">value.sort(<span class="function">(<span class="params">a,b</span>)=&gt;</span>a-b);<span class="comment">//升序排列</span></span><br><span class="line">alert(value);</span><br></pre></td></tr></table></figure>
+
+<h3 id="操作方法"><a href="#操作方法" class="headerlink" title="操作方法"></a>操作方法</h3><p>slice(start,end):end为可选参数.将索引对应的元素返回为字符串</p>
+<p>concat(string1,string2):添加元素返回新数组</p>
+<p>splice():<em>array</em>.splice(<em>index</em>,<em>howmany</em>,<em>item1</em>,…..,<em>itemX</em>)</p>
+<ol>
+<li>删除:传入index和howmany;要删除的第一个元素的位置和要删除的元素数量.</li>
+<li>插入:传入index,howmany和item;将howmany设置为0.</li>
+<li>替换:howmany为需要替换的元素数目.</li>
+</ol>
+<h3 id="搜索和位置方法"><a href="#搜索和位置方法" class="headerlink" title="搜索和位置方法"></a>搜索和位置方法</h3><h4 id="严格相等"><a href="#严格相等" class="headerlink" title="严格相等"></a>严格相等</h4><p>indexOf(),lastIndexOf(),includes()[ES7]:这些方法传入两个参数:要查找的元素和可选的起始搜索位置.indexOf与lastIndexOf返回元素在数组中的位置.include返回布尔值.</p>
+<h4 id="断言函数"><a href="#断言函数" class="headerlink" title="断言函数"></a>断言函数</h4><p>find()与findIndex()使用断言函数,断言函数接受三个参数:<strong>元素,索引,数组</strong>;(两个方法也可以接第二个参数改变this的值).find()返回第一个匹配的元素,findIndex返回第一个匹配的参数的索引.</p>
+<h3 id="迭代方法"><a href="#迭代方法" class="headerlink" title="迭代方法"></a>迭代方法</h3><p>ES有五个迭代方法,接受两个参数:以每一项为参数运行的函数(该函数同样接受三个参数currentValue,index,arr);改变函数内this的对象.</p>
+<ol>
+<li>every():如果每一项都返回true则该方法返回true.</li>
+<li>filter():函数返回为true的项返回为新数组.</li>
+<li>forEach():对每一项都运行传入的函数,无返回值.</li>
+<li>map():对每一项都运行传入的函数,返回新的数组.</li>
+<li>some():对每一项都运行传入的函数,如果有一项为true,返回true.</li>
+</ol>
+<p><strong>这些方法都不会改变原有的数组</strong></p>
+<h3 id="归并方法"><a href="#归并方法" class="headerlink" title="归并方法"></a>归并方法</h3><p>reduce(),reduceRight()这两个方法接受两个参数:归并函数和可选的以之为归并起点的初始值,归并起点默认为第二项.归并函数接受四个参数:上一个归并值,当前项,当前项的索引,数组本身.这两个方法只是方向不一样.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ze-d</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ze-d.github.io/2021/11/11/Array/">https://ze-d.github.io/2021/11/11/Array/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://Ze-d.github.io" target="_blank">BiliSland</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JS/">JS</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/11/17/String/"><img class="prev-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">String</div></div></a></div><div class="next-post pull-right"><a href="/2021/11/02/BFC/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">BFC</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/10/25/ES定义类和对象的方法/" title="ES定义类和对象的方法"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-25</div><div class="title">ES定义类和对象的方法</div></div></a></div><div><a href="/2021/10/21/JS-变量-作用域-内存/" title="变量,作用域,内存"><img class="cover" src="https://github.com/Ze-d/blog.img/raw/main/Konachan.com%2520-%2520272114%2520bicycle%2520building%2520city%2520gom_jabbar%2520nobody%2520original%2520scenic%2520shade%5B1%5D.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-21</div><div class="title">变量,作用域,内存</div></div></a></div><div><a href="/2021/11/17/String/" title="String"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-17</div><div class="title">String</div></div></a></div><div><a href="/2021/11/02/闭包/" title="闭包"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-02</div><div class="title">闭包</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Ze-d</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">34</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E7%BB%84"><span class="toc-number">1.</span> <span class="toc-text">创建数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">迭代器方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E5%92%8C%E5%A1%AB%E5%85%85%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">复制和填充方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%88%E6%96%B9%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">栈方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%9F%E5%88%97%E6%96%B9%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">队列方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F%E6%96%B9%E6%B3%95"><span class="toc-number">6.</span> <span class="toc-text">排序方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95"><span class="toc-number">7.</span> <span class="toc-text">操作方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E5%92%8C%E4%BD%8D%E7%BD%AE%E6%96%B9%E6%B3%95"><span class="toc-number">8.</span> <span class="toc-text">搜索和位置方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%A5%E6%A0%BC%E7%9B%B8%E7%AD%89"><span class="toc-number">8.1.</span> <span class="toc-text">严格相等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%AD%E8%A8%80%E5%87%BD%E6%95%B0"><span class="toc-number">8.2.</span> <span class="toc-text">断言函数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E6%96%B9%E6%B3%95"><span class="toc-number">9.</span> <span class="toc-text">迭代方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%92%E5%B9%B6%E6%96%B9%E6%B3%95"><span class="toc-number">10.</span> <span class="toc-text">归并方法</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/12/16/CSS%E5%8A%A8%E7%94%BB/" title="CSS动画"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CSS动画"/></a><div class="content"><a class="title" href="/2021/12/16/CSS%E5%8A%A8%E7%94%BB/" title="CSS动画">CSS动画</a><time datetime="2021-12-16T11:40:17.000Z" title="发表于 2021-12-16 19:40:17">2021-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/16/Vue%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/" title="Vue数据传输"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue数据传输"/></a><div class="content"><a class="title" href="/2021/12/16/Vue%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/" title="Vue数据传输">Vue数据传输</a><time datetime="2021-12-16T11:39:35.000Z" title="发表于 2021-12-16 19:39:35">2021-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/16/Vue%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" title="Vue基本操作"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue基本操作"/></a><div class="content"><a class="title" href="/2021/12/16/Vue%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" title="Vue基本操作">Vue基本操作</a><time datetime="2021-12-16T10:56:36.000Z" title="发表于 2021-12-16 18:56:36">2021-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/08/%E6%9C%9F%E7%BA%A6%E4%B8%8E%E5%BC%82%E6%AD%A5%E5%87%BD%E6%95%B0/" title="期约与异步函数"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="期约与异步函数"/></a><div class="content"><a class="title" href="/2021/12/08/%E6%9C%9F%E7%BA%A6%E4%B8%8E%E5%BC%82%E6%AD%A5%E5%87%BD%E6%95%B0/" title="期约与异步函数">期约与异步函数</a><time datetime="2021-12-08T11:58:36.000Z" title="发表于 2021-12-08 19:58:36">2021-12-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/29/Vue%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/" title="Vue双向绑定"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue双向绑定"/></a><div class="content"><a class="title" href="/2021/11/29/Vue%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/" title="Vue双向绑定">Vue双向绑定</a><time datetime="2021-11-29T03:24:49.000Z" title="发表于 2021-11-29 11:24:49">2021-11-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Ze-d</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

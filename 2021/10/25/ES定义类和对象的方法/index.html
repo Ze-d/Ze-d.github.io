@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ES定义类和对象的方法 | BiliSland</title><meta name="keywords" content="JS"><meta name="author" content="Ze-d"><meta name="copyright" content="Ze-d"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="原始的方式var oCar &#x3D; new Object;oCar.color &#x3D; &quot;blue&quot;;oCar.doors &#x3D; 4;oCar.mpg &#x3D; 25;oCar.showColor &#x3D; function() &amp;#123;alert(this.color);&amp;#125;;&#96;  先创建对象再动态定义.但是如果我要创建多个有相同接口的实例,代码就太冗杂了,可不可以用流水线来生产这样的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES定义类和对象的方法">
+<meta property="og:url" content="https://ze-d.github.io/2021/10/25/ES%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="BiliSland">
+<meta property="og:description" content="原始的方式var oCar &#x3D; new Object;oCar.color &#x3D; &quot;blue&quot;;oCar.doors &#x3D; 4;oCar.mpg &#x3D; 25;oCar.showColor &#x3D; function() &amp;#123;alert(this.color);&amp;#125;;&#96;  先创建对象再动态定义.但是如果我要创建多个有相同接口的实例,代码就太冗杂了,可不可以用流水线来生产这样的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2021-10-25T06:06:44.000Z">
+<meta property="article:modified_time" content="2021-10-25T15:26:53.339Z">
+<meta property="article:author" content="Ze-d">
+<meta property="article:tag" content="JS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/icon.ico"><link rel="canonical" href="https://ze-d.github.io/2021/10/25/ES%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%96%B9%E6%B3%95/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ES定义类和对象的方法',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-10-25 23:26:53'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="BiliSland" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">34</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/upadte/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> Myself</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/%E5%85%B3%E4%BA%8E"><i class="fa-fw /about/"></i><span> 0</span></a></li><li><a class="site-page child" href="/butterfly%E4%B8%BB%E9%A2%98"><i class="fa-fw https://github.com/jerryc127/hexo-theme-butterfly/"></i><span> 1</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">BiliSland</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/upadte/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> Myself</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/%E5%85%B3%E4%BA%8E"><i class="fa-fw /about/"></i><span> 0</span></a></li><li><a class="site-page child" href="/butterfly%E4%B8%BB%E9%A2%98"><i class="fa-fw https://github.com/jerryc127/hexo-theme-butterfly/"></i><span> 1</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">ES定义类和对象的方法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-10-25T06:06:44.000Z" title="发表于 2021-10-25 14:06:44">2021-10-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-25T15:26:53.339Z" title="更新于 2021-10-25 23:26:53">2021-10-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="ES定义类和对象的方法"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="原始的方式"><a href="#原始的方式" class="headerlink" title="原始的方式"></a>原始的方式</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> oCar = <span class="keyword">new</span> <span class="built_in">Object</span>;</span><br><span class="line">oCar.color = <span class="string">&quot;blue&quot;</span>;</span><br><span class="line">oCar.doors = <span class="number">4</span>;</span><br><span class="line">oCar.mpg = <span class="number">25</span>;</span><br><span class="line">oCar.showColor = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">alert(<span class="built_in">this</span>.color);</span><br><span class="line">&#125;;<span class="string">`</span></span><br></pre></td></tr></table></figure>
+
+<p>先创建对象再动态定义.<strong>但是如果我要创建多个有相同接口的实例,代码就太冗杂了</strong>,可不可以用流水线来生产这样的实例呢?</p>
+<h2 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createCar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="keyword">var</span> oTempCar = <span class="keyword">new</span> <span class="built_in">Object</span>;</span><br><span class="line">oTempCar.color = <span class="string">&quot;blue&quot;</span>;</span><br><span class="line">oTempCar.doors = <span class="number">4</span>;</span><br><span class="line">oTempCar.mpg = <span class="number">25</span>;</span><br><span class="line">oTempCar.showColor = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">alert(<span class="built_in">this</span>.color);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">return</span> oTempCar;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> oCar1 = createCar();</span><br><span class="line"><span class="keyword">var</span> oCar2 = createCar();</span><br></pre></td></tr></table></figure>
+<p>这样确实方便创建相同的实例了,可是问题来了,<strong>这样每一个实例都创建了一个不同版本的相同函数</strong>.</p>
+<h3 id="稍微改进一下"><a href="#稍微改进一下" class="headerlink" title="稍微改进一下"></a>稍微改进一下</h3><p>首先可以给函数传递参数,这样实例就不会总是默认值了.</p>
+<p>或许可以通过属性<strong>指向一个函数外的额外函数方法</strong>,但是这样使得语义分散了,不像是一个对象的方法,我甚至不看函数的话,我都不知道oCar1是一个对象,他连一个new都没有!</p>
+<h2 id="函数方法"><a href="#函数方法" class="headerlink" title="函数方法"></a>函数方法</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Car</span>(<span class="params">sColor,iDoors,iMpg</span>) </span>&#123;</span><br><span class="line"><span class="built_in">this</span>.color = sColor;</span><br><span class="line"><span class="built_in">this</span>.doors = iDoors;</span><br><span class="line"><span class="built_in">this</span>.mpg = iMpg;</span><br><span class="line"><span class="built_in">this</span>.showColor = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">alert(<span class="built_in">this</span>.color);</span><br><span class="line">&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> oCar1 = <span class="keyword">new</span> Car(<span class="string">&quot;red&quot;</span>,<span class="number">4</span>,<span class="number">23</span>);</span><br><span class="line"><span class="keyword">var</span> oCar2 = <span class="keyword">new</span> Car(<span class="string">&quot;blue&quot;</span>,<span class="number">3</span>,<span class="number">25</span>);</span><br></pre></td></tr></table></figure>
+<p>现在，用 new 运算符和类名 Car 创建对象，就更像 ECMAScript 中一般对象的创建方式了。但是仍没有解决<strong>独立的函数版本的问题</strong></p>
+<h2 id="原型方式"><a href="#原型方式" class="headerlink" title="原型方式"></a>原型方式</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Car</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">Car.prototype.color = <span class="string">&quot;blue&quot;</span>;</span><br><span class="line">Car.prototype.doors = <span class="number">4</span>;</span><br><span class="line">Car.prototype.mpg = <span class="number">25</span>;</span><br><span class="line">Car.prototype.showColor = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  alert(<span class="built_in">this</span>.color);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> oCar1 = <span class="keyword">new</span> Car();</span><br><span class="line"><span class="keyword">var</span> oCar2 = <span class="keyword">new</span> Car();</span><br></pre></td></tr></table></figure>
+<p>首先用<strong>空构造函数</strong>来设置类名。然后所有的属性和方法都被直接赋予 prototype 属性.通过给 Car 的 prototype 属性添加属性去定义 Car 对象的属性。调用 new Car() 时，原型的所有属性都被立即赋予要创建的对象，意味着所有 Car 实例存放的都是指向 showColor() 函数的指针。从语义上讲，所有属性看起来都属于一个对象，因此解决了前面两种方式存在的问题。</p>
+<p>可是这样的话:只有在对象创建后才可以修改其属性的默认值,而且<strong>真正的问题出现在属性指向的是对象，而不是函数时,一个实例的修改会导致所有实例的修改</strong></p>
+<h2 id="混合的构造函数-原型方式"><a href="#混合的构造函数-原型方式" class="headerlink" title="混合的构造函数/原型方式##"></a>混合的构造函数/原型方式##</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Car</span>(<span class="params">sColor,iDoors,iMpg</span>) </span>&#123;</span><br><span class="line"><span class="built_in">this</span>.color = sColor;</span><br><span class="line"> <span class="built_in">this</span>.doors = iDoors;</span><br><span class="line"> <span class="built_in">this</span>.mpg = iMpg;</span><br><span class="line"> <span class="built_in">this</span>.drivers = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="string">&quot;Mike&quot;</span>,<span class="string">&quot;John&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">Car.prototype.showColor = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  alert(<span class="built_in">this</span>.color);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> oCar1 = <span class="keyword">new</span> Car(<span class="string">&quot;red&quot;</span>,<span class="number">4</span>,<span class="number">23</span>);</span><br><span class="line"><span class="keyword">var</span> oCar2 = <span class="keyword">new</span> Car(<span class="string">&quot;blue&quot;</span>,<span class="number">3</span>,<span class="number">25</span>);</span><br><span class="line">oCar1.drivers.push(<span class="string">&quot;Bill&quot;</span>);</span><br><span class="line">alert(oCar1.drivers);	<span class="comment">//输出 &quot;Mike,John,Bill&quot;</span></span><br><span class="line">alert(oCar2.drivers);	<span class="comment">//输出 &quot;Mike,John&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用构造函数定义对象的所有非函数属性，用原型方式定义对象的函数属性（方法）。结果是，所有函数都只创建一次，而每个对象都具有自己的对象属性实例。几乎完美!如果你觉得还不够完美的话…</p>
+<h2 id="动态原型方法"><a href="#动态原型方法" class="headerlink" title="动态原型方法"></a>动态原型方法</h2><p>对于习惯使用其他语言的开发者来说，使用混合的构造函数/原型方式感觉不那么和谐。毕竟，定义类时，大多数面向对象语言都对属性和方法进行了视觉上的封装</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Car</span>(<span class="params">sColor,iDoors,iMpg</span>) </span>&#123;</span><br><span class="line"><span class="built_in">this</span>.color = sColor;</span><br><span class="line"><span class="built_in">this</span>.doors = iDoors;</span><br><span class="line"><span class="built_in">this</span>.mpg = iMpg;</span><br><span class="line"><span class="built_in">this</span>.drivers = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="string">&quot;Mike&quot;</span>,<span class="string">&quot;John&quot;</span>);  </span><br><span class="line"> <span class="keyword">if</span> (<span class="keyword">typeof</span> Car._initialized == <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">Car.prototype.showColor = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  alert(<span class="built_in">this</span>.color);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Car._initialized = <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该方法使用标志（_initialized）来判断是否已给原型赋予了任何方法。该方法只创建并赋值一次</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ze-d</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ze-d.github.io/2021/10/25/ES%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%96%B9%E6%B3%95/">https://ze-d.github.io/2021/10/25/ES%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%96%B9%E6%B3%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://Ze-d.github.io" target="_blank">BiliSland</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JS/">JS</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/10/26/CSSVerticalAlign/"><img class="prev-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">CSSVerticalAlign</div></div></a></div><div class="next-post pull-right"><a href="/2021/10/23/inline-block%E4%B8%8Efloat/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">inline-block与float</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/11/11/Array/" title="Array"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-11</div><div class="title">Array</div></div></a></div><div><a href="/2021/10/21/JS-变量-作用域-内存/" title="变量,作用域,内存"><img class="cover" src="https://github.com/Ze-d/blog.img/raw/main/Konachan.com%2520-%2520272114%2520bicycle%2520building%2520city%2520gom_jabbar%2520nobody%2520original%2520scenic%2520shade%5B1%5D.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-21</div><div class="title">变量,作用域,内存</div></div></a></div><div><a href="/2021/11/17/String/" title="String"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-17</div><div class="title">String</div></div></a></div><div><a href="/2021/11/02/闭包/" title="闭包"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-02</div><div class="title">闭包</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Ze-d</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">34</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%A7%8B%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">原始的方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">工厂方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A8%8D%E5%BE%AE%E6%94%B9%E8%BF%9B%E4%B8%80%E4%B8%8B"><span class="toc-number">2.1.</span> <span class="toc-text">稍微改进一下</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">函数方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E6%96%B9%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">原型方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E7%9A%84%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0-%E5%8E%9F%E5%9E%8B%E6%96%B9%E5%BC%8F"><span class="toc-number">5.</span> <span class="toc-text">混合的构造函数&#x2F;原型方式##</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%8E%9F%E5%9E%8B%E6%96%B9%E6%B3%95"><span class="toc-number">6.</span> <span class="toc-text">动态原型方法</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/12/16/CSS%E5%8A%A8%E7%94%BB/" title="CSS动画"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CSS动画"/></a><div class="content"><a class="title" href="/2021/12/16/CSS%E5%8A%A8%E7%94%BB/" title="CSS动画">CSS动画</a><time datetime="2021-12-16T11:40:17.000Z" title="发表于 2021-12-16 19:40:17">2021-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/16/Vue%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/" title="Vue数据传输"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue数据传输"/></a><div class="content"><a class="title" href="/2021/12/16/Vue%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/" title="Vue数据传输">Vue数据传输</a><time datetime="2021-12-16T11:39:35.000Z" title="发表于 2021-12-16 19:39:35">2021-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/16/Vue%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" title="Vue基本操作"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue基本操作"/></a><div class="content"><a class="title" href="/2021/12/16/Vue%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" title="Vue基本操作">Vue基本操作</a><time datetime="2021-12-16T10:56:36.000Z" title="发表于 2021-12-16 18:56:36">2021-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/08/%E6%9C%9F%E7%BA%A6%E4%B8%8E%E5%BC%82%E6%AD%A5%E5%87%BD%E6%95%B0/" title="期约与异步函数"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="期约与异步函数"/></a><div class="content"><a class="title" href="/2021/12/08/%E6%9C%9F%E7%BA%A6%E4%B8%8E%E5%BC%82%E6%AD%A5%E5%87%BD%E6%95%B0/" title="期约与异步函数">期约与异步函数</a><time datetime="2021-12-08T11:58:36.000Z" title="发表于 2021-12-08 19:58:36">2021-12-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/29/Vue%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/" title="Vue双向绑定"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue双向绑定"/></a><div class="content"><a class="title" href="/2021/11/29/Vue%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/" title="Vue双向绑定">Vue双向绑定</a><time datetime="2021-11-29T03:24:49.000Z" title="发表于 2021-11-29 11:24:49">2021-11-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Ze-d</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
