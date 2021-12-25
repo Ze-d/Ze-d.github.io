@@ -305,6 +305,13 @@
 
   
   <url>
+    <loc>https://ze-d.github.io/tags/CSS/</loc>
+    <lastmod>2021-12-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://ze-d.github.io/tags/AJAX/</loc>
     <lastmod>2021-12-25</lastmod>
     <changefreq>daily</changefreq>
@@ -319,7 +326,7 @@
   </url>
   
   <url>
-    <loc>https://ze-d.github.io/tags/CSS/</loc>
+    <loc>https://ze-d.github.io/tags/Vue-Vuex/</loc>
     <lastmod>2021-12-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -341,13 +348,6 @@
   
   <url>
     <loc>https://ze-d.github.io/tags/Vue-js/</loc>
-    <lastmod>2021-12-25</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ze-d.github.io/tags/Vue-Vuex/</loc>
     <lastmod>2021-12-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
