@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Canvas基础 | BiliSland</title><meta name="keywords" content="JS"><meta name="author" content="Ze-d"><meta name="copyright" content="Ze-d"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Canvas基本使用canvas标签​    canvas标签是一个闭合标签,由宽高属性,默认为300px*150px.注意:设定canvas画布的宽和高要在标签内设定,如果在CSS中设定宽和高的话,会导致画布内的内容拉伸变形. ​    对于支持性问题,canvas标签不会渲染标签内部内容,不支持canvas的时候会将标签内渲染出来 渲染上下文canvas 会创建一个固定大小的画布，会公开一个或">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Canvas基础">
+<meta property="og:url" content="https://ze-d.github.io/2022/03/22/Canvas%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="BiliSland">
+<meta property="og:description" content="Canvas基本使用canvas标签​    canvas标签是一个闭合标签,由宽高属性,默认为300px*150px.注意:设定canvas画布的宽和高要在标签内设定,如果在CSS中设定宽和高的话,会导致画布内的内容拉伸变形. ​    对于支持性问题,canvas标签不会渲染标签内部内容,不支持canvas的时候会将标签内渲染出来 渲染上下文canvas 会创建一个固定大小的画布，会公开一个或">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2022-03-22T08:02:11.000Z">
+<meta property="article:modified_time" content="2022-03-22T12:51:01.998Z">
+<meta property="article:author" content="Ze-d">
+<meta property="article:tag" content="JS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/icon.ico"><link rel="canonical" href="https://ze-d.github.io/2022/03/22/Canvas%E5%9F%BA%E7%A1%80/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Canvas基础',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-03-22 20:51:01'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="BiliSland" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">42</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/upadte/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> Myself</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/%E5%85%B3%E4%BA%8E"><i class="fa-fw /about/"></i><span> 0</span></a></li><li><a class="site-page child" href="/butterfly%E4%B8%BB%E9%A2%98"><i class="fa-fw https://github.com/jerryc127/hexo-theme-butterfly/"></i><span> 1</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">BiliSland</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/upadte/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> Myself</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/%E5%85%B3%E4%BA%8E"><i class="fa-fw /about/"></i><span> 0</span></a></li><li><a class="site-page child" href="/butterfly%E4%B8%BB%E9%A2%98"><i class="fa-fw https://github.com/jerryc127/hexo-theme-butterfly/"></i><span> 1</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Canvas基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-22T08:02:11.000Z" title="发表于 2022-03-22 16:02:11">2022-03-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-03-22T12:51:01.998Z" title="更新于 2022-03-22 20:51:01">2022-03-22</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Canvas基础"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="Canvas基本使用"><a href="#Canvas基本使用" class="headerlink" title="Canvas基本使用"></a>Canvas基本使用</h2><h3 id="canvas标签"><a href="#canvas标签" class="headerlink" title="canvas标签"></a>canvas标签</h3><p>​    canvas标签是一个闭合标签,由宽高属性,默认为300px*150px.<strong>注意:设定canvas画布的宽和高要在标签内设定,如果在CSS中设定宽和高的话,会导致画布内的内容拉伸变形</strong>.</p>
+<p>​    对于支持性问题,canvas标签不会渲染标签内部内容,不支持canvas的时候会将标签内渲染出来</p>
+<h3 id="渲染上下文"><a href="#渲染上下文" class="headerlink" title="渲染上下文"></a>渲染上下文</h3><p>canvas 会创建一个固定大小的画布，会公开一个或多个<strong>渲染上下文</strong>(画笔)，使用<strong>渲染上下文</strong>来绘制和处理要展示的内容.同样我们可以用渲染上下文是否存在来判断浏览器对canvas的zhichi程度</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//获取DOM元素</span></span><br><span class="line"><span class="keyword">var</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;test&#x27;</span>);</span><br><span class="line"><span class="comment">//获得 2d 上下文对象</span></span><br><span class="line"><span class="keyword">var</span> ctx = canvas.getContext(<span class="string">&#x27;2d&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="绘制形状"><a href="#绘制形状" class="headerlink" title="绘制形状"></a>绘制形状</h2><h3 id="坐标系"><a href="#坐标系" class="headerlink" title="坐标系"></a>坐标系</h3><p>总是以画布的左上角为原点;向右的水平轴为0rad.</p>
+<h3 id="绘制图形"><a href="#绘制图形" class="headerlink" title="绘制图形"></a>绘制图形</h3><p>canvas仅仅支持一种原生的图形绘制:矩形.渲染上下文提供了三种方法</p>
+<ul>
+<li>1、**fillRect(x, y, width, height)**：绘制一个填充的矩形。</li>
+<li>2、**strokeRect(x, y, width, height)**：绘制一个矩形的边框。</li>
+<li>3、**clearRect(x, y, width, height)**：清除指定的矩形区域，然后这块区域会变的完全透明。</li>
+</ul>
+<h2 id="绘制路径"><a href="#绘制路径" class="headerlink" title="绘制路径"></a>绘制路径</h2><p>绘制路径方法使得canvas制作复杂的图形成为了可能.</p>
+<h3 id="绘制线段图形"><a href="#绘制线段图形" class="headerlink" title="绘制线段图形"></a>绘制线段图形</h3><ol>
+<li><strong>beginPath()</strong>     新建一条路径</li>
+<li><strong>moveTo(x, y)</strong>   设置路径的起始点坐标。</li>
+<li><strong>lineTo(x,y)</strong>        将画笔移动到</li>
+<li><strong>closePath()</strong>       闭合路径，连接绘制的起点和终点,图形绘制命令又重新指向到上下文中</li>
+<li><strong>stroke()</strong>             描边</li>
+<li><strong>fill()</strong>                    填充</li>
+</ol>
+<h3 id="绘制圆弧"><a href="#绘制圆弧" class="headerlink" title="绘制圆弧"></a>绘制圆弧</h3><h4 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h4><p>​      <strong>arc(x, y, r, startAngle, endAngle, anticlockwise),</strong> <strong>注意anticlockwise为布尔值,默认为逆时针</strong>.度数全部都是弧度(用<strong>Math.PI</strong> 来表示).</p>
+<h4 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h4><p>​    <strong>arcTo(x1, y1, x2, y2, radius)</strong>,这种做法就是创建了由三点:起始点,1点,2点形成的角.与半径为radius的远相切的弧</p>
+<h2 id="添加样式和颜色"><a href="#添加样式和颜色" class="headerlink" title="添加样式和颜色"></a>添加样式和颜色</h2><h3 id="颜色"><a href="#颜色" class="headerlink" title="颜色"></a>颜色</h3><p>给渲染上下文添加两个属性</p>
+<ol>
+<li><strong>fillStyle</strong> = color 设置图形的填充颜色</li>
+<li><strong>strokeStyle</strong> = color 设置图形轮廓的颜色</li>
+</ol>
+<p><strong>备注：</strong></p>
+<ul>
+<li>color 可以是表示 css 颜色值的字符串(“rgba(0, 0, 0, 0.5)”)、渐变对象或者图案对象。</li>
+<li>一旦您设置了 strokeStyle 或者 fillStyle 的值，那么这个新值就会成为新绘制的图形的默认值。如果你要给每个图形上不同的颜色，你需要重新设置 fillStyle 或 strokeStyle 的值。</li>
+<li>globalAlpha = transparencyValue同样可以设置透明度,但是这样会影响到canvas标签内所有元素的透明度,建议使用rgba.</li>
+</ul>
+<h3 id="line样式"><a href="#line样式" class="headerlink" title="line样式"></a>line样式</h3><ol>
+<li><strong>linewidth</strong>:默认为1,大于0.总是中线对齐</li>
+<li><strong>lineCap</strong>:取值有三个:</li>
+</ol>
+<ul>
+<li>butt：线段末端以方形结束,默认值</li>
+<li>round：线段末端以圆形结束</li>
+<li>square：线段末端以方形结束，但是增加了一个宽度和线段相同，高度是线段厚度一半的矩形区域。</li>
+</ul>
+<ol start="3">
+<li><strong>lineJoin</strong>:共有 3 个值 round圆形, bevel矩形和 miter默认值菱形.</li>
+<li><strong>虚线</strong>:用 setLineDash 方法和 lineDashOffset属性来制定虚线样式。 setLineDash 方法接受一个数组,这个数组表示一个循环内线长和空隙长度的值，来指定线段与间隙的交替；lineDashOffset属性设置起始偏移量,正值表示向左移动.</li>
+</ol>
+<h2 id="绘制文本"><a href="#绘制文本" class="headerlink" title="绘制文本"></a>绘制文本</h2><p>渲染上下文提供提供了两个方法</p>
+<ol>
+<li>fillText(text, x, y [, maxWidth]) 在指定的 (x,y) 位置填充指定的文本，绘制的最大宽度是可选的。</li>
+<li>strokeText(text, x, y [, maxWidth]) 在指定的 (x,y) 位置绘制文本边框，绘制的最大宽度是可选的。</li>
+</ol>
+<p> 设定文字样式</p>
+<ol>
+<li><p>font = value 当前我们用来绘制文本的样式。这个字符串使用和 CSS font 属性相同的语法。 默认的字体是 10px sans-serif。</p>
+</li>
+<li><p>textAlign = value 文本对齐选项。 可选的值包括：start, end, left, right or center。 默认值是 start。</p>
+</li>
+<li><p>textBaseline = value 基线对齐选项，可选的值包括：top, hanging, middle, alphabetic, ideographic, bottom。默认值是 alphabetic。。</p>
+</li>
+<li><p>direction = value 文本方向。可能的值包括：ltr, rtl, inherit。默认值是 inherit。</p>
+</li>
+</ol>
+<h2 id="绘制图片"><a href="#绘制图片" class="headerlink" title="绘制图片"></a>绘制图片</h2><p>drawImage()方法的使用</p>
+<h3 id="图片来源"><a href="#图片来源" class="headerlink" title="图片来源"></a>图片来源</h3><p>首先当然可以是网页中的DOM元素;也可以是自己创建的DOM元素</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> img = <span class="keyword">new</span> Image();   <span class="comment">// 创建img元素</span></span><br><span class="line">img.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    ctx.drawImage(img, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">&#125;</span><br><span class="line">img.src = <span class="string">&#x27;myImage.png&#x27;</span>; <span class="comment">// 设置图片源地址</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="drawImage-使用"><a href="#drawImage-使用" class="headerlink" title="drawImage()使用"></a>drawImage()使用</h3><ol>
+<li><p>drawImage(image, x, y):参数2,3表示图片在canvas中的坐标</p>
+</li>
+<li><p>drawImage(image, x, y, width, height);后两个参数控制图片在画布中的缩放大小</p>
+</li>
+<li><p>drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight):s参数表示图像元的位置和大小;d参数表示在画布中展示的位置和大小.</p>
+</li>
+</ol>
+<h2 id="状态的保持和恢复"><a href="#状态的保持和恢复" class="headerlink" title="状态的保持和恢复"></a>状态的保持和恢复</h2><p>save() 和 restore().save 和 restore 方法是用来保存和恢复 canvas 状态的，都没有参数。Canvas 的状态就是当前画面应用的所有样式和变形的一个快照。</p>
+<p>Canvas的状态是存储在栈中的,保存的状态包括:</p>
+<ol>
+<li><p> 当前应用的变形（即移动，旋转和缩放）</p>
+</li>
+<li><p> strokeStyle, fillStyle, globalAlpha, lineWidth, lineCap, lineJoin, miterLimit, shadowOffsetX, shadowOffsetY, shadowBlur, shadowColor, globalCompositeOperation 的值</p>
+</li>
+<li><p>  当前的裁切路径（clipping path）</p>
+</li>
+</ol>
+<h2 id="变形"><a href="#变形" class="headerlink" title="变形"></a>变形</h2><ol>
+<li>translate(x,y)原点偏移</li>
+<li>rotate(angle)坐标轴旋转,单位为弧度</li>
+<li>scale(x,y)坐标轴缩放标值为1.0</li>
+<li>transform(a,b,c,d,e,f)</li>
+</ol>
+<h2 id="合成"><a href="#合成" class="headerlink" title="合成"></a>合成</h2><p>在默认设置中,新的图像会覆盖旧的图像,通过设定globalCompositeOperation可以改变:</p>
+<p>可以取值为type详见:<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation">CanvasRenderingContext2D.globalCompositeOperation - Web API 接口参考 | MDN (mozilla.org)</a></p>
+<h2 id="剪裁路径"><a href="#剪裁路径" class="headerlink" title="剪裁路径"></a>剪裁路径</h2><p>clip()把<strong>已经创建的路径</strong>转换成裁剪路径。裁剪路径的作用是遮罩。只显示裁剪路径内的区域，裁剪路径外的区域会被隐藏.</p>
+<p><strong>注意</strong>:clip() 只能遮罩在这个方法调用之后绘制的图像，如果是 clip() 方法调用之前绘制的图像，则无法实现遮罩</p>
+<h2 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h2><h3 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h3><ol>
+<li><strong>清空</strong> <strong>canvas</strong> 再绘制每一帧动画之前，需要清空所有。清空所有最简单的做法就是 clearRect() 方法。</li>
+<li><strong>保存</strong> <strong>canvas</strong> <strong>状态</strong> 如果在绘制的过程中会更改 canvas 的状态(颜色、移动了坐标原点等),又在绘制每一帧时都是原始状态的话，则最好保存下 canvas 的状态</li>
+<li><strong>绘制动画图形</strong>这一步才是真正的绘制动画帧</li>
+<li><strong>恢复</strong> <strong>canvas</strong> <strong>状态</strong>如果你前面保存了 canvas 状态，则应该在绘制完成一帧之后恢复 canvas 状态。</li>
+</ol>
+<h3 id="控制动画"><a href="#控制动画" class="headerlink" title="控制动画"></a>控制动画</h3><p>​    我们可用通过 canvas 的方法或者自定义的方法把图像会知道到 canvas 上。正常情况，我们能看到绘制的结果是 在脚本执行结束之后。例如，我们不可能在一个 for 循环内部完成动画。</p>
+<p>​    也就是，为了执行动画，我们需要一些可以定时执行重绘的方法。</p>
+<p>​    一般用到下面三个方法：</p>
+<ol>
+<li>setInterval()</li>
+<li>setTimeout()</li>
+<li>requestAnimationFrame()</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ze-d</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ze-d.github.io/2022/03/22/Canvas%E5%9F%BA%E7%A1%80/">https://ze-d.github.io/2022/03/22/Canvas%E5%9F%BA%E7%A1%80/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://Ze-d.github.io" target="_blank">BiliSland</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JS/">JS</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/02/12/JS%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6%E5%92%8C%E6%A8%A1%E6%8B%9F%E4%BA%8B%E4%BB%B6/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JS中的自定义事件和模拟事件</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/11/11/Array/" title="Array"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-11</div><div class="title">Array</div></div></a></div><div><a href="/2021/10/25/ES定义类和对象的方法/" title="ES定义类和对象的方法"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-25</div><div class="title">ES定义类和对象的方法</div></div></a></div><div><a href="/2021/10/21/JS-变量-作用域-内存/" title="变量,作用域,内存"><img class="cover" src="https://github.com/Ze-d/blog.img/raw/main/Konachan.com%2520-%2520272114%2520bicycle%2520building%2520city%2520gom_jabbar%2520nobody%2520original%2520scenic%2520shade%5B1%5D.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-21</div><div class="title">变量,作用域,内存</div></div></a></div><div><a href="/2021/11/17/String/" title="String"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-17</div><div class="title">String</div></div></a></div><div><a href="/2021/11/02/闭包/" title="闭包"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-02</div><div class="title">闭包</div></div></a></div><div><a href="/2022/02/12/JS中的自定义事件和模拟事件/" title="JS中的自定义事件和模拟事件"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-12</div><div class="title">JS中的自定义事件和模拟事件</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Ze-d</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">42</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Canvas%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">Canvas基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#canvas%E6%A0%87%E7%AD%BE"><span class="toc-number">1.1.</span> <span class="toc-text">canvas标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-number">1.2.</span> <span class="toc-text">渲染上下文</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%98%E5%88%B6%E5%BD%A2%E7%8A%B6"><span class="toc-number">2.</span> <span class="toc-text">绘制形状</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9D%90%E6%A0%87%E7%B3%BB"><span class="toc-number">2.1.</span> <span class="toc-text">坐标系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%98%E5%88%B6%E5%9B%BE%E5%BD%A2"><span class="toc-number">2.2.</span> <span class="toc-text">绘制图形</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%98%E5%88%B6%E8%B7%AF%E5%BE%84"><span class="toc-number">3.</span> <span class="toc-text">绘制路径</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%98%E5%88%B6%E7%BA%BF%E6%AE%B5%E5%9B%BE%E5%BD%A2"><span class="toc-number">3.1.</span> <span class="toc-text">绘制线段图形</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%98%E5%88%B6%E5%9C%86%E5%BC%A7"><span class="toc-number">3.2.</span> <span class="toc-text">绘制圆弧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%951"><span class="toc-number">3.2.1.</span> <span class="toc-text">方法1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%952"><span class="toc-number">3.2.2.</span> <span class="toc-text">方法2</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%A0%B7%E5%BC%8F%E5%92%8C%E9%A2%9C%E8%89%B2"><span class="toc-number">4.</span> <span class="toc-text">添加样式和颜色</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%9C%E8%89%B2"><span class="toc-number">4.1.</span> <span class="toc-text">颜色</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#line%E6%A0%B7%E5%BC%8F"><span class="toc-number">4.2.</span> <span class="toc-text">line样式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%98%E5%88%B6%E6%96%87%E6%9C%AC"><span class="toc-number">5.</span> <span class="toc-text">绘制文本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%98%E5%88%B6%E5%9B%BE%E7%89%87"><span class="toc-number">6.</span> <span class="toc-text">绘制图片</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E7%89%87%E6%9D%A5%E6%BA%90"><span class="toc-number">6.1.</span> <span class="toc-text">图片来源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#drawImage-%E4%BD%BF%E7%94%A8"><span class="toc-number">6.2.</span> <span class="toc-text">drawImage()使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E7%9A%84%E4%BF%9D%E6%8C%81%E5%92%8C%E6%81%A2%E5%A4%8D"><span class="toc-number">7.</span> <span class="toc-text">状态的保持和恢复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%98%E5%BD%A2"><span class="toc-number">8.</span> <span class="toc-text">变形</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%88%E6%88%90"><span class="toc-number">9.</span> <span class="toc-text">合成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%AA%E8%A3%81%E8%B7%AF%E5%BE%84"><span class="toc-number">10.</span> <span class="toc-text">剪裁路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E7%94%BB"><span class="toc-number">11.</span> <span class="toc-text">动画</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4"><span class="toc-number">11.1.</span> <span class="toc-text">基本步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%8A%A8%E7%94%BB"><span class="toc-number">11.2.</span> <span class="toc-text">控制动画</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/03/22/Canvas%E5%9F%BA%E7%A1%80/" title="Canvas基础"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Canvas基础"/></a><div class="content"><a class="title" href="/2022/03/22/Canvas%E5%9F%BA%E7%A1%80/" title="Canvas基础">Canvas基础</a><time datetime="2022-03-22T08:02:11.000Z" title="发表于 2022-03-22 16:02:11">2022-03-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/12/JS%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6%E5%92%8C%E6%A8%A1%E6%8B%9F%E4%BA%8B%E4%BB%B6/" title="JS中的自定义事件和模拟事件"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JS中的自定义事件和模拟事件"/></a><div class="content"><a class="title" href="/2022/02/12/JS%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6%E5%92%8C%E6%A8%A1%E6%8B%9F%E4%BA%8B%E4%BB%B6/" title="JS中的自定义事件和模拟事件">JS中的自定义事件和模拟事件</a><time datetime="2022-02-11T17:18:44.000Z" title="发表于 2022-02-12 01:18:44">2022-02-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/12/Flex%E4%B8%8EGrid%E5%B8%83%E5%B1%80/" title="Flex与Grid布局"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Flex与Grid布局"/></a><div class="content"><a class="title" href="/2022/02/12/Flex%E4%B8%8EGrid%E5%B8%83%E5%B1%80/" title="Flex与Grid布局">Flex与Grid布局</a><time datetime="2022-02-11T17:17:31.000Z" title="发表于 2022-02-12 01:17:31">2022-02-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/25/Vue%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86/" title="Vue配置代理"><img src="https://cn.vuejs.org/images/logo.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue配置代理"/></a><div class="content"><a class="title" href="/2021/12/25/Vue%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86/" title="Vue配置代理">Vue配置代理</a><time datetime="2021-12-25T07:45:46.000Z" title="发表于 2021-12-25 15:45:46">2021-12-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/25/Vue%E8%B7%AF%E7%94%B1/" title="Vue路由"><img src="https://cn.vuejs.org/images/logo.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue路由"/></a><div class="content"><a class="title" href="/2021/12/25/Vue%E8%B7%AF%E7%94%B1/" title="Vue路由">Vue路由</a><time datetime="2021-12-25T07:43:42.000Z" title="发表于 2021-12-25 15:43:42">2021-12-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Ze-d</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
