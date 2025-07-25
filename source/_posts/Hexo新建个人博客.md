@@ -89,9 +89,9 @@ deploy:
 
 ### 博客更新
 
-## **主题设置
+## 主题设置
 
-## **远程协作
+## 远程协作
 
 使用hexo d进行github的推送的时候仅仅会将pages相关的文件推送，hexo的环境相关文件不会推送，如果本地环境更换或者丢失，或者对博客进行协作的更新的话，会非常麻烦。
 
@@ -178,7 +178,7 @@ git commit -m "source branch"
 git push --set-upstream origin source
 ```
 
-## **绑定域名
+## 绑定域名
 
 ## 参考链接
 

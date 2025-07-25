@@ -286,10 +286,10 @@ aside:
       enable: true
       icon: fab fa-github
       text: Follow Me
-      link: https://github.com/xxxxxx
+      link: https://github.com/ze-d
   card_announcement:
     enable: true
-    content: This is my Blog
+    content: welcome to my Blog
   card_recent_post:
     enable: true
     # If set 0 will show all

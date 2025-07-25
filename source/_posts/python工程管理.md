@@ -1,10 +1,10 @@
 ---
-title: python工程管理
+title: Python工程管理
 date: 2025-03-24 09:50:38
-tags: Python
+tags: Python 
 ---
 
-## **1.Python命名规则**
+## 1.Python命名规则
 
 ### 1.1项目、模块和包命名
 
