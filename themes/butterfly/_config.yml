@@ -64,7 +64,7 @@ avatar:
 disable_top_img: false
 
 # If the banner of page not setting, it will show the default_top_img
-default_top_img:
+default_top_img: /img/bkground.png
 
 # The banner image of index page
 index_img:
@@ -93,7 +93,7 @@ footer_img: false
 
 # Website Background
 # Can set it to color or image url
-background:
+background: /img/bkground.png
 
 cover:
   # Disable the cover or not
