@@ -1,0 +1,403 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>docker使用与开发 | Hexo</title><meta name="author" content="Zed"><meta name="copyright" content="Zed"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Docker 开发入门与实践指南 目标：帮你从开发者视角理解 Docker，并学会用 Docker 搭建 &amp; 驱动日常开发环境。   1. Docker 是什么？用一句话概括：  Docker &#x3D; 用镜像和容器来管理“运行环境”的工具，让程序在任何机器上都以同样的方式运行。  传统开发&#x2F;部署方式的问题：  开发机装各种依赖：JDK &#x2F; Python &amp;#x2F">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker使用与开发">
+<meta property="og:url" content="http://example.com/2025/11/23/docker%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Docker 开发入门与实践指南 目标：帮你从开发者视角理解 Docker，并学会用 Docker 搭建 &amp; 驱动日常开发环境。   1. Docker 是什么？用一句话概括：  Docker &#x3D; 用镜像和容器来管理“运行环境”的工具，让程序在任何机器上都以同样的方式运行。  传统开发&#x2F;部署方式的问题：  开发机装各种依赖：JDK &#x2F; Python &amp;#x2F">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/asuka.jpg">
+<meta property="article:published_time" content="2025-11-23T08:07:06.000Z">
+<meta property="article:modified_time" content="2025-11-23T08:07:57.651Z">
+<meta property="article:author" content="Zed">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/asuka.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "docker使用与开发",
+  "url": "http://example.com/2025/11/23/docker%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%BC%80%E5%8F%91/",
+  "image": "http://example.com/img/asuka.jpg",
+  "datePublished": "2025-11-23T08:07:06.000Z",
+  "dateModified": "2025-11-23T08:07:57.651Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zed",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/11/23/docker%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%BC%80%E5%8F%91/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'docker使用与开发',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bkground.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bkground.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">docker使用与开发</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">docker使用与开发</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-11-23T08:07:06.000Z" title="Created 2025-11-23 16:07:06">2025-11-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-11-23T08:07:57.651Z" title="Updated 2025-11-23 16:07:57">2025-11-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Docker-开发入门与实践指南"><a href="#Docker-开发入门与实践指南" class="headerlink" title="Docker 开发入门与实践指南"></a>Docker 开发入门与实践指南</h1><blockquote>
+<p>目标：帮你从开发者视角理解 Docker，并学会用 Docker 搭建 &amp; 驱动日常开发环境。</p>
+</blockquote>
+<hr>
+<h2 id="1-Docker-是什么？"><a href="#1-Docker-是什么？" class="headerlink" title="1. Docker 是什么？"></a>1. Docker 是什么？</h2><p>用一句话概括：</p>
+<blockquote>
+<p><strong>Docker &#x3D; 用镜像和容器来管理“运行环境”的工具，让程序在任何机器上都以同样的方式运行。</strong></p>
+</blockquote>
+<p>传统开发&#x2F;部署方式的问题：</p>
+<ul>
+<li>开发机装各种依赖：JDK &#x2F; Python &#x2F; MySQL &#x2F; Redis &#x2F; Kafka…</li>
+<li>服务器上还要重复装一遍，而且版本必须对得上</li>
+<li>“我这跑得好好的，服务器怎么就挂了？”——典型的环境不一致问题</li>
+</ul>
+<p>Docker 的思路：</p>
+<ul>
+<li>把「程序 + 依赖 + 配置 + 启动命令」打包到一个 <strong>镜像 (Image)</strong> 里  </li>
+<li>运行镜像的时候，启动一个 <strong>容器 (Container)</strong>  </li>
+<li>容器之间、容器与宿主机之间是相对隔离的  </li>
+<li>任何装了 Docker 的机器上，只要有这个镜像，就能得到一致的运行环境</li>
+</ul>
+<hr>
+<h2 id="2-Docker-核心概念"><a href="#2-Docker-核心概念" class="headerlink" title="2. Docker 核心概念"></a>2. Docker 核心概念</h2><h3 id="2-1-Image（镜像）"><a href="#2-1-Image（镜像）" class="headerlink" title="2.1 Image（镜像）"></a>2.1 Image（镜像）</h3><ul>
+<li>类似 “系统快照 + 应用安装包”</li>
+<li>只读模板，可以从仓库拉取，也可以自己构建</li>
+<li>示例：<ul>
+<li><code>openjdk:17-jdk</code></li>
+<li><code>python:3.11-slim</code></li>
+<li><code>mysql:8.0</code></li>
+<li><code>nginx:latest</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-Container（容器）"><a href="#2-2-Container（容器）" class="headerlink" title="2.2 Container（容器）"></a>2.2 Container（容器）</h3><ul>
+<li>镜像运行起来后的“实例”</li>
+<li>本质上是一个隔离的进程空间，有自己的文件系统、网络等</li>
+<li>可以启动多个容器实例，互不影响</li>
+</ul>
+<h3 id="2-3-Registry（仓库）"><a href="#2-3-Registry（仓库）" class="headerlink" title="2.3 Registry（仓库）"></a>2.3 Registry（仓库）</h3><ul>
+<li>存放镜像的地方<ul>
+<li>公共仓库：Docker Hub</li>
+<li>私有仓库：公司自建镜像仓库</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-4-Volume（数据卷）"><a href="#2-4-Volume（数据卷）" class="headerlink" title="2.4 Volume（数据卷）"></a>2.4 Volume（数据卷）</h3><ul>
+<li>用来把容器内部目录挂载到宿主机</li>
+<li>作用：<ul>
+<li>持久化数据（容器删掉数据不丢）</li>
+<li>在开发时把代码目录挂进去，实现热更新</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-5-Network（网络）"><a href="#2-5-Network（网络）" class="headerlink" title="2.5 Network（网络）"></a>2.5 Network（网络）</h3><ul>
+<li>容器之间通过虚拟网络通信</li>
+<li>在同一个自定义网络中，容器可以通过 <strong>容器名</strong> 互相访问<ul>
+<li>例如在 <code>app</code> 容器中访问 <code>mysql:3306</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="3-开发中如何使用-Docker？"><a href="#3-开发中如何使用-Docker？" class="headerlink" title="3. 开发中如何使用 Docker？"></a>3. 开发中如何使用 Docker？</h2><p>常见几种使用姿势：</p>
+<ol>
+<li><strong>只用 Docker 跑依赖服务</strong>（MySQL&#x2F;Redis&#x2F;Kafka&#x2F;…），代码在本机跑</li>
+<li><strong>应用也容器化</strong>，本机和服务器用同一套镜像</li>
+<li><strong>使用 docker-compose 管理多容器系统</strong>（推荐）</li>
+</ol>
+<p>下面逐个展开。</p>
+<hr>
+<h2 id="4-必会基础命令"><a href="#4-必会基础命令" class="headerlink" title="4. 必会基础命令"></a>4. 必会基础命令</h2><p>以 <code>nginx</code> 为例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拉取镜像</span></span><br><span class="line">docker pull nginx:latest</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动容器：-d 后台运行，--name 命名，-p 做端口映射</span></span><br><span class="line">docker run -d --name my-nginx -p 8080:80 nginx:latest</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看正在运行的容器</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看所有容器（包含已停止）</span></span><br><span class="line">docker ps -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入容器内部</span></span><br><span class="line">docker <span class="built_in">exec</span> -it my-nginx /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看容器日志（持续输出）</span></span><br><span class="line">docker logs -f my-nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止容器</span></span><br><span class="line">docker stop my-nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除容器</span></span><br><span class="line">docker <span class="built_in">rm</span> my-nginx</span><br></pre></td></tr></table></figure>
+
+<p>端口映射 <code>-p 宿主端口:容器端口</code>：</p>
+<ul>
+<li>容器内服务监听的是容器端口（例如 80）</li>
+<li>通过 <code>-p 8080:80</code>，宿主机访问 <code>http://localhost:8080</code> 即等价访问容器内的 <code>80</code> 端口</li>
+</ul>
+<hr>
+<h2 id="5-用-Docker-跑依赖，代码在本机跑（推荐起步方式）"><a href="#5-用-Docker-跑依赖，代码在本机跑（推荐起步方式）" class="headerlink" title="5. 用 Docker 跑依赖，代码在本机跑（推荐起步方式）"></a>5. 用 Docker 跑依赖，代码在本机跑（推荐起步方式）</h2><p>这是日常开发里最常见、体验最好的一种方式：</p>
+<ul>
+<li>宿主机：<ul>
+<li>代码、IDE（IntelliJ &#x2F; VSCode &#x2F; 等）</li>
+</ul>
+</li>
+<li>Docker：<ul>
+<li>MySQL &#x2F; Redis &#x2F; Kafka &#x2F; RabbitMQ 等依赖服务</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-1-示例：使用-Docker-启动-MySQL"><a href="#5-1-示例：使用-Docker-启动-MySQL" class="headerlink" title="5.1 示例：使用 Docker 启动 MySQL"></a>5.1 示例：使用 Docker 启动 MySQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">  --name my-mysql \</span><br><span class="line">  -e MYSQL_ROOT_PASSWORD=123456 \</span><br><span class="line">  -e MYSQL_DATABASE=testdb \</span><br><span class="line">  -p 3306:3306 \</span><br><span class="line">  -v /your/path/mysql-data:/var/lib/mysql \</span><br><span class="line">  mysql:8.0</span><br></pre></td></tr></table></figure>
+
+<p>在你的应用配置中（例如 Spring Boot）：</p>
+<ul>
+<li>数据库 URL：<code>jdbc:mysql://localhost:3306/testdb</code></li>
+<li>用户名：<code>root</code></li>
+<li>密码：<code>123456</code></li>
+</ul>
+<p><strong>优点：</strong></p>
+<ul>
+<li>不用在本机安装、维护一堆数据库服务</li>
+<li>想重置环境：停容器、删数据卷即可</li>
+<li>换机器只要装 Docker + 这条命令就能复现依赖环境</li>
+</ul>
+<hr>
+<h2 id="6-为应用构建镜像：Dockerfile"><a href="#6-为应用构建镜像：Dockerfile" class="headerlink" title="6. 为应用构建镜像：Dockerfile"></a>6. 为应用构建镜像：Dockerfile</h2><p>当你希望应用也容器化时，就需要写 <code>Dockerfile</code>。</p>
+<h3 id="6-1-Spring-Boot-单-jar-示例"><a href="#6-1-Spring-Boot-单-jar-示例" class="headerlink" title="6.1 Spring Boot 单 jar 示例"></a>6.1 Spring Boot 单 jar 示例</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 基础镜像（JDK 环境）</span></span><br><span class="line"><span class="keyword">FROM</span> eclipse-temurin:<span class="number">17</span>-jdk-alpine</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 设置工作目录</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 拷贝 jar 包</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> target/myapp-0.0.1-SNAPSHOT.jar app.jar</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 暴露端口（文档说明用）</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 容器启动命令</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;java&quot;</span>, <span class="string">&quot;-jar&quot;</span>, <span class="string">&quot;app.jar&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<p>构建 &amp; 运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在项目根目录（确保 target 下已有 jar）</span></span><br><span class="line">docker build -t myapp:latest .</span><br><span class="line"></span><br><span class="line">docker run -d --name myapp-container -p 8080:8080 myapp:latest</span><br></pre></td></tr></table></figure>
+
+<p>此时：</p>
+<ul>
+<li>应用在容器中运行</li>
+<li>本机访问 <code>http://localhost:8080</code> 即可访问服务</li>
+</ul>
+<hr>
+<h2 id="7-开发阶段的热更新与代码验证方式"><a href="#7-开发阶段的热更新与代码验证方式" class="headerlink" title="7. 开发阶段的热更新与代码验证方式"></a>7. 开发阶段的热更新与代码验证方式</h2><p>核心问题：<strong>我怎么一边改代码，一边在 Docker 环境中验证？</strong></p>
+<p>有两种主流模式：</p>
+<h3 id="7-1-模式-A：代码在宿主机，Docker-只跑依赖（强烈推荐）"><a href="#7-1-模式-A：代码在宿主机，Docker-只跑依赖（强烈推荐）" class="headerlink" title="7.1 模式 A：代码在宿主机，Docker 只跑依赖（强烈推荐）"></a>7.1 模式 A：代码在宿主机，Docker 只跑依赖（强烈推荐）</h3><ul>
+<li>适合 Java &#x2F; Node &#x2F; Python 等常规开发</li>
+<li>你在本机像平时一样：<ul>
+<li><code>mvn spring-boot:run</code></li>
+<li><code>npm run dev</code></li>
+</ul>
+</li>
+<li>Docker 只负责 MySQL &#x2F; Redis &#x2F; Kafka 等</li>
+</ul>
+<p><strong>优点：</strong></p>
+<ul>
+<li>IDE 断点、热部署体验最佳</li>
+<li>Docker 负责“环境”，你专心写代码</li>
+</ul>
+<h3 id="7-2-模式-B：代码目录挂载进容器，容器跑-dev-命令"><a href="#7-2-模式-B：代码目录挂载进容器，容器跑-dev-命令" class="headerlink" title="7.2 模式 B：代码目录挂载进容器，容器跑 dev 命令"></a>7.2 模式 B：代码目录挂载进容器，容器跑 dev 命令</h3><ul>
+<li>适合你想用容器统一开发环境的场景</li>
+<li>镜像提供：JDK &#x2F; Node &#x2F; Python 等运行环境</li>
+<li>代码通过 Volume 挂载</li>
+</ul>
+<h4 id="Node-项目开发示例："><a href="#Node-项目开发示例：" class="headerlink" title="Node 项目开发示例："></a>Node 项目开发示例：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --<span class="built_in">rm</span> \</span><br><span class="line">  -v /your/path/my-node-app:/app \</span><br><span class="line">  -w /app \</span><br><span class="line">  -p 3000:3000 \</span><br><span class="line">  node:20 \</span><br><span class="line">  bash -c <span class="string">&quot;npm install &amp;&amp; npm run dev&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-v /your/path/my-node-app:/app</code>：把本机代码目录挂载到容器 <code>/app</code></li>
+<li><code>npm run dev</code>：跑前端开发服务器（带热更新）</li>
+<li>在本机编辑器里改代码，容器里会自动重新编译、刷新</li>
+</ul>
+<h4 id="Spring-Boot-开发类似："><a href="#Spring-Boot-开发类似：" class="headerlink" title="Spring Boot 开发类似："></a>Spring Boot 开发类似：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --<span class="built_in">rm</span> \</span><br><span class="line">  -v /your/path/demo:/app \</span><br><span class="line">  -w /app \</span><br><span class="line">  -p 8080:8080 \</span><br><span class="line">  maven:3.9-eclipse-temurin-17 \</span><br><span class="line">  mvn spring-boot:run</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="8-使用-docker-compose-管理多服务开发环境"><a href="#8-使用-docker-compose-管理多服务开发环境" class="headerlink" title="8. 使用 docker-compose 管理多服务开发环境"></a>8. 使用 docker-compose 管理多服务开发环境</h2><p><code>docker-compose</code> 让你可以用一个 <code>yaml</code> 文件描述多个服务，然后一条命令拉起整个环境。</p>
+<h3 id="8-1-示例：后端-MySQL-的开发环境"><a href="#8-1-示例：后端-MySQL-的开发环境" class="headerlink" title="8.1 示例：后端 + MySQL 的开发环境"></a>8.1 示例：后端 + MySQL 的开发环境</h3><p><code>docker-compose.yml</code>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3.9&quot;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">demo-mysql</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="number">123456</span></span><br><span class="line">      <span class="attr">MYSQL_DATABASE:</span> <span class="string">demo</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3306:3306&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./mysql-data:/var/lib/mysql</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">demo-net</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">app:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">eclipse-temurin:17-jdk</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">demo-app</span></span><br><span class="line">    <span class="attr">working_dir:</span> <span class="string">/app</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./app:/app</span></span><br><span class="line">    <span class="attr">command:</span> [<span class="string">&quot;bash&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;chmod +x mvnw &amp;&amp; ./mvnw spring-boot:run&quot;</span>]</span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:8080&quot;</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">demo-net</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">demo-net:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br></pre></td></tr></table></figure>
+
+<p>使用命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 前台启动</span></span><br><span class="line">docker-compose up</span><br><span class="line"></span><br><span class="line"><span class="comment"># 后台启动</span></span><br><span class="line">docker-compose up -d</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看日志</span></span><br><span class="line">docker-compose logs -f           <span class="comment"># 所有服务</span></span><br><span class="line">docker-compose logs -f app       <span class="comment"># 指定 app 服务</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止并清理容器（保留数据卷）</span></span><br><span class="line">docker-compose down</span><br></pre></td></tr></table></figure>
+
+<p>特点：</p>
+<ul>
+<li><code>app</code> 和 <code>db</code> 在同一个网络 <code>demo-net</code> 中</li>
+<li>在 <code>app</code> 容器内访问数据库地址可以写 <code>db:3306</code></li>
+<li><code>./app</code> 目录挂载进容器，修改本机代码即可触发重新编译&#x2F;热更新（视项目配置）</li>
+</ul>
+<hr>
+<h2 id="9-日常最常用的-Docker-操作"><a href="#9-日常最常用的-Docker-操作" class="headerlink" title="9. 日常最常用的 Docker 操作"></a>9. 日常最常用的 Docker 操作</h2><h3 id="9-1-日志查看"><a href="#9-1-日志查看" class="headerlink" title="9.1 日志查看"></a>9.1 日志查看</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 单个容器</span></span><br><span class="line">docker logs -f myapp-container</span><br><span class="line"></span><br><span class="line"><span class="comment"># compose 中的服务</span></span><br><span class="line">docker-compose logs -f          <span class="comment"># 所有服务</span></span><br><span class="line">docker-compose logs -f app      <span class="comment"># 指定服务</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="9-2-进入容器调试"><a href="#9-2-进入容器调试" class="headerlink" title="9.2 进入容器调试"></a>9.2 进入容器调试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入 Linux shell</span></span><br><span class="line">docker <span class="built_in">exec</span> -it myapp-container /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 直接连 MySQL</span></span><br><span class="line">docker <span class="built_in">exec</span> -it demo-mysql mysql -uroot -p123456</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-3-代码更新-镜像更新"><a href="#9-3-代码更新-镜像更新" class="headerlink" title="9.3 代码更新 &amp; 镜像更新"></a>9.3 代码更新 &amp; 镜像更新</h3><p>如果采用“打包成 jar → 构建镜像”的方式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 本机打包</span></span><br><span class="line">mvn package -DskipTests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 构建镜像</span></span><br><span class="line">docker build -t myapp:latest .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 重启容器</span></span><br><span class="line">docker stop myapp-container</span><br><span class="line">docker <span class="built_in">rm</span> myapp-container</span><br><span class="line">docker run -d --name myapp-container -p 8080:8080 myapp:latest</span><br></pre></td></tr></table></figure>
+
+<p>如果采用“代码挂载 + dev 命令”方式：</p>
+<ul>
+<li>直接改代码即可，容器里 dev 进程会自动重载（视框架而定）</li>
+</ul>
+<h3 id="9-4-清理环境"><a href="#9-4-清理环境" class="headerlink" title="9.4 清理环境"></a>9.4 清理环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除所有已停止的容器</span></span><br><span class="line">docker container prune</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除没有容器引用的镜像</span></span><br><span class="line">docker image prune</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有未使用的容器、网络、镜像等（危险，慎用）</span></span><br><span class="line">docker system prune -a</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="10-一个“端到端”开发流程示例"><a href="#10-一个“端到端”开发流程示例" class="headerlink" title="10. 一个“端到端”开发流程示例"></a>10. 一个“端到端”开发流程示例</h2><p>以一个 <strong>Spring Boot + Vue + MySQL</strong> 项目为例：</p>
+<h3 id="阶段-1：只-Docker-化依赖"><a href="#阶段-1：只-Docker-化依赖" class="headerlink" title="阶段 1：只 Docker 化依赖"></a>阶段 1：只 Docker 化依赖</h3><ol>
+<li>用 Docker 跑 <code>mysql</code>、<code>redis</code> 等</li>
+<li>后端在本机用 IDE 跑</li>
+<li>前端在本机 <code>npm run dev</code></li>
+<li>这一步已经极大减少了环境差异问题</li>
+</ol>
+<h3 id="阶段-2：用-docker-compose-做“开发版环境”"><a href="#阶段-2：用-docker-compose-做“开发版环境”" class="headerlink" title="阶段 2：用 docker-compose 做“开发版环境”"></a>阶段 2：用 docker-compose 做“开发版环境”</h3><ul>
+<li><p>写一个 <code>docker-compose.dev.yml</code>：</p>
+<ul>
+<li><code>mysql</code> &#x2F; <code>redis</code>：镜像 + 数据卷</li>
+<li><code>backend</code> &#x2F; <code>frontend</code>：镜像只提供环境（JDK&#x2F;Node），代码目录挂载，命令是 <code>mvn spring-boot:run</code> &#x2F; <code>npm run dev</code></li>
+</ul>
+</li>
+<li><p>开发时：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose -f docker-compose.dev.yml up</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>一条命令拉起整套开发环境，IDE 只负责编辑代码和调试</p>
+</li>
+</ul>
+<h3 id="阶段-3：写“生产版”-Dockerfile-Compose"><a href="#阶段-3：写“生产版”-Dockerfile-Compose" class="headerlink" title="阶段 3：写“生产版” Dockerfile + Compose"></a>阶段 3：写“生产版” Dockerfile + Compose</h3><ul>
+<li>后端：<ul>
+<li>使用打包好的 jar 构建瘦身镜像（基于 <code>jre</code>&#x2F;<code>distroless</code>）</li>
+</ul>
+</li>
+<li>前端：<ul>
+<li>打包静态文件</li>
+<li>用 <code>nginx</code> 镜像部署</li>
+</ul>
+</li>
+<li>数据库：<ul>
+<li>用云数据库 &#x2F; 独立 DB 服务 &#x2F; 单独容器，根据实际架构决定</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="11-从零开始学习-Docker-的推荐练习路径"><a href="#11-从零开始学习-Docker-的推荐练习路径" class="headerlink" title="11. 从零开始学习 Docker 的推荐练习路径"></a>11. 从零开始学习 Docker 的推荐练习路径</h2><ol>
+<li><strong>练习基础命令</strong><ul>
+<li><code>docker pull/run/ps/logs/exec/stop/rm</code></li>
+<li>用 <code>nginx</code>、<code>mysql</code>、<code>redis</code> 做小实验</li>
+</ul>
+</li>
+<li><strong>把一个现有 demo 做成镜像</strong><ul>
+<li>给一个简单的 Spring Boot &#x2F; Node 应用写 Dockerfile</li>
+<li>构建镜像、运行、访问接口</li>
+</ul>
+</li>
+<li><strong>用 docker-compose 拉起多服务</strong><ul>
+<li>App + MySQL &#x2F; Redis</li>
+<li>学会用服务名互相访问（例如 <code>db:3306</code>）</li>
+</ul>
+</li>
+<li><strong>挂载代码目录实现热更新开发</strong><ul>
+<li>Node 项目：<code>npm run dev</code> + volume 挂载</li>
+<li>Java 项目：<code>mvn spring-boot:run</code> + volume 挂载</li>
+</ul>
+</li>
+<li><strong>最终写一个“生产版”镜像</strong><ul>
+<li>减小镜像体积</li>
+<li>把编译和运行阶段拆成多阶段构建（multi-stage build）</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p>如果你之后告诉我你当前项目的技术栈（例如：Spring Boot + MySQL + Redis，或者还带前端），我可以在这个基础上给你定制一套 <strong>适合该项目的 docker-compose + Dockerfile 模板</strong>，直接可用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">::contentReference[oaicite:0]&#123;index=0&#125;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Zed</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/23/docker%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%BC%80%E5%8F%91/">http://example.com/2025/11/23/docker%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%BC%80%E5%8F%91/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/docker/">docker</a></div><div class="post-share"><div class="social-share" data-image="/img/asuka.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/19/%E4%BF%AE%E9%A5%B0%E7%AC%A6/" title="修饰符"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">修饰符</div></div><div class="info-2"><div class="info-item-1"> 所谓“修饰符”，本质上是在“声明（declaration）上挂元数据”，告诉编译器&#x2F;运行时：这个东西应该如何被  看见（可见性 &#x2F; 访问控制） 存放（存储位置 &#x2F; 生命周期 &#x2F; 对齐方式） 使用（能不能改、能不能被覆盖、是否线程安全等等） 连接（如何跟别的语言&#x2F;库&#x2F;OS 交互）  下面按你问的几个维度，把 Java 和 C++ 的修饰符拆开说。  一、从整体上看修饰符：几个维度可以先把修饰符按“背后影响的系统层级”分一下类（Java &#x2F; C++ 都适用）：  只影响编译器的静态检查 &#x2F; 类型系统 比如：public/private/protected、abstract、override、final（对方法&#x2F;类）等。 主要作用：限制&#x2F;描述用法，帮助编译器在编译时报错，或者做某些优化。 OS 完全不知道这些东西存在。   影响内存布局 &#x2F; 生命周期 &#x2F; 可变性（memory-related） C++：static, thread_local, const,...</div></div></div></a><a class="pagination-related" href="/2025/11/23/Gradle%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Gradle使用指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Gradle使用指南</div></div><div class="info-2"><div class="info-item-1">Gradle 入门与 Ant &#x2F; Maven &#x2F; Gradle 对比本文分两部分：  认识 Gradle：它是什么、能做什么，以及如何在实际开发中使用。   对比 Ant &#x2F; Maven &#x2F; Gradle：从多个维度理解三者的差异和使用场景。   一、Gradle 是什么？Gradle &#x3D; 一种用“脚本”描述构建流程的自动化构建工具，最常见于 Java &#x2F; Kotlin &#x2F; Spring Boot &#x2F; Android 项目，用来做这些事情：  编译代码   跑测试   打 JAR &#x2F; WAR &#x2F; APK 包   管理依赖（Maven 仓库里的各种库）   一条命令完成“构建 → 测试 → 打包 → 发布”  可以简单理解为：Gradle 是新一代 Java 生态主流构建工具，比 Ant 灵活、比 Maven 更可编程，而且构建性能更好。 1. Gradle 和 Maven 的简单区别 配置方式：    Maven 用 XML（pom.xml）   Gradle 用 Groovy...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zed</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8%E4%B8%8E%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97"><span class="toc-number">1.</span> <span class="toc-text">Docker 开发入门与实践指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Docker-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">1. Docker 是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Docker-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">1.2.</span> <span class="toc-text">2. Docker 核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Image%EF%BC%88%E9%95%9C%E5%83%8F%EF%BC%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 Image（镜像）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-Container%EF%BC%88%E5%AE%B9%E5%99%A8%EF%BC%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 Container（容器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-Registry%EF%BC%88%E4%BB%93%E5%BA%93%EF%BC%89"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 Registry（仓库）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-Volume%EF%BC%88%E6%95%B0%E6%8D%AE%E5%8D%B7%EF%BC%89"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.4 Volume（数据卷）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-Network%EF%BC%88%E7%BD%91%E7%BB%9C%EF%BC%89"><span class="toc-number">1.2.5.</span> <span class="toc-text">2.5 Network（网络）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%BC%80%E5%8F%91%E4%B8%AD%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-Docker%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">3. 开发中如何使用 Docker？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%BF%85%E4%BC%9A%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.</span> <span class="toc-text">4. 必会基础命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%94%A8-Docker-%E8%B7%91%E4%BE%9D%E8%B5%96%EF%BC%8C%E4%BB%A3%E7%A0%81%E5%9C%A8%E6%9C%AC%E6%9C%BA%E8%B7%91%EF%BC%88%E6%8E%A8%E8%8D%90%E8%B5%B7%E6%AD%A5%E6%96%B9%E5%BC%8F%EF%BC%89"><span class="toc-number">1.5.</span> <span class="toc-text">5. 用 Docker 跑依赖，代码在本机跑（推荐起步方式）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E7%A4%BA%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8-Docker-%E5%90%AF%E5%8A%A8-MySQL"><span class="toc-number">1.5.1.</span> <span class="toc-text">5.1 示例：使用 Docker 启动 MySQL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E4%B8%BA%E5%BA%94%E7%94%A8%E6%9E%84%E5%BB%BA%E9%95%9C%E5%83%8F%EF%BC%9ADockerfile"><span class="toc-number">1.6.</span> <span class="toc-text">6. 为应用构建镜像：Dockerfile</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-Spring-Boot-%E5%8D%95-jar-%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.6.1.</span> <span class="toc-text">6.1 Spring Boot 单 jar 示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%BC%80%E5%8F%91%E9%98%B6%E6%AE%B5%E7%9A%84%E7%83%AD%E6%9B%B4%E6%96%B0%E4%B8%8E%E4%BB%A3%E7%A0%81%E9%AA%8C%E8%AF%81%E6%96%B9%E5%BC%8F"><span class="toc-number">1.7.</span> <span class="toc-text">7. 开发阶段的热更新与代码验证方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E6%A8%A1%E5%BC%8F-A%EF%BC%9A%E4%BB%A3%E7%A0%81%E5%9C%A8%E5%AE%BF%E4%B8%BB%E6%9C%BA%EF%BC%8CDocker-%E5%8F%AA%E8%B7%91%E4%BE%9D%E8%B5%96%EF%BC%88%E5%BC%BA%E7%83%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-number">1.7.1.</span> <span class="toc-text">7.1 模式 A：代码在宿主机，Docker 只跑依赖（强烈推荐）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E6%A8%A1%E5%BC%8F-B%EF%BC%9A%E4%BB%A3%E7%A0%81%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD%E8%BF%9B%E5%AE%B9%E5%99%A8%EF%BC%8C%E5%AE%B9%E5%99%A8%E8%B7%91-dev-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.7.2.</span> <span class="toc-text">7.2 模式 B：代码目录挂载进容器，容器跑 dev 命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Node-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="toc-number">1.7.2.1.</span> <span class="toc-text">Node 项目开发示例：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Spring-Boot-%E5%BC%80%E5%8F%91%E7%B1%BB%E4%BC%BC%EF%BC%9A"><span class="toc-number">1.7.2.2.</span> <span class="toc-text">Spring Boot 开发类似：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E4%BD%BF%E7%94%A8-docker-compose-%E7%AE%A1%E7%90%86%E5%A4%9A%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">1.8.</span> <span class="toc-text">8. 使用 docker-compose 管理多服务开发环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%E7%A4%BA%E4%BE%8B%EF%BC%9A%E5%90%8E%E7%AB%AF-MySQL-%E7%9A%84%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">1.8.1.</span> <span class="toc-text">8.1 示例：后端 + MySQL 的开发环境</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E6%97%A5%E5%B8%B8%E6%9C%80%E5%B8%B8%E7%94%A8%E7%9A%84-Docker-%E6%93%8D%E4%BD%9C"><span class="toc-number">1.9.</span> <span class="toc-text">9. 日常最常用的 Docker 操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B"><span class="toc-number">1.9.1.</span> <span class="toc-text">9.1 日志查看</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-%E8%BF%9B%E5%85%A5%E5%AE%B9%E5%99%A8%E8%B0%83%E8%AF%95"><span class="toc-number">1.9.2.</span> <span class="toc-text">9.2 进入容器调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-3-%E4%BB%A3%E7%A0%81%E6%9B%B4%E6%96%B0-%E9%95%9C%E5%83%8F%E6%9B%B4%E6%96%B0"><span class="toc-number">1.9.3.</span> <span class="toc-text">9.3 代码更新 &amp; 镜像更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-4-%E6%B8%85%E7%90%86%E7%8E%AF%E5%A2%83"><span class="toc-number">1.9.4.</span> <span class="toc-text">9.4 清理环境</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E4%B8%80%E4%B8%AA%E2%80%9C%E7%AB%AF%E5%88%B0%E7%AB%AF%E2%80%9D%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.10.</span> <span class="toc-text">10. 一个“端到端”开发流程示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B6%E6%AE%B5-1%EF%BC%9A%E5%8F%AA-Docker-%E5%8C%96%E4%BE%9D%E8%B5%96"><span class="toc-number">1.10.1.</span> <span class="toc-text">阶段 1：只 Docker 化依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B6%E6%AE%B5-2%EF%BC%9A%E7%94%A8-docker-compose-%E5%81%9A%E2%80%9C%E5%BC%80%E5%8F%91%E7%89%88%E7%8E%AF%E5%A2%83%E2%80%9D"><span class="toc-number">1.10.2.</span> <span class="toc-text">阶段 2：用 docker-compose 做“开发版环境”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B6%E6%AE%B5-3%EF%BC%9A%E5%86%99%E2%80%9C%E7%94%9F%E4%BA%A7%E7%89%88%E2%80%9D-Dockerfile-Compose"><span class="toc-number">1.10.3.</span> <span class="toc-text">阶段 3：写“生产版” Dockerfile + Compose</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0-Docker-%E7%9A%84%E6%8E%A8%E8%8D%90%E7%BB%83%E4%B9%A0%E8%B7%AF%E5%BE%84"><span class="toc-number">1.11.</span> <span class="toc-text">11. 从零开始学习 Docker 的推荐练习路径</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/23/Gradle%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Gradle使用指南">Gradle使用指南</a><time datetime="2025-11-23T08:07:19.000Z" title="Created 2025-11-23 16:07:19">2025-11-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/23/docker%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%BC%80%E5%8F%91/" title="docker使用与开发">docker使用与开发</a><time datetime="2025-11-23T08:07:06.000Z" title="Created 2025-11-23 16:07:06">2025-11-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/19/%E4%BF%AE%E9%A5%B0%E7%AC%A6/" title="修饰符">修饰符</a><time datetime="2025-11-19T11:53:53.000Z" title="Created 2025-11-19 19:53:53">2025-11-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/21/Session-and-Cookie/" title="Session and Cookie">Session and Cookie</a><time datetime="2025-08-21T02:43:34.000Z" title="Created 2025-08-21 10:43:34">2025-08-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/21/%E7%90%86%E8%A7%A3OAuth-2-0/" title="理解OAuth 2.0">理解OAuth 2.0</a><time datetime="2025-08-21T02:18:48.000Z" title="Created 2025-08-21 10:18:48">2025-08-21</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bkground.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Zed</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
