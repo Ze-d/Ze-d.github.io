@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RAG框架及其应用 | Hexo</title><meta name="author" content="Zed"><meta name="copyright" content="Zed"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="RAG 技术总结1. RAG 是什么？RAG（Retrieval-Augmented Generation，检索增强生成）是一种将信息检索系统与**大语言模型（LLM）**结合的AI架构。模型在回答问题前，先从外部知识库检索相关内容，并将检索结果作为上下文供模型生成答案。 主要解决的问题：  训练数据过时导致知识陈旧 无法访问领域专有&#x2F;内部知识 减少大模型“幻觉”（胡编乱造）   2.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RAG框架及其应用">
+<meta property="og:url" content="http://example.com/2025/11/24/RAG%E6%A1%86%E6%9E%B6%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="RAG 技术总结1. RAG 是什么？RAG（Retrieval-Augmented Generation，检索增强生成）是一种将信息检索系统与**大语言模型（LLM）**结合的AI架构。模型在回答问题前，先从外部知识库检索相关内容，并将检索结果作为上下文供模型生成答案。 主要解决的问题：  训练数据过时导致知识陈旧 无法访问领域专有&#x2F;内部知识 减少大模型“幻觉”（胡编乱造）   2.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/asuka.jpg">
+<meta property="article:published_time" content="2025-11-24T12:03:37.000Z">
+<meta property="article:modified_time" content="2025-11-24T12:04:14.972Z">
+<meta property="article:author" content="Zed">
+<meta property="article:tag" content="RAG">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/asuka.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "RAG框架及其应用",
+  "url": "http://example.com/2025/11/24/RAG%E6%A1%86%E6%9E%B6%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/",
+  "image": "http://example.com/img/asuka.jpg",
+  "datePublished": "2025-11-24T12:03:37.000Z",
+  "dateModified": "2025-11-24T12:04:14.972Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zed",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/11/24/RAG%E6%A1%86%E6%9E%B6%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RAG框架及其应用',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bkground.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bkground.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">RAG框架及其应用</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">RAG框架及其应用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-11-24T12:03:37.000Z" title="Created 2025-11-24 20:03:37">2025-11-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-11-24T12:04:14.972Z" title="Updated 2025-11-24 20:04:14">2025-11-24</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="RAG-技术总结"><a href="#RAG-技术总结" class="headerlink" title="RAG 技术总结"></a>RAG 技术总结</h1><h2 id="1-RAG-是什么？"><a href="#1-RAG-是什么？" class="headerlink" title="1. RAG 是什么？"></a>1. RAG 是什么？</h2><p>RAG（Retrieval-Augmented Generation，检索增强生成）是一种将<strong>信息检索系统</strong>与**大语言模型（LLM）**结合的AI架构。模型在回答问题前，先从外部知识库检索相关内容，并将检索结果作为上下文供模型生成答案。</p>
+<p>主要解决的问题：</p>
+<ul>
+<li>训练数据过时导致知识陈旧</li>
+<li>无法访问领域专有&#x2F;内部知识</li>
+<li>减少大模型“幻觉”（胡编乱造）</li>
+</ul>
+<hr>
+<h2 id="2-RAG-的典型框架"><a href="#2-RAG-的典型框架" class="headerlink" title="2. RAG 的典型框架"></a>2. RAG 的典型框架</h2><h3 id="🧱-离线阶段（构建知识库）"><a href="#🧱-离线阶段（构建知识库）" class="headerlink" title="🧱 离线阶段（构建知识库）"></a>🧱 离线阶段（构建知识库）</h3><ol>
+<li><strong>数据接入</strong> → 企业文档、API 数据库、代码、会议记录等  </li>
+<li><strong>内容清洗与切分（Chunking）</strong>  </li>
+<li><strong>Embedding 向量化</strong>  </li>
+<li><strong>索引构建（向量数据库：Qdrant &#x2F; Milvus &#x2F; Pinecone 等）</strong></li>
+</ol>
+<h3 id="🔍-在线阶段（实时问答）"><a href="#🔍-在线阶段（实时问答）" class="headerlink" title="🔍 在线阶段（实时问答）"></a>🔍 在线阶段（实时问答）</h3><ol>
+<li>Query 预处理 &#x2F; 重写  </li>
+<li>检索（向量检索 &#x2F; Hybrid 检索 + Reranker）  </li>
+<li>构造增强上下文（文档片段 + Prompt）  </li>
+<li>LLM 生成答案  </li>
+<li>后处理（格式整理 &#x2F; 安全审查）</li>
+</ol>
+<h3 id="常见技术栈"><a href="#常见技术栈" class="headerlink" title="常见技术栈"></a>常见技术栈</h3><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>可选技术</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>框架</td>
+<td>LangChain &#x2F; LangGraph &#x2F; LlamaIndex &#x2F; Haystack</td>
+</tr>
+<tr>
+<td>向量数据库</td>
+<td>Qdrant &#x2F; Milvus &#x2F; Pinecone &#x2F; Elasticsearch</td>
+</tr>
+<tr>
+<td>Embedding</td>
+<td>BGE &#x2F; E5 &#x2F; text-embedding-3-large</td>
+</tr>
+<tr>
+<td>LLM</td>
+<td>GPT &#x2F; Claude &#x2F; Llama &#x2F; Gemini &#x2F; Minimax 等</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-RAG-的应用场景"><a href="#3-RAG-的应用场景" class="headerlink" title="3. RAG 的应用场景"></a>3. RAG 的应用场景</h2><h3 id="📚-企业知识库-内部搜索"><a href="#📚-企业知识库-内部搜索" class="headerlink" title="📚 企业知识库 &#x2F; 内部搜索"></a>📚 企业知识库 &#x2F; 内部搜索</h3><ul>
+<li>查询 HR 政策、技术方案、项目要求等</li>
+</ul>
+<h3 id="🤖-客服-帮助中心"><a href="#🤖-客服-帮助中心" class="headerlink" title="🤖 客服 &amp; 帮助中心"></a>🤖 客服 &amp; 帮助中心</h3><ul>
+<li>FAQ 自动化、产品询问、工单辅助</li>
+</ul>
+<h3 id="⚖-合同-法务-合规"><a href="#⚖-合同-法务-合规" class="headerlink" title="⚖ 合同 &#x2F; 法务 &#x2F; 合规"></a>⚖ 合同 &#x2F; 法务 &#x2F; 合规</h3><ul>
+<li>查找相关条款并总结风险点</li>
+</ul>
+<h3 id="💻-代码与技术助手"><a href="#💻-代码与技术助手" class="headerlink" title="💻 代码与技术助手"></a>💻 代码与技术助手</h3><ul>
+<li>基于代码库检索解释、调试建议（如 GitHub Copilot Chat）</li>
+</ul>
+<h3 id="📊-业务数据问答（自然语言-BI）"><a href="#📊-业务数据问答（自然语言-BI）" class="headerlink" title="📊 业务数据问答（自然语言 BI）"></a>📊 业务数据问答（自然语言 BI）</h3><ul>
+<li>“上季度华东地区营收是多少？”</li>
+</ul>
+<h3 id="🏥-医疗、制造、公共服务"><a href="#🏥-医疗、制造、公共服务" class="headerlink" title="🏥 医疗、制造、公共服务"></a>🏥 医疗、制造、公共服务</h3><ul>
+<li>检索行业标准或批准流程，辅助分析与决策</li>
+</ul>
+<hr>
+<h2 id="4-已经落地的-RAG-项目案例"><a href="#4-已经落地的-RAG-项目案例" class="headerlink" title="4. 已经落地的 RAG 项目案例"></a>4. 已经落地的 RAG 项目案例</h2><table>
+<thead>
+<tr>
+<th>领域</th>
+<th>项目示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>政府</td>
+<td><em>GOV.UK Chat（英国政府）</em>；e-Albania 电子政务</td>
+</tr>
+<tr>
+<td>企业</td>
+<td><em>Audi 内部文档助手</em>；<em>NVIDIA RAG Chatbots</em></td>
+</tr>
+<tr>
+<td>开发</td>
+<td><em>GitHub Copilot Chat</em>（检索代码）</td>
+</tr>
+<tr>
+<td>SaaS 办公</td>
+<td>Microsoft 365 Copilot &#x2F; ChatGPT Enterprise</td>
+</tr>
+<tr>
+<td>教育</td>
+<td><em>Harvard Business School – AI Professor</em></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="5-如何自己构建一个-RAG-系统？"><a href="#5-如何自己构建一个-RAG-系统？" class="headerlink" title="5. 如何自己构建一个 RAG 系统？"></a>5. 如何自己构建一个 RAG 系统？</h2><ol>
+<li>明确使用者 &amp; 场景（如内网知识、生产数据）  </li>
+<li>选存储系统（Qdrant &#x2F; ES &#x2F; Mongo + Vector）  </li>
+<li>选架构方式（LangChain or SpringAI 架构）  </li>
+<li>规范文档结构和索引策略  </li>
+<li>实现检索增强 Prompt  </li>
+<li>引入反馈机制，迭代检索策略</li>
+</ol>
+<hr>
+<h2 id="6-一句话总结"><a href="#6-一句话总结" class="headerlink" title="6. 一句话总结"></a>6. 一句话总结</h2><blockquote>
+<p><strong>RAG 是让大模型“会查资料再回答”的外挂系统。</strong><br>它不追求让模型“记住一切”，而是通过检索增强推理能力，实现<strong>可解释性、更准确、更可靠</strong>的问答、分析及知识应用。</p>
+</blockquote>
+<hr>
+<p>如需：</p>
+<ul>
+<li>架构图  </li>
+<li>Prompt 模板  </li>
+<li>RAG 项目 README &amp; 设计文档<br>可以告诉我具体项目（如使用 Spring AI + Qdrant 来做 Java API 文档助手），我可以直接生成项目构建方案。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Zed</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/24/RAG%E6%A1%86%E6%9E%B6%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/">http://example.com/2025/11/24/RAG%E6%A1%86%E6%9E%B6%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/RAG/">RAG</a></div><div class="post-share"><div class="social-share" data-image="/img/asuka.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/23/Gradle%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Gradle使用指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Gradle使用指南</div></div><div class="info-2"><div class="info-item-1">Gradle 入门与 Ant &#x2F; Maven &#x2F; Gradle 对比本文分两部分：  认识 Gradle：它是什么、能做什么，以及如何在实际开发中使用。   对比 Ant &#x2F; Maven &#x2F; Gradle：从多个维度理解三者的差异和使用场景。   一、Gradle 是什么？Gradle &#x3D; 一种用“脚本”描述构建流程的自动化构建工具，最常见于 Java &#x2F; Kotlin &#x2F; Spring Boot &#x2F; Android 项目，用来做这些事情：  编译代码   跑测试   打 JAR &#x2F; WAR &#x2F; APK 包   管理依赖（Maven 仓库里的各种库）   一条命令完成“构建 → 测试 → 打包 → 发布”  可以简单理解为：Gradle 是新一代 Java 生态主流构建工具，比 Ant 灵活、比 Maven 更可编程，而且构建性能更好。 1. Gradle 和 Maven 的简单区别 配置方式：    Maven 用 XML（pom.xml）   Gradle 用 Groovy...</div></div></div></a><a class="pagination-related" href="/2025/11/28/MAVEN-pom/" title="MAVEN pom"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">MAVEN pom</div></div><div class="info-2"><div class="info-item-1">Maven POM.xml 配置完整指南 1. 项目坐标标识基础坐标配置12345&lt;!-- 项目坐标 - 唯一标识 --&gt;&lt;groupId&gt;com.example&lt;/groupId&gt;      &lt;!-- 组织/公司域名反写 --&gt;&lt;artifactId&gt;demo-project&lt;/artifactId&gt; &lt;!-- 项目名称 --&gt;&lt;version&gt;1.0.0&lt;/version&gt;            &lt;!-- 版本号 --&gt;&lt;packaging&gt;jar&lt;/packaging&gt;          &lt;!-- 打包方式: jar, war, pom --&gt;  项目元数据123&lt;name&gt;Demo Project&lt;/name&gt;           &lt;!-- 项目名称 --&gt;&lt;description&gt;项目描述信息&lt;/description&gt;  &lt;!-- 项目描述...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zed</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RAG-%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">RAG 技术总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-RAG-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">1. RAG 是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-RAG-%E7%9A%84%E5%85%B8%E5%9E%8B%E6%A1%86%E6%9E%B6"><span class="toc-number">1.2.</span> <span class="toc-text">2. RAG 的典型框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%B1-%E7%A6%BB%E7%BA%BF%E9%98%B6%E6%AE%B5%EF%BC%88%E6%9E%84%E5%BB%BA%E7%9F%A5%E8%AF%86%E5%BA%93%EF%BC%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">🧱 离线阶段（构建知识库）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%8D-%E5%9C%A8%E7%BA%BF%E9%98%B6%E6%AE%B5%EF%BC%88%E5%AE%9E%E6%97%B6%E9%97%AE%E7%AD%94%EF%BC%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">🔍 在线阶段（实时问答）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">1.2.3.</span> <span class="toc-text">常见技术栈</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-RAG-%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.3.</span> <span class="toc-text">3. RAG 的应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%9A-%E4%BC%81%E4%B8%9A%E7%9F%A5%E8%AF%86%E5%BA%93-%E5%86%85%E9%83%A8%E6%90%9C%E7%B4%A2"><span class="toc-number">1.3.1.</span> <span class="toc-text">📚 企业知识库 &#x2F; 内部搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A4%96-%E5%AE%A2%E6%9C%8D-%E5%B8%AE%E5%8A%A9%E4%B8%AD%E5%BF%83"><span class="toc-number">1.3.2.</span> <span class="toc-text">🤖 客服 &amp; 帮助中心</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9A%96-%E5%90%88%E5%90%8C-%E6%B3%95%E5%8A%A1-%E5%90%88%E8%A7%84"><span class="toc-number">1.3.3.</span> <span class="toc-text">⚖ 合同 &#x2F; 法务 &#x2F; 合规</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%92%BB-%E4%BB%A3%E7%A0%81%E4%B8%8E%E6%8A%80%E6%9C%AF%E5%8A%A9%E6%89%8B"><span class="toc-number">1.3.4.</span> <span class="toc-text">💻 代码与技术助手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8A-%E4%B8%9A%E5%8A%A1%E6%95%B0%E6%8D%AE%E9%97%AE%E7%AD%94%EF%BC%88%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80-BI%EF%BC%89"><span class="toc-number">1.3.5.</span> <span class="toc-text">📊 业务数据问答（自然语言 BI）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8F%A5-%E5%8C%BB%E7%96%97%E3%80%81%E5%88%B6%E9%80%A0%E3%80%81%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.3.6.</span> <span class="toc-text">🏥 医疗、制造、公共服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%B7%B2%E7%BB%8F%E8%90%BD%E5%9C%B0%E7%9A%84-RAG-%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B"><span class="toc-number">1.4.</span> <span class="toc-text">4. 已经落地的 RAG 项目案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%A6%82%E4%BD%95%E8%87%AA%E5%B7%B1%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA-RAG-%E7%B3%BB%E7%BB%9F%EF%BC%9F"><span class="toc-number">1.5.</span> <span class="toc-text">5. 如何自己构建一个 RAG 系统？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">6. 一句话总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/03/Nginx%E8%AF%A6%E8%A7%A3/" title="Nginx详解">Nginx详解</a><time datetime="2025-12-03T09:13:59.000Z" title="Created 2025-12-03 17:13:59">2025-12-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/28/MAVEN-pom/" title="MAVEN pom">MAVEN pom</a><time datetime="2025-11-28T09:22:02.000Z" title="Created 2025-11-28 17:22:02">2025-11-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/24/RAG%E6%A1%86%E6%9E%B6%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/" title="RAG框架及其应用">RAG框架及其应用</a><time datetime="2025-11-24T12:03:37.000Z" title="Created 2025-11-24 20:03:37">2025-11-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/23/Gradle%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Gradle使用指南">Gradle使用指南</a><time datetime="2025-11-23T08:07:19.000Z" title="Created 2025-11-23 16:07:19">2025-11-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/23/docker%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%BC%80%E5%8F%91/" title="docker使用与开发">docker使用与开发</a><time datetime="2025-11-23T08:07:06.000Z" title="Created 2025-11-23 16:07:06">2025-11-23</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bkground.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Zed</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
