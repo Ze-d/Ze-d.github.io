@@ -1,0 +1,467 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>servlet tomcat and springMVC | Hexo</title><meta name="author" content="Zed"><meta name="copyright" content="Zed"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1 概述本篇文档总结了前面关于 Servlet、Tomcat、Spring MVC（以及 Jetty、Spring Boot）的所有回答，目的是帮你把它们的概念和关系串成一个完整、可记忆的知识体系。 可以先用一句话概括三者关系：  Servlet：Java Web 的底层标准接口 Tomcat：实现 Servlet 标准的 Web 服务器 &#x2F; 容器 Spring MVC：建立在 Serv">
+<meta property="og:type" content="article">
+<meta property="og:title" content="servlet tomcat and springMVC">
+<meta property="og:url" content="http://example.com/2025/12/11/servlet-tomcat-and-springMVC/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1 概述本篇文档总结了前面关于 Servlet、Tomcat、Spring MVC（以及 Jetty、Spring Boot）的所有回答，目的是帮你把它们的概念和关系串成一个完整、可记忆的知识体系。 可以先用一句话概括三者关系：  Servlet：Java Web 的底层标准接口 Tomcat：实现 Servlet 标准的 Web 服务器 &#x2F; 容器 Spring MVC：建立在 Serv">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/asuka.jpg">
+<meta property="article:published_time" content="2025-12-11T12:37:21.000Z">
+<meta property="article:modified_time" content="2025-12-11T12:37:41.480Z">
+<meta property="article:author" content="Zed">
+<meta property="article:tag" content="java springboot">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/asuka.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "servlet tomcat and springMVC",
+  "url": "http://example.com/2025/12/11/servlet-tomcat-and-springMVC/",
+  "image": "http://example.com/img/asuka.jpg",
+  "datePublished": "2025-12-11T12:37:21.000Z",
+  "dateModified": "2025-12-11T12:37:41.480Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zed",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/12/11/servlet-tomcat-and-springMVC/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'servlet tomcat and springMVC',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bkground.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bkground.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">servlet tomcat and springMVC</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">servlet tomcat and springMVC</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-12-11T12:37:21.000Z" title="Created 2025-12-11 20:37:21">2025-12-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-12-11T12:37:41.480Z" title="Updated 2025-12-11 20:37:41">2025-12-11</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h1><p>本篇文档总结了前面关于 <strong>Servlet、Tomcat、Spring MVC</strong>（以及 Jetty、Spring Boot）的所有回答，目的是帮你把它们的概念和关系串成一个完整、可记忆的知识体系。</p>
+<p>可以先用一句话概括三者关系：</p>
+<blockquote>
+<p><strong>Servlet：Java Web 的底层标准接口</strong><br> <strong>Tomcat：实现 Servlet 标准的 Web 服务器 &#x2F; 容器</strong><br> <strong>Spring MVC：建立在 Servlet 之上的 Web MVC 框架</strong></p>
+</blockquote>
+<hr>
+<h1 id="2-Servlet-基础"><a href="#2-Servlet-基础" class="headerlink" title="2 Servlet 基础"></a>2 Servlet 基础</h1><h2 id="2-1-什么是-Servlet"><a href="#2-1-什么是-Servlet" class="headerlink" title="2.1 什么是 Servlet"></a>2.1 什么是 Servlet</h2><p>Servlet 不是一个软件，而是：</p>
+<ol>
+<li><strong>一套规范 &#x2F; 标准（Servlet 规范）</strong><br> 定义了：<ul>
+<li><code>Servlet</code> &#x2F; <code>HttpServlet</code> 接口与类</li>
+<li>生命周期方法：<code>init()</code>、<code>service()</code>、<code>doGet()</code>、<code>doPost()</code>、<code>destroy()</code></li>
+<li><code>HttpServletRequest</code>、<code>HttpServletResponse</code> 的行为</li>
+<li>Session、Cookie 等基础机制的行为规则</li>
+</ul>
+</li>
+<li><strong>你写的那个 Java 类</strong><br> 继承 <code>HttpServlet</code>，重写 <code>doGet()</code> &#x2F; <code>doPost()</code> 来处理 HTTP 请求。</li>
+</ol>
+<p>本质上：</p>
+<blockquote>
+<p><strong>Servlet 就是运行在服务器端、专门用来处理请求并返回响应的 Java 类。</strong></p>
+</blockquote>
+<p>例如，一个最简单的 Servlet：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jakarta.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> jakarta.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> jakarta.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloServlet</span> <span class="keyword">extends</span> <span class="title class_">HttpServlet</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doGet</span><span class="params">(HttpServletRequest req,</span></span><br><span class="line"><span class="params">                         HttpServletResponse resp)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        resp.setContentType(<span class="string">&quot;text/html;charset=UTF-8&quot;</span>);</span><br><span class="line">        resp.getWriter().write(<span class="string">&quot;&lt;h1&gt;Hello, Servlet!&lt;/h1&gt;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但注意：<strong>光有这个类，它不会自动“接收 HTTP 请求”</strong>，需要有“Servlet 容器”来调用它，这就引出 Tomcat。</p>
+<h2 id="2-2-Servlet-的生命周期"><a href="#2-2-Servlet-的生命周期" class="headerlink" title="2.2 Servlet 的生命周期"></a>2.2 Servlet 的生命周期</h2><p>典型 Servlet（继承 <code>HttpServlet</code>）有三个核心生命周期阶段：</p>
+<ol>
+<li><strong><code>init()</code></strong><ul>
+<li>Servlet 被创建时调用一次</li>
+<li>通常用于初始化资源（读取配置、初始化对象等）</li>
+</ul>
+</li>
+<li><strong><code>service()</code> &#x2F; <code>doGet()</code> &#x2F; <code>doPost()</code></strong><ul>
+<li>每一次 HTTP 请求都会调用</li>
+<li><code>service()</code> 会根据 HTTP 方法（GET&#x2F;POST&#x2F;PUT&#x2F;DELETE…）去调用对应的 <code>doXxx()</code> 方法</li>
+<li>业务逻辑大部分写在 <code>doGet()</code>、<code>doPost()</code> 等方法里</li>
+</ul>
+</li>
+<li><strong><code>destroy()</code></strong><ul>
+<li>Web 应用卸载或容器关闭时调用一次</li>
+<li>可在此释放资源（关闭连接、线程池等）</li>
+</ul>
+</li>
+</ol>
+<h2 id="2-3-Servlet-在-Web-请求中的角色"><a href="#2-3-Servlet-在-Web-请求中的角色" class="headerlink" title="2.3 Servlet 在 Web 请求中的角色"></a>2.3 Servlet 在 Web 请求中的角色</h2><p>一个 HTTP 请求通过 Servlet 的典型流程：</p>
+<ol>
+<li>浏览器发送请求（例如 <code>GET /hello</code>）</li>
+<li>容器解析请求，找到对应的 Servlet</li>
+<li>创建 <code>HttpServletRequest</code> &#x2F; <code>HttpServletResponse</code></li>
+<li>调用 Servlet 的 <code>service()</code> &#x2F; <code>doGet()</code> &#x2F; <code>doPost()</code></li>
+<li>Servlet 通过 <code>response</code> 写出 HTML &#x2F; JSON &#x2F; 文件流…</li>
+<li>容器把响应通过网络发回客户端</li>
+</ol>
+<p>Servlet 只负责**“业务逻辑 + 读写请求&#x2F;响应”**，网络监听、线程管理等底层工作由容器负责。</p>
+<hr>
+<h1 id="3-Tomcat-与-Servlet-容器"><a href="#3-Tomcat-与-Servlet-容器" class="headerlink" title="3 Tomcat 与 Servlet 容器"></a>3 Tomcat 与 Servlet 容器</h1><h2 id="3-1-Tomcat-是什么"><a href="#3-1-Tomcat-是什么" class="headerlink" title="3.1 Tomcat 是什么"></a>3.1 Tomcat 是什么</h2><p><strong>Tomcat 是一个 Web 服务器 + Servlet 容器</strong>：</p>
+<ul>
+<li>监听端口（默认 8080）</li>
+<li>接收并解析 HTTP 请求</li>
+<li>加载和管理 Web 应用（war 包 &#x2F; webapps）</li>
+<li>管理 Servlet 的生命周期</li>
+<li>处理线程池、连接、Session 等底层细节</li>
+</ul>
+<p>它的一个核心身份是：</p>
+<blockquote>
+<p><strong>Servlet 规范的实现者</strong></p>
+</blockquote>
+<p>也就是说：Tomcat 实现了规范定义的接口与行为，使你写的 Servlet 能被正确加载、调用。</p>
+<h2 id="3-2-Tomcat-与-Servlet-规范的关系"><a href="#3-2-Tomcat-与-Servlet-规范的关系" class="headerlink" title="3.2 Tomcat 与 Servlet 规范的关系"></a>3.2 Tomcat 与 Servlet 规范的关系</h2><p>可以这么理解：</p>
+<ul>
+<li><strong>Servlet 规范</strong>：<ul>
+<li>制定“插座标准”：针脚怎么排布、电压多少、接口形状如何</li>
+</ul>
+</li>
+<li><strong>Tomcat</strong>：<ul>
+<li>按这个标准做出来的“插线板”：可以“插入”任意符合这个标准的“插头”</li>
+</ul>
+</li>
+</ul>
+<p>类比到 Java：</p>
+<ul>
+<li>Servlet 规范给出接口和行为规则</li>
+<li>你写的 Servlet 类实现&#x2F;继承这些接口</li>
+<li>Tomcat 负责：<ul>
+<li>按 URL 映射找到你的 Servlet</li>
+<li>帮你调用 <code>init()</code>、<code>doGet()</code>、<code>doPost()</code>、<code>destroy()</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>同一套 Servlet 代码也可以跑在 Jetty、Undertow、GlassFish 等其他 Servlet 容器中</strong>，不必只用 Tomcat。</p>
+<h2 id="3-3-Tomcat-中可以运行什么程序"><a href="#3-3-Tomcat-中可以运行什么程序" class="headerlink" title="3.3 Tomcat 中可以运行什么程序"></a>3.3 Tomcat 中可以运行什么程序</h2><h3 id="3-3-1-基于-Servlet-的-Java-Web-应用"><a href="#3-3-1-基于-Servlet-的-Java-Web-应用" class="headerlink" title="3.3.1 基于 Servlet 的 Java Web 应用"></a>3.3.1 基于 Servlet 的 Java Web 应用</h3><p>Tomcat 的“主战场”就是运行各种基于 Servlet 的 Java Web 应用：</p>
+<ul>
+<li>原生 Servlet + JSP</li>
+<li>Spring MVC &#x2F; Spring Boot（war 部署）</li>
+<li>其他框架（Struts、JSF、Shiro 等）</li>
+</ul>
+<p>在 Tomcat 看来，这些都是“多个 Servlet + Filter + Listener”的组合。</p>
+<h3 id="3-3-2-静态资源"><a href="#3-3-2-静态资源" class="headerlink" title="3.3.2 静态资源"></a>3.3.2 静态资源</h3><p>Tomcat 也可以：</p>
+<ul>
+<li>提供静态 HTML、CSS、JS、图片</li>
+<li>文件下载等</li>
+</ul>
+<p>靠的是 Tomcat 内置的默认 Servlet 和静态资源处理器。<br> <strong>即便你不写任何 Servlet，Tomcat 仍然可以当一个简易 Web 服务器使用。</strong></p>
+<h3 id="3-3-3-其他-Java-外部程序（技术上可以，工程上不推荐）"><a href="#3-3-3-其他-Java-外部程序（技术上可以，工程上不推荐）" class="headerlink" title="3.3.3 其他 Java &#x2F; 外部程序（技术上可以，工程上不推荐）"></a>3.3.3 其他 Java &#x2F; 外部程序（技术上可以，工程上不推荐）</h3><p>你可以在 Web 应用里：</p>
+<ul>
+<li>启动后台线程、定时任务</li>
+<li>使用 <code>Runtime.exec()</code> 或 <code>ProcessBuilder</code> 调用外部程序（如 Python、Shell）</li>
+</ul>
+<p>但问题是：</p>
+<ul>
+<li>Tomcat 本来是 Web 容器，不是任务调度平台</li>
+<li>把一堆后台任务塞进 Tomcat 进程容易导致：<ul>
+<li>稳定性差，某个任务挂了拖垮整个 Web</li>
+<li>运维、排错复杂</li>
+</ul>
+</li>
+</ul>
+<p>因此：<strong>技术上可以，工程上一般建议拆成独立服务。</strong></p>
+<h3 id="3-3-4-非-Java-Web-应用（Python-Node-等）"><a href="#3-3-4-非-Java-Web-应用（Python-Node-等）" class="headerlink" title="3.3.4 非 Java Web 应用（Python&#x2F;Node 等）"></a>3.3.4 非 Java Web 应用（Python&#x2F;Node 等）</h3><p>Tomcat 不能直接运行 Python Flask &#x2F; Node.js 应用，因为它们需要各自的运行时。</p>
+<p>常见架构是：</p>
+<ul>
+<li>每个后端（Python&#x2F;Node&#x2F;Java）有自己的进程</li>
+<li>前面再加一个 Nginx 之类的反向代理，把不同路径或域名转发到不同后端</li>
+</ul>
+<hr>
+<h1 id="4-Spring-MVC"><a href="#4-Spring-MVC" class="headerlink" title="4 Spring MVC"></a>4 Spring MVC</h1><h2 id="4-1-Spring-MVC-的定位"><a href="#4-1-Spring-MVC-的定位" class="headerlink" title="4.1 Spring MVC 的定位"></a>4.1 Spring MVC 的定位</h2><p>如果只用原生 Servlet：</p>
+<ul>
+<li>你需要手写参数解析（<code>req.getParameter</code>）</li>
+<li>手动处理 URL 到类&#x2F;方法的映射</li>
+<li>手动输出 JSON 或 JSP 等</li>
+</ul>
+<p>这非常原始。</p>
+<p><strong>Spring MVC 是一个建立在 Servlet 之上的 Web MVC 框架</strong>，主要目标：</p>
+<ul>
+<li>封装这些繁琐细节</li>
+<li>提供：<ul>
+<li>注解式控制器（<code>@Controller</code>、<code>@RestController</code>）</li>
+<li>URL 映射（<code>@RequestMapping</code>、<code>@GetMapping</code> 等）</li>
+<li>自动参数绑定、数据校验</li>
+<li>视图解析、返回 JSON 等能力</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-2-DispatcherServlet：Spring-MVC-的核心-Servlet"><a href="#4-2-DispatcherServlet：Spring-MVC-的核心-Servlet" class="headerlink" title="4.2 DispatcherServlet：Spring MVC 的核心 Servlet"></a>4.2 DispatcherServlet：Spring MVC 的核心 Servlet</h2><p>Spring MVC 的核心是一个特殊的 Servlet：</p>
+<blockquote>
+<p><strong><code>DispatcherServlet</code></strong></p>
+</blockquote>
+<p>特点：</p>
+<ul>
+<li>继承自 <code>HttpServlet</code>，本质也是一个 Servlet</li>
+<li>在容器中被注册为“前端控制器”（Front Controller）</li>
+<li>所有匹配的请求都先交给它处理</li>
+</ul>
+<p>请求进入 <code>DispatcherServlet</code> 后，Spring 开始接管：</p>
+<ol>
+<li>通过 <code>HandlerMapping</code> 找到对应的控制器方法（某个 <code>@Controller</code> &#x2F; <code>@RestController</code> 上的某个方法）</li>
+<li>用 <code>HandlerAdapter</code> 去调用该方法</li>
+<li>处理方法参数（路径变量、请求参数、JSON、表单…）</li>
+<li>返回值通过视图解析或消息转换器输出为 HTML &#x2F; JSON 等</li>
+</ol>
+<h2 id="4-3-注解式编程模型（-Controller、-GetMapping-等）"><a href="#4-3-注解式编程模型（-Controller、-GetMapping-等）" class="headerlink" title="4.3 注解式编程模型（@Controller、@GetMapping 等）"></a>4.3 注解式编程模型（<code>@Controller</code>、<code>@GetMapping</code> 等）</h2><p>在 Spring MVC 中，你写的不再是直接继承 <code>HttpServlet</code> 的类，而是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/user&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> User <span class="title function_">getUser</span><span class="params">(<span class="meta">@PathVariable</span> Long id)</span> &#123;</span><br><span class="line">        <span class="comment">// 业务逻辑...</span></span><br><span class="line">        <span class="keyword">return</span> userService.findById(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里：</p>
+<ul>
+<li><code>@RestController</code> &#x2F; <code>@Controller</code>：标记该类是一个控制器，让 Spring 扫描并管理</li>
+<li><code>@RequestMapping(&quot;/user&quot;)</code>：定义类级别路径前缀</li>
+<li><code>@GetMapping(&quot;/&#123;id&#125;&quot;)</code>：映射 GET <code>/user/&#123;id&#125;</code> 请求到该方法</li>
+<li>方法参数和返回值都由 Spring 自动进行绑定和序列化</li>
+</ul>
+<p>**关键点：**这些注解不是 Tomcat 的、也不是 Servlet 的，而是 <strong>Spring MVC 自己的东西</strong>，依赖的是：</p>
+<ul>
+<li>Spring 容器（Bean 管理）</li>
+<li><code>DispatcherServlet</code>（统一入口）</li>
+<li>运行在一个 Servlet 容器里（Tomcat&#x2F;Jetty 等）</li>
+</ul>
+<hr>
+<h1 id="5-Jetty-与其他-Servlet-容器"><a href="#5-Jetty-与其他-Servlet-容器" class="headerlink" title="5 Jetty 与其他 Servlet 容器"></a>5 Jetty 与其他 Servlet 容器</h1><h2 id="5-1-Jetty-与-Tomcat-的关系"><a href="#5-1-Jetty-与-Tomcat-的关系" class="headerlink" title="5.1 Jetty 与 Tomcat 的关系"></a>5.1 Jetty 与 Tomcat 的关系</h2><p>Jetty、Tomcat、Undertow 都属于：</p>
+<blockquote>
+<p><strong>Servlet 容器（实现 Servlet 规范的服务器）</strong></p>
+</blockquote>
+<p>区别主要在：</p>
+<ul>
+<li>实现方式、性能特点</li>
+<li>嵌入式使用体验</li>
+<li>配置风格</li>
+</ul>
+<p>但在 <strong>Servlet 视角</strong> 和 <strong>Spring MVC 视角</strong>，它们都是：</p>
+<blockquote>
+<p>“能接收 HTTP 请求并调用 Servlet 的容器”。</p>
+</blockquote>
+<h2 id="5-2-在-Jetty-上使用-Controller-GetMapping-的前提"><a href="#5-2-在-Jetty-上使用-Controller-GetMapping-的前提" class="headerlink" title="5.2 在 Jetty 上使用 @Controller &#x2F; @GetMapping 的前提"></a>5.2 在 Jetty 上使用 <code>@Controller</code> &#x2F; <code>@GetMapping</code> 的前提</h2><p>要在 Jetty 上使用 Spring MVC 注解，前提是：</p>
+<ol>
+<li>引入 Spring MVC 相关依赖（例如 <code>spring-webmvc</code>）</li>
+<li>在 Jetty 中正确注册 <code>DispatcherServlet</code></li>
+<li>启动 Spring 容器并开启组件扫描（XML 或 Java Config 都可）</li>
+</ol>
+<p>这样：</p>
+<ul>
+<li>Jetty 负责把请求交给 <code>DispatcherServlet</code></li>
+<li>Spring MVC 解析 <code>@Controller</code> &#x2F; <code>@GetMapping</code> 等</li>
+<li>最终效果与使用 Tomcat 几乎完全一样</li>
+</ul>
+<p>如果你只是“裸 Jetty + 原生 Servlet”，没有集成 Spring MVC，那么：</p>
+<ul>
+<li><code>@Controller</code>、<code>@GetMapping</code> 这些注解不会起作用，只是摆设。</li>
+</ul>
+<hr>
+<h1 id="6-三者关系与完整请求链路"><a href="#6-三者关系与完整请求链路" class="headerlink" title="6 三者关系与完整请求链路"></a>6 三者关系与完整请求链路</h1><h2 id="6-1-分层结构（逻辑分层）"><a href="#6-1-分层结构（逻辑分层）" class="headerlink" title="6.1 分层结构（逻辑分层）"></a>6.1 分层结构（逻辑分层）</h2><p>可以把浏览器到业务代码的调用链画成这样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[客户端 / 浏览器]</span><br><span class="line">        │  HTTP 请求</span><br><span class="line">        ▼</span><br><span class="line">[Servlet 容器：Tomcat / Jetty / Undertow]</span><br><span class="line">        │  找到对应 Servlet，并调用其 service()</span><br><span class="line">        ▼</span><br><span class="line">[Servlet 层：原生 HttpServlet 或 Spring 的 DispatcherServlet]</span><br><span class="line">        │  若是 DispatcherServlet，则继续分发</span><br><span class="line">        ▼</span><br><span class="line">[Spring MVC 层：@Controller / @RestController / @GetMapping 方法]</span><br><span class="line">        │  调用业务逻辑、访问数据库等</span><br><span class="line">        ▼</span><br><span class="line">[组装响应，通过 Servlet 容器发回给浏览器]</span><br></pre></td></tr></table></figure>
+
+<p>从“控制权”的角度看：</p>
+<ol>
+<li>浏览器 → 容器（Tomcat&#x2F;Jetty）</li>
+<li>容器 → 某个 Servlet（可能是 DispatcherServlet）</li>
+<li>DispatcherServlet → 某个 Controller 的方法</li>
+<li>方法返回结果 → DispatcherServlet → 容器 → 浏览器</li>
+</ol>
+<h2 id="6-2-请求处理的时序简述（以-Spring-MVC-为例）"><a href="#6-2-请求处理的时序简述（以-Spring-MVC-为例）" class="headerlink" title="6.2 请求处理的时序简述（以 Spring MVC 为例）"></a>6.2 请求处理的时序简述（以 Spring MVC 为例）</h2><p>以 <code>GET /user/1</code> 为例：</p>
+<ol>
+<li><p>浏览器发起请求</p>
+</li>
+<li><p>Tomcat 监听 8080，接收请求并解析</p>
+</li>
+<li><p>Tomcat 根据 URL 映射，找到 Spring 注册的 <code>DispatcherServlet</code></p>
+</li>
+<li><p>Tomcat 调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dispatcherServlet.service(request, response);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>DispatcherServlet</code>：</p>
+<ul>
+<li>通过 HandlerMapping 找到 <code>UserController#getUser</code></li>
+<li>做参数绑定（<code>@PathVariable Long id</code>）</li>
+<li>调用 <code>getUser(1L)</code></li>
+<li>拿到返回的 <code>User</code> 对象</li>
+<li>使用 JSON 转换器写入 <code>response</code></li>
+</ul>
+</li>
+<li><p><code>DispatcherServlet</code> 结束，控制权回到 Tomcat</p>
+</li>
+<li><p>Tomcat 把构造好的 HTTP 响应发送给浏览器</p>
+</li>
+</ol>
+<hr>
+<h1 id="7-与-Spring-Boot-的关系"><a href="#7-与-Spring-Boot-的关系" class="headerlink" title="7 与 Spring Boot 的关系"></a>7 与 Spring Boot 的关系</h1><p>Spring Boot 主要是<strong>帮你自动把这一整套配好、打包好</strong>：</p>
+<ol>
+<li><p>默认内嵌一个 Servlet 容器（默认 Tomcat，可换 Jetty&#x2F;Undertow）</p>
+</li>
+<li><p>自动注册 <code>DispatcherServlet</code></p>
+</li>
+<li><p>自动扫描 <code>@RestController</code>、<code>@Controller</code> 等</p>
+</li>
+<li><p>提供一键启动的 <code>main</code> 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Application</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>底层仍然是同一条链路：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">浏览器</span><br><span class="line">  → 内嵌 Tomcat/Jetty</span><br><span class="line">  → DispatcherServlet (Servlet)</span><br><span class="line">  → Spring MVC Controller 方法</span><br></pre></td></tr></table></figure>
+
+<p><strong>换容器不影响你的 <code>@Controller</code> &#x2F; <code>@GetMapping</code> 代码</strong>，只要 Spring MVC 还在。</p>
+<hr>
+<h1 id="8-常见误区与记忆方式"><a href="#8-常见误区与记忆方式" class="headerlink" title="8 常见误区与记忆方式"></a>8 常见误区与记忆方式</h1><h2 id="8-1-常见误区"><a href="#8-1-常见误区" class="headerlink" title="8.1 常见误区"></a>8.1 常见误区</h2><ol>
+<li><strong>把 Servlet 当成“某个框架或服务器”</strong><br> 实际上 Servlet 是规范 + 接口 + 你写的类。</li>
+<li><strong>认为 <code>@Controller</code> &#x2F; <code>@GetMapping</code> 是 Tomcat 提供的</strong><br> 它们是 Spring MVC 的注解，只依赖：<ul>
+<li>Spring 容器</li>
+<li>DispatcherServlet</li>
+<li>一个 Servlet 容器（Tomcat&#x2F;Jetty&#x2F;Undertow 等都可以）</li>
+</ul>
+</li>
+<li><strong>觉得“Spring MVC 取代了 Servlet”</strong><br> 不对，Spring MVC 是建立在 Servlet 之上，核心仍是一个 Servlet（DispatcherServlet）。</li>
+<li><strong>以为只能在 Tomcat 上用 Spring MVC</strong><br> 任何支持 Servlet 规范的容器（Jetty、Undertow 等）都可以。</li>
+</ol>
+<h2 id="8-2-记忆口诀"><a href="#8-2-记忆口诀" class="headerlink" title="8.2 记忆口诀"></a>8.2 记忆口诀</h2><p>你可以用这一句来记住三者关系：</p>
+<blockquote>
+<p><strong>Servlet 是地基标准，Tomcat 是这块地上的物业（容器），Spring MVC 是在地基上盖的框架大楼。</strong></p>
+</blockquote>
+<p>或者更程序员一点的说法：</p>
+<blockquote>
+<p>Servlet：接口规范<br> Tomcat：接口的实现 + 运行平台<br> Spring MVC：在接口之上封装出来的高级库（用一个特制的 Servlet：DispatcherServlet 起家）</p>
+</blockquote>
+<hr>
+<h1 id="9-总结"><a href="#9-总结" class="headerlink" title="9 总结"></a>9 总结</h1><ul>
+<li><strong>Servlet</strong>：<ul>
+<li>Java Web 的核心标准接口</li>
+<li>定义如何用 Java 类处理 HTTP 请求</li>
+<li>你的业务类可以继承 <code>HttpServlet</code> 来实现一个 Servlet</li>
+</ul>
+</li>
+<li><strong>Tomcat</strong>：<ul>
+<li>实现 Servlet 规范的 Web 服务器 &#x2F; 容器</li>
+<li>负责接收 HTTP 请求、管理 Servlet 生命周期、调用 <code>doGet()</code> &#x2F; <code>doPost()</code></li>
+<li>可以运行基于 Servlet 的各种 Java Web 应用和静态资源</li>
+</ul>
+</li>
+<li><strong>Spring MVC</strong>：<ul>
+<li>建立在 Servlet 之上的 Web MVC 框架</li>
+<li>用 <code>DispatcherServlet</code> 作为核心 Servlet</li>
+<li>提供 <code>@Controller</code> &#x2F; <code>@RestController</code> &#x2F; <code>@GetMapping</code> 等注解来简化 Web 开发</li>
+</ul>
+</li>
+<li><strong>Jetty &#x2F; Undertow 等</strong>：<ul>
+<li>也是 Servlet 容器，只要集成 Spring MVC，同样可以使用注解式 Controller，与 Tomcat 无本质差别。</li>
+</ul>
+</li>
+</ul>
+<p>如果你之后想要做 PPT 或笔记，我还可以帮你把这份内容拆成“几页 PPT 结构”和“时序图 &#x2F; 结构图草稿”，直接拿去用。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Zed</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2025/12/11/servlet-tomcat-and-springMVC/">http://example.com/2025/12/11/servlet-tomcat-and-springMVC/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/java-springboot/">java springboot</a></div><div class="post-share"><div class="social-share" data-image="/img/asuka.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/12/11/Spring-AOP/" title="Spring AOP"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Spring AOP</div></div><div class="info-2"><div class="info-item-1">我直接从三个层次来讲：是什么 → 能干嘛 → Spring 具体怎么做（含代码示例）。看完你基本就能自己写一个简单的 AOP 了。  一、AOP 是什么？跟 OOP 有啥关系？ OOP（面向对象）：通过类、继承、多态，把**“核心业务逻辑”**封装起来，比如下单、支付、发货。 AOP（面向切面）：通过“切面”，把一些跟核心业务“横着切过去”的功能抽出来统一处理，比如： 事务（Transactional） 日志 权限校验 性能统计 异常监控    这些东西都有特点：  不属于某一个具体业务，但又“到处都要用”，如果每个方法里手写一遍会非常恶心。  AOP 的核心思想一句话：  在不改业务代码的前提下，在方法调用“前后、抛异常时”等时机，自动插入一段公共逻辑。   二、AOP 里的几个关键概念（Spring 里也就是这些）你在 Spring AOP 会经常看到这些词：  Join Point（连接点）  程序中可以被“切入”的点。 在 Spring AOP 里，只能是方法的执行（method execution）。 比如：UserService.createUser()...</div></div></div></a><a class="pagination-related" href="/2025/12/11/Autowired%E5%92%8CResource%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%8C%BA%E5%88%AB/" title="Autowired和Resource注解的区别"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Autowired和Resource注解的区别</div></div><div class="info-2"><div class="info-item-1">先直接说结论：  两者都是用来做依赖注入的，但 @Autowired 是 Spring 自家的注解，按类型（byType）优先。 @Resource 是 JSR-250（标准规范）的注解，按名字（byName）优先。  下面细一点说清楚区别。  1. 所属来源不同 @Autowired 包：org.springframework.beans.factory.annotation.Autowired 只在 Spring 体系下有意义，是 Spring 自己的注解。   @Resource 包：javax.annotation.Resource（JDK8~） 或 jakarta.annotation.Resource（Jakarta EE） 是 Java 标准（JSR-250）的一部分，各种容器（比如 Java EE 容器）都可以识别。    很多公司内部规范会说：如果想写“与框架无关”的代码，用 @Resource 更“标准”一点。  2. 注入规则差异（核心区别）2.1 @Autowired：类型优先默认策略：byType（按类型查找） 12@Autowiredprivate...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zed</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">1 概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Servlet-%E5%9F%BA%E7%A1%80"><span class="toc-number">2.</span> <span class="toc-text">2 Servlet 基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%BB%80%E4%B9%88%E6%98%AF-Servlet"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 什么是 Servlet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-Servlet-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 Servlet 的生命周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-Servlet-%E5%9C%A8-Web-%E8%AF%B7%E6%B1%82%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 Servlet 在 Web 请求中的角色</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Tomcat-%E4%B8%8E-Servlet-%E5%AE%B9%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">3 Tomcat 与 Servlet 容器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-Tomcat-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 Tomcat 是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Tomcat-%E4%B8%8E-Servlet-%E8%A7%84%E8%8C%83%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 Tomcat 与 Servlet 规范的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Tomcat-%E4%B8%AD%E5%8F%AF%E4%BB%A5%E8%BF%90%E8%A1%8C%E4%BB%80%E4%B9%88%E7%A8%8B%E5%BA%8F"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 Tomcat 中可以运行什么程序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-1-%E5%9F%BA%E4%BA%8E-Servlet-%E7%9A%84-Java-Web-%E5%BA%94%E7%94%A8"><span class="toc-number">3.3.1.</span> <span class="toc-text">3.3.1 基于 Servlet 的 Java Web 应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-2-%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90"><span class="toc-number">3.3.2.</span> <span class="toc-text">3.3.2 静态资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-3-%E5%85%B6%E4%BB%96-Java-%E5%A4%96%E9%83%A8%E7%A8%8B%E5%BA%8F%EF%BC%88%E6%8A%80%E6%9C%AF%E4%B8%8A%E5%8F%AF%E4%BB%A5%EF%BC%8C%E5%B7%A5%E7%A8%8B%E4%B8%8A%E4%B8%8D%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-number">3.3.3.</span> <span class="toc-text">3.3.3 其他 Java &#x2F; 外部程序（技术上可以，工程上不推荐）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-4-%E9%9D%9E-Java-Web-%E5%BA%94%E7%94%A8%EF%BC%88Python-Node-%E7%AD%89%EF%BC%89"><span class="toc-number">3.3.4.</span> <span class="toc-text">3.3.4 非 Java Web 应用（Python&#x2F;Node 等）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Spring-MVC"><span class="toc-number">4.</span> <span class="toc-text">4 Spring MVC</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-Spring-MVC-%E7%9A%84%E5%AE%9A%E4%BD%8D"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 Spring MVC 的定位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-DispatcherServlet%EF%BC%9ASpring-MVC-%E7%9A%84%E6%A0%B8%E5%BF%83-Servlet"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 DispatcherServlet：Spring MVC 的核心 Servlet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E6%B3%A8%E8%A7%A3%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B%EF%BC%88-Controller%E3%80%81-GetMapping-%E7%AD%89%EF%BC%89"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 注解式编程模型（@Controller、@GetMapping 等）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Jetty-%E4%B8%8E%E5%85%B6%E4%BB%96-Servlet-%E5%AE%B9%E5%99%A8"><span class="toc-number">5.</span> <span class="toc-text">5 Jetty 与其他 Servlet 容器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-Jetty-%E4%B8%8E-Tomcat-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 Jetty 与 Tomcat 的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E5%9C%A8-Jetty-%E4%B8%8A%E4%BD%BF%E7%94%A8-Controller-GetMapping-%E7%9A%84%E5%89%8D%E6%8F%90"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 在 Jetty 上使用 @Controller &#x2F; @GetMapping 的前提</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E4%B8%89%E8%80%85%E5%85%B3%E7%B3%BB%E4%B8%8E%E5%AE%8C%E6%95%B4%E8%AF%B7%E6%B1%82%E9%93%BE%E8%B7%AF"><span class="toc-number">6.</span> <span class="toc-text">6 三者关系与完整请求链路</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84%EF%BC%88%E9%80%BB%E8%BE%91%E5%88%86%E5%B1%82%EF%BC%89"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 分层结构（逻辑分层）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86%E7%9A%84%E6%97%B6%E5%BA%8F%E7%AE%80%E8%BF%B0%EF%BC%88%E4%BB%A5-Spring-MVC-%E4%B8%BA%E4%BE%8B%EF%BC%89"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 请求处理的时序简述（以 Spring MVC 为例）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E4%B8%8E-Spring-Boot-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">7.</span> <span class="toc-text">7 与 Spring Boot 的关系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA%E4%B8%8E%E8%AE%B0%E5%BF%86%E6%96%B9%E5%BC%8F"><span class="toc-number">8.</span> <span class="toc-text">8 常见误区与记忆方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 常见误区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-%E8%AE%B0%E5%BF%86%E5%8F%A3%E8%AF%80"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 记忆口诀</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text">9 总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/13/redis%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="redis基本数据类型">redis基本数据类型</a><time datetime="2025-12-13T07:16:50.000Z" title="Created 2025-12-13 15:16:50">2025-12-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/12/Spring-Boot%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC/" title="Spring Boot事件监听">Spring Boot事件监听</a><time datetime="2025-12-12T08:58:11.000Z" title="Created 2025-12-12 16:58:11">2025-12-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/12/Redis%E5%92%8CMysql%E5%B8%B8%E8%A7%81%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF/" title="Redis和Mysql常见应用场景">Redis和Mysql常见应用场景</a><time datetime="2025-12-12T08:44:20.000Z" title="Created 2025-12-12 16:44:20">2025-12-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/11/Mybatis-Plus%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3/" title="Mybatis-Plus使用文档">Mybatis-Plus使用文档</a><time datetime="2025-12-11T13:08:53.000Z" title="Created 2025-12-11 21:08:53">2025-12-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/11/Autowired%E5%92%8CResource%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%8C%BA%E5%88%AB/" title="Autowired和Resource注解的区别">Autowired和Resource注解的区别</a><time datetime="2025-12-11T12:52:46.000Z" title="Created 2025-12-11 20:52:46">2025-12-11</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bkground.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Zed</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

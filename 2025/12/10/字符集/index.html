@@ -1,0 +1,423 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>字符集 | Hexo</title><meta name="author" content="Zed"><meta name="copyright" content="Zed"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="下面是一个可以直接当作笔记&#x2F;文档使用的技术总结（Markdown 形式）。你可以整段复制到 Markdown、Word 或 Confluence 里。  字符集与编码技术总结1. 基本概念梳理在编码相关问题中，最容易混淆的几个概念是：  字符（Character） 人类眼中的一个符号，例如：A、中、🙂。 码点（Code Point） 给字符分配的唯一编号。 例如在 Unicode 中：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符集">
+<meta property="og:url" content="http://example.com/2025/12/10/%E5%AD%97%E7%AC%A6%E9%9B%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="下面是一个可以直接当作笔记&#x2F;文档使用的技术总结（Markdown 形式）。你可以整段复制到 Markdown、Word 或 Confluence 里。  字符集与编码技术总结1. 基本概念梳理在编码相关问题中，最容易混淆的几个概念是：  字符（Character） 人类眼中的一个符号，例如：A、中、🙂。 码点（Code Point） 给字符分配的唯一编号。 例如在 Unicode 中：">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/asuka.jpg">
+<meta property="article:published_time" content="2025-12-10T12:58:04.000Z">
+<meta property="article:modified_time" content="2025-12-10T12:58:17.354Z">
+<meta property="article:author" content="Zed">
+<meta property="article:tag" content="cs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/asuka.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "字符集",
+  "url": "http://example.com/2025/12/10/%E5%AD%97%E7%AC%A6%E9%9B%86/",
+  "image": "http://example.com/img/asuka.jpg",
+  "datePublished": "2025-12-10T12:58:04.000Z",
+  "dateModified": "2025-12-10T12:58:17.354Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zed",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/12/10/%E5%AD%97%E7%AC%A6%E9%9B%86/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '字符集',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bkground.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bkground.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">字符集</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">字符集</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-12-10T12:58:04.000Z" title="Created 2025-12-10 20:58:04">2025-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-12-10T12:58:17.354Z" title="Updated 2025-12-10 20:58:17">2025-12-10</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>下面是一个可以直接当作笔记&#x2F;文档使用的技术总结（Markdown 形式）。你可以整段复制到 Markdown、Word 或 Confluence 里。</p>
+<hr>
+<h1 id="字符集与编码技术总结"><a href="#字符集与编码技术总结" class="headerlink" title="字符集与编码技术总结"></a>字符集与编码技术总结</h1><h2 id="1-基本概念梳理"><a href="#1-基本概念梳理" class="headerlink" title="1. 基本概念梳理"></a>1. 基本概念梳理</h2><p>在编码相关问题中，最容易混淆的几个概念是：</p>
+<ul>
+<li><strong>字符（Character）</strong><br> 人类眼中的一个符号，例如：<code>A</code>、<code>中</code>、<code>🙂</code>。</li>
+<li><strong>码点（Code Point）</strong><br> 给字符分配的唯一编号。<br> 例如在 Unicode 中：<ul>
+<li><code>A</code> → U+0041</li>
+<li><code>中</code> → U+4E2D</li>
+</ul>
+</li>
+<li><strong>字符集（Character Set &#x2F; Charset）</strong><br> 一套“有哪些字符 + 每个字符对应什么码点”的<strong>字符集合与编号表</strong>。<br> 可以理解为一本“字典”，定义了可用字符范围和每个字符的编号。</li>
+<li><strong>字符编码（Character Encoding）</strong><br> 规定“码点 → 字节序列”的转换规则，即<strong>字符最终在文件&#x2F;网络中用哪些字节表示</strong>。<br> 例如同一个码点 U+4E2D：<ul>
+<li>在 UTF-8 中编码为 <code>E4 B8 AD</code></li>
+<li>在 UTF-16LE 中编码为 <code>2D 4E</code></li>
+</ul>
+</li>
+<li><strong>字体（Font）</strong><br> 决定这个字符“长什么样”，与字符集&#x2F;编码不同层面。</li>
+</ul>
+<p>在很多系统&#x2F;配置中，<code>charset</code> 这个词往往同时指“字符集 + 编码实现方式”（例如 <code>charset=utf-8</code>）。</p>
+<hr>
+<h2 id="2-为什么会有那么多字符集？"><a href="#2-为什么会有那么多字符集？" class="headerlink" title="2. 为什么会有那么多字符集？"></a>2. 为什么会有那么多字符集？</h2><h3 id="2-1-ASCII：起点"><a href="#2-1-ASCII：起点" class="headerlink" title="2.1 ASCII：起点"></a>2.1 ASCII：起点</h3><p>最早只有美国用户使用计算机，设计了 <strong>ASCII</strong>：</p>
+<ul>
+<li>7 位编码（0–127），共 128 个字符</li>
+<li>包含英文字母、数字、常用标点和控制字符</li>
+<li>每个字符 1 字节，高位为 0</li>
+</ul>
+<p>当时只考虑英文，世界看起来很简单。</p>
+<h3 id="2-2-各国各搞一套本地编码"><a href="#2-2-各国各搞一套本地编码" class="headerlink" title="2.2 各国各搞一套本地编码"></a>2.2 各国各搞一套本地编码</h3><p>随着计算机全球使用：</p>
+<ul>
+<li>欧洲语言需要带重音的拉丁字母（é、ö、ç 等）</li>
+<li>中文需要大量汉字</li>
+<li>日文需要平假名&#x2F;片假名&#x2F;汉字</li>
+<li>韩文有自己的字母系统</li>
+</ul>
+<p>受制于早期硬件资源，大多方案希望保持<strong>单字节编码（1 字节 256 种可能）</strong>：</p>
+<ul>
+<li>0–127 继续兼容 ASCII</li>
+<li>128–255 这部分，各地区&#x2F;厂商自由发挥</li>
+</ul>
+<p>结果出现了大量地区性&#x2F;厂商自定义字符集：</p>
+<ul>
+<li>欧洲：<code>ISO-8859-1/2/...</code> 等</li>
+<li>简体中文：<code>GB2312</code> → <code>GBK</code> → <code>GB18030</code></li>
+<li>繁体中文：<code>Big5</code></li>
+<li>日文：<code>Shift_JIS</code>、<code>EUC-JP</code></li>
+<li>各种 Windows 代码页：<code>cp936</code>、<code>cp1252</code> 等</li>
+</ul>
+<p>这些字符集对同一字节（例如 <code>0xE4</code>）的解释完全不同，互不兼容，因此产生大量乱码问题。</p>
+<h3 id="2-3-Unicode：统一大一统方案"><a href="#2-3-Unicode：统一大一统方案" class="headerlink" title="2.3 Unicode：统一大一统方案"></a>2.3 Unicode：统一大一统方案</h3><p>为解决“各国各搞一套彼此不兼容”的混乱局面，提出了 <strong>Unicode</strong>：</p>
+<ul>
+<li>一套统一的“全球字符 → 码点”映射规范</li>
+<li>覆盖几乎所有自然语言文字与大量符号</li>
+</ul>
+<p>注意：<br> <strong>Unicode 本身是“码点规范”，不是具体存储格式。</strong><br> 在 Unicode 之上，才有不同的编码方式：</p>
+<ul>
+<li><strong>UTF-8</strong>：变长 1–4 字节，兼容 ASCII，是互联网标准默认编码</li>
+<li><strong>UTF-16</strong>：多数字符 2 字节，少数 4 字节，常见于 Windows&#x2F;Java 内部</li>
+<li><strong>UTF-32</strong>：每个字符固定 4 字节，简单但浪费空间</li>
+</ul>
+<hr>
+<h2 id="3-常见字符集与编码方式"><a href="#3-常见字符集与编码方式" class="headerlink" title="3. 常见字符集与编码方式"></a>3. 常见字符集与编码方式</h2><h3 id="3-1-旧式地区性编码（单-双字节）"><a href="#3-1-旧式地区性编码（单-双字节）" class="headerlink" title="3.1 旧式地区性编码（单&#x2F;双字节）"></a>3.1 旧式地区性编码（单&#x2F;双字节）</h3><ul>
+<li><strong>ASCII</strong>：只含英文，1 字节</li>
+<li><strong>ISO-8859-x 系列</strong>：面向不同欧洲语言的扩展</li>
+<li><strong>GB2312 &#x2F; GBK &#x2F; GB18030</strong>：简体中文编码演进</li>
+<li><strong>Big5</strong>：繁体中文</li>
+<li><strong>Shift_JIS &#x2F; EUC-JP</strong>：日文编码</li>
+</ul>
+<p>特点：<br> 覆盖范围有限，只适合特定地区&#x2F;语言，互不兼容。</p>
+<h3 id="3-2-Unicode-编码系列"><a href="#3-2-Unicode-编码系列" class="headerlink" title="3.2 Unicode 编码系列"></a>3.2 Unicode 编码系列</h3><ul>
+<li><strong>UTF-8</strong><ul>
+<li>变长，1–4 字节</li>
+<li>ASCII 范围仍然是单字节，与 ASCII 完全兼容</li>
+<li>非 ASCII 字符使用 2–4 字节</li>
+<li>目前实际工程中首选编码</li>
+</ul>
+</li>
+<li><strong>UTF-16</strong><ul>
+<li>大多字符 2 字节，少数增补字符 4 字节</li>
+<li>有大小端之分：UTF-16LE &#x2F; UTF-16BE</li>
+<li>Windows&#x2F;Java 内存中常见</li>
+</ul>
+</li>
+<li><strong>UTF-32</strong><ul>
+<li>每个字符固定 4 字节</li>
+<li>实现简单，但空间开销大</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="4-UTF-8-与-UTF-8-BOM-的区别"><a href="#4-UTF-8-与-UTF-8-BOM-的区别" class="headerlink" title="4. UTF-8 与 UTF-8 BOM 的区别"></a>4. UTF-8 与 UTF-8 BOM 的区别</h2><h3 id="4-1-BOM-的作用"><a href="#4-1-BOM-的作用" class="headerlink" title="4.1 BOM 的作用"></a>4.1 BOM 的作用</h3><p><strong>BOM（Byte Order Mark，字节序标记）</strong>：</p>
+<ul>
+<li>最初为 UTF-16 &#x2F; UTF-32 这类存在<strong>大小端问题</strong>的编码设计：<ul>
+<li>UTF-16 BE：<code>FE FF</code></li>
+<li>UTF-16 LE：<code>FF FE</code></li>
+</ul>
+</li>
+<li>对应 Unicode 字符 U+FEFF（零宽不换行空格），放在文件开头，帮助解码器判断字节序。</li>
+</ul>
+<p><strong>UTF-8 本身不存在大小端问题</strong>，理论上不需要 BOM。<br> 但某些历史原因（主要是 Windows 记事本识别编码），导致出现了 “UTF-8 带 BOM” 的实际写法。</p>
+<h3 id="4-2-UTF-8-vs-UTF-8-BOM"><a href="#4-2-UTF-8-vs-UTF-8-BOM" class="headerlink" title="4.2 UTF-8 vs UTF-8 BOM"></a>4.2 UTF-8 vs UTF-8 BOM</h3><ul>
+<li><strong>普通 UTF-8（无 BOM）</strong>：<br> 文件内容完全由有效字符的 UTF-8 字节组成。</li>
+<li><strong>UTF-8 with BOM</strong>：<br> 文件开头额外多出 3 个字节：<code>EF BB BF</code>（UTF-8 编码的 U+FEFF）。<br> 之后字符编码与普通 UTF-8 完全一致。</li>
+</ul>
+<p><strong>本质：</strong></p>
+<blockquote>
+<p>UTF-8 和 UTF-8 BOM 的编码规则完全相同，只是“带 BOM”形式文件开头多 3 个字节。</p>
+</blockquote>
+<h3 id="4-3-BOM-带来的兼容性问题"><a href="#4-3-BOM-带来的兼容性问题" class="headerlink" title="4.3 BOM 带来的兼容性问题"></a>4.3 BOM 带来的兼容性问题</h3><p>一些工具将 BOM 当作“提示”，另一些则把它当作普通字节，可能产生问题：</p>
+<ul>
+<li>脚本语言&#x2F;shebang：<ul>
+<li><code>#!/usr/bin/env python</code> 前面多了 BOM，会导致某些环境无法正确识别脚本解释器。</li>
+</ul>
+</li>
+<li>JSON &#x2F; 配置文件：<ul>
+<li>部分解析库不接受 BOM，可能报错或产生不可见字符。</li>
+</ul>
+</li>
+<li>PHP &#x2F; HTTP 头：<ul>
+<li>若 PHP 文件为 UTF-8 BOM，BOM 会被输出到响应流头部，导致 <code>header()</code> 报 “Headers already sent”。</li>
+</ul>
+</li>
+<li>SQL 脚本 &#x2F; 文件名等：<ul>
+<li>开头的 BOM 被当作语句内容或名称一部分，引发语法问题或“看不见但存在”的脏数据。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-4-工程实践建议"><a href="#4-4-工程实践建议" class="headerlink" title="4.4 工程实践建议"></a>4.4 工程实践建议</h3><ul>
+<li><strong>后端代码、脚本、配置文件、SQL、JSON 等</strong><br> → 推荐统一使用 <strong>UTF-8（无 BOM）</strong>，兼容性最好。</li>
+<li><strong>仅为兼容非常旧的 Windows Notepad 或 Excel 打开 CSV</strong><br> → 可根据需要导出带 BOM 的 UTF-8 文件，改善其自动识别能力。</li>
+</ul>
+<hr>
+<h2 id="5-MySQL-中的-utf8-与-utf8mb4"><a href="#5-MySQL-中的-utf8-与-utf8mb4" class="headerlink" title="5. MySQL 中的 utf8 与 utf8mb4"></a>5. MySQL 中的 <code>utf8</code> 与 <code>utf8mb4</code></h2><h3 id="5-1-utf8-与标准-UTF-8-的不一致"><a href="#5-1-utf8-与标准-UTF-8-的不一致" class="headerlink" title="5.1 utf8 与标准 UTF-8 的不一致"></a>5.1 <code>utf8</code> 与标准 UTF-8 的不一致</h3><p><strong>标准 UTF-8</strong> 允许使用 1–4 字节表示 Unicode 字符，其中：</p>
+<ul>
+<li>U+0000 ~ U+007F：1 字节</li>
+<li>U+0080 ~ U+07FF：2 字节</li>
+<li>U+0800 ~ U+FFFF：3 字节</li>
+<li>U+10000 ~ U+10FFFF：4 字节（增补平面，包括 emoji 等）</li>
+</ul>
+<p><strong>MySQL 的 <code>utf8</code> 字符集</strong> 实际上只支持最多 3 字节：</p>
+<ul>
+<li>即仅支持 U+0000 ~ U+FFFF（基本多文种平面）</li>
+<li>对 4 字节字符（如 emoji、部分特殊汉字）无法存储</li>
+</ul>
+<p>因此：</p>
+<blockquote>
+<p>MySQL 的 <code>utf8</code> 是“阉割版 UTF-8”，并非完整 UTF-8。</p>
+</blockquote>
+<h3 id="5-2-utf8mb4：MySQL-对“完整-UTF-8”的实现"><a href="#5-2-utf8mb4：MySQL-对“完整-UTF-8”的实现" class="headerlink" title="5.2 utf8mb4：MySQL 对“完整 UTF-8”的实现"></a>5.2 <code>utf8mb4</code>：MySQL 对“完整 UTF-8”的实现</h3><p><strong><code>utf8mb4</code>（multi-byte up to 4 bytes）</strong>：</p>
+<ul>
+<li>支持 1–4 字节 UTF-8 编码</li>
+<li>可以覆盖全部 Unicode 码点，包括 emoji 和扩展字符</li>
+<li>在字节层面就是标准 UTF-8</li>
+</ul>
+<p>因此：</p>
+<ul>
+<li><code>utf8mb4</code> &#x3D; 真·完整 UTF-8</li>
+<li><code>utf8</code>     &#x3D; MySQL 专用的 3 字节“缩水版 UTF-8”</li>
+</ul>
+<h3 id="5-3-使用场景与问题"><a href="#5-3-使用场景与问题" class="headerlink" title="5.3 使用场景与问题"></a>5.3 使用场景与问题</h3><ul>
+<li>使用 <code>utf8</code> 作为列字符集时：<ul>
+<li>无法插入 emoji、部分特殊符号，可能导致：<ul>
+<li>插入失败</li>
+<li>自动截断</li>
+<li>替换为 <code>?</code> 等占位符</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使用 <code>utf8mb4</code>：<ul>
+<li>可以安全存储所有 Unicode 字符</li>
+<li>与前端&#x2F;后端统一 UTF-8 编码完全兼容</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-4-推荐配置示例"><a href="#5-4-推荐配置示例" class="headerlink" title="5.4 推荐配置示例"></a>5.4 推荐配置示例</h3><p><strong>数据库级</strong>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE mydb</span><br><span class="line">  <span class="keyword">DEFAULT</span> <span class="keyword">CHARACTER SET</span> utf8mb4</span><br><span class="line">  <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8mb4_general_ci;</span><br></pre></td></tr></table></figure>
+
+<p><strong>表与字段级</strong>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> user_info (</span><br><span class="line">  id      <span class="type">BIGINT</span> <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">  name    <span class="type">VARCHAR</span>(<span class="number">64</span>) <span class="keyword">CHARACTER SET</span> utf8mb4,</span><br><span class="line">  comment TEXT        <span class="keyword">CHARACTER SET</span> utf8mb4</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p><strong>JDBC 连接示例（Java）</strong>：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jdbc:mysql://host:3306/mydb</span><br><span class="line">  ?useUnicode=true</span><br><span class="line">  &amp;characterEncoding=utf8mb4</span><br></pre></td></tr></table></figure>
+
+<p>建议：新项目统一使用 <code>utf8mb4</code>，并保证：</p>
+<blockquote>
+<p>前端（UTF-8） → 后端语言（UTF-8） → 数据库（utf8mb4）<br> 全链路统一编码，避免隐含编码转换。</p>
+</blockquote>
+<hr>
+<h2 id="6-字符集差异在编程中的典型问题"><a href="#6-字符集差异在编程中的典型问题" class="headerlink" title="6. 字符集差异在编程中的典型问题"></a>6. 字符集差异在编程中的典型问题</h2><h3 id="6-1-乱码与存储错误"><a href="#6-1-乱码与存储错误" class="headerlink" title="6.1 乱码与存储错误"></a>6.1 乱码与存储错误</h3><p>典型错误示例（MySQL）：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Incorrect string value &#x27;\xE6\xB2\x89\xE9\xBB\x98...&#x27; for column &#x27;AUTHOR&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>含义：</p>
+<ul>
+<li>实际发送的字节是 UTF-8 编码的中文（如 <code>沉默...</code>）</li>
+<li>数据库列使用的字符集（如 <code>latin1</code> 或错误配置的 <code>utf8</code>）不接受该字节序列</li>
+<li>MySQL 尝试按列字符集解码时发现非法字节 → 报错</li>
+</ul>
+<p><strong>本质原因：</strong><br> 发送端与接收端对“这些字节是什么编码”意见不一致。</p>
+<h3 id="6-2-字符长度与截断问题"><a href="#6-2-字符长度与截断问题" class="headerlink" title="6.2 字符长度与截断问题"></a>6.2 字符长度与截断问题</h3><p>多字节编码（UTF-8、GBK 等）下，<strong>字符数 ≠ 字节数</strong>：</p>
+<ul>
+<li>数据库字段 <code>VARCHAR(10)</code> 通常是 10 个“字符”</li>
+<li>但底层可能最多占用 30~40 字节空间（UTF-8）</li>
+<li>如果应用层代码按字节数截断，可能截断到一个字符中间，生成非法编码序列</li>
+</ul>
+<p>常见问题：</p>
+<ul>
+<li>UI 截断导致半个汉字显示异常</li>
+<li>后端截断后插入数据库时出现编码错误或报错</li>
+</ul>
+<h3 id="6-3-边界处编码不一致"><a href="#6-3-边界处编码不一致" class="headerlink" title="6.3 边界处编码不一致"></a>6.3 边界处编码不一致</h3><p>常见边界包括：</p>
+<ul>
+<li>源文件编码 vs 编译器&#x2F;解释器认为的编码</li>
+<li>HTTP 请求&#x2F;响应体实际编码 vs <code>Content-Type</code> 中声明的 charset</li>
+<li>终端&#x2F;控制台编码（Windows 旧版 CMD 默认 GBK，Linux 常为 UTF-8）</li>
+<li>文件系统对文件名使用的编码</li>
+</ul>
+<p>任一环节不一致都会导致乱码，严重时引发程序异常。</p>
+<h3 id="6-4-排序-比较-Collation-相关问题"><a href="#6-4-排序-比较-Collation-相关问题" class="headerlink" title="6.4 排序&#x2F;比较&#x2F;Collation 相关问题"></a>6.4 排序&#x2F;比较&#x2F;Collation 相关问题</h3><p>字符集与 Collation 共同影响：</p>
+<ul>
+<li>字符比较是否大小写敏感</li>
+<li>特殊字符&#x2F;带音标字符的比较与排序顺序</li>
+<li>唯一索引是否视某些变体为相同（例如 <code>ß</code> 与 <code>ss</code> 等）</li>
+</ul>
+<p>在数据库中，<code>charset + collation</code> 的组合会直接影响：</p>
+<ul>
+<li><code>ORDER BY</code> 排序结果</li>
+<li><code>WHERE col = &#39;值&#39;</code> 的匹配行为</li>
+<li>唯一约束冲突判断</li>
+</ul>
+<hr>
+<h2 id="7-实战中的通用建议"><a href="#7-实战中的通用建议" class="headerlink" title="7. 实战中的通用建议"></a>7. 实战中的通用建议</h2><ol>
+<li><strong>统一标准：优先使用 UTF-8（无 BOM）+ MySQL utf8mb4</strong><ul>
+<li>编辑器、源代码、配置文件、脚本、HTTP 接口：全部使用 UTF-8（无 BOM）</li>
+<li>数据库使用 <code>utf8mb4</code>，包括：<ul>
+<li><code>character_set_server</code> &#x2F; <code>character_set_database</code></li>
+<li>表与字段定义</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>明确每个“边界”的编码</strong><ul>
+<li>网络协议（HTTP、WebSocket 等）明示 charset</li>
+<li>数据库驱动连接参数中显式设置编码</li>
+<li>打开文件时通过 API 指定编码，不依赖系统默认值</li>
+</ul>
+</li>
+<li><strong>遇到编码问题时的排查顺序</strong><ul>
+<li>数据原始来源（前端&#x2F;文件&#x2F;接口）的真实编码</li>
+<li>应用程序对输入&#x2F;输出流的编码设定</li>
+<li>数据库驱动与连接的编码配置</li>
+<li>数据库表&#x2F;列的字符集与 Collation</li>
+</ul>
+</li>
+</ol>
+<p>只要做到：<strong>全链路编码一致 + 清晰标识 + 不依赖隐式默认值</strong>，大部分字符集相关问题（乱码、报错、截断）都可以避免。</p>
+<hr>
+<p>如果你后续需要，我可以在这个总结的基础上，帮你再写一份专门面向你当前项目的「编码规范与检查清单」，比如：</p>
+<ul>
+<li>Spring Boot &#x2F; MyBatis &#x2F; MySQL 的统一 UTF-8mb4 配置模板</li>
+<li>常见编码问题的排查脚本与 SQL 命令示例</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Zed</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2025/12/10/%E5%AD%97%E7%AC%A6%E9%9B%86/">http://example.com/2025/12/10/%E5%AD%97%E7%AC%A6%E9%9B%86/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/cs/">cs</a></div><div class="post-share"><div class="social-share" data-image="/img/asuka.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/12/08/Red-Black-Tree/" title="Red-Black Tree"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Red-Black Tree</div></div><div class="info-2"><div class="info-item-1">1. 概述红黑树是一种自平衡的二叉查找树，它在每个节点上增加一个存储位表示节点的颜色（红色或黑色），通过对任何一条从根到叶子的路径上各个节点的颜色约束，确保树的大致平衡。 2. 红黑树的性质红黑树必须满足以下五个性质：  每个节点要么是红色，要么是黑色 根节点必须是黑色 所有叶子节点（NIL节点）都是黑色（实际实现中，通常用空指针表示叶子） 红色节点的两个子节点必须是黑色（即不能有连续的红色节点） 从任一节点到其每个叶子的所有路径包含相同数量的黑色节点  这些性质保证了红黑树的关键特性：从根到叶子的最长路径不会超过最短路径的两倍。 3. 红黑树 vs AVL树   特性 红黑树 AVL树    平衡标准 近似平衡 严格平衡   旋转频率 较低 较高   插入&#x2F;删除 性能较好 需要更多旋转   查找 O(log n) 稍快（更平衡）   内存占用 1位颜色信息 高度或平衡因子   使用场景 需要频繁插入&#x2F;删除 查询密集型应用   4. 红黑树的结构4.1 节点结构1234567891011121314class RBNode&lt;K extends...</div></div></div></a><a class="pagination-related" href="/2025/12/11/process-thread-and-coroutine/" title="process,thread and coroutine"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">process,thread and coroutine</div></div><div class="info-2"><div class="info-item-1"> 进程 &#x3D; 资源与地址空间的边界 线程 &#x3D; CPU 能“直接感知”的执行单元 协程 &#x3D; 在“线程内部”用软件做的小调度器   1. 从硬件出发：CPU 眼里只有“当前那一串寄存器”CPU 真正在乎的只有：  运算器：包括寄存器和算数逻辑单元 PC（程序计数器）：下一条要执行的指令地址 寄存器：通用寄存器，标志寄存器，指令寄存器，段寄存器，控制寄存器，调试寄存器，描述符寄存器，任务寄存器，模型特定寄存器。 SP（栈指针）：当前栈顶，用来管理函数调用栈  只要你把 PC + 寄存器组 + 栈指针 + 程序状态字 全部保存下来，换一套新的上来，CPU 就像“穿上了新号衣”，开始执行另一段程序——这就是上下文切换（context switch）的本质。  所以，从硬件角度看： 不管是“换进程”“换线程”，都是在换这“一堆寄存器 + 栈”的内容，只是涉及的东西多少有差别。   2. 进程：虚拟地址空间 + 一堆资源 + 至少一个执行流1....</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/12/11/process-thread-and-coroutine/" title="process,thread and coroutine"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-11</div><div class="info-item-2">process,thread and coroutine</div></div><div class="info-2"><div class="info-item-1"> 进程 &#x3D; 资源与地址空间的边界 线程 &#x3D; CPU 能“直接感知”的执行单元 协程 &#x3D; 在“线程内部”用软件做的小调度器   1. 从硬件出发：CPU 眼里只有“当前那一串寄存器”CPU 真正在乎的只有：  运算器：包括寄存器和算数逻辑单元 PC（程序计数器）：下一条要执行的指令地址 寄存器：通用寄存器，标志寄存器，指令寄存器，段寄存器，控制寄存器，调试寄存器，描述符寄存器，任务寄存器，模型特定寄存器。 SP（栈指针）：当前栈顶，用来管理函数调用栈  只要你把 PC + 寄存器组 + 栈指针 + 程序状态字 全部保存下来，换一套新的上来，CPU 就像“穿上了新号衣”，开始执行另一段程序——这就是上下文切换（context switch）的本质。  所以，从硬件角度看： 不管是“换进程”“换线程”，都是在换这“一堆寄存器 + 栈”的内容，只是涉及的东西多少有差别。   2. 进程：虚拟地址空间 + 一堆资源 + 至少一个执行流1....</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zed</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E9%9B%86%E4%B8%8E%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">字符集与编码技术总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E6%A2%B3%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">1. 基本概念梳理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%9C%89%E9%82%A3%E4%B9%88%E5%A4%9A%E5%AD%97%E7%AC%A6%E9%9B%86%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">2. 为什么会有那么多字符集？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-ASCII%EF%BC%9A%E8%B5%B7%E7%82%B9"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 ASCII：起点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%90%84%E5%9B%BD%E5%90%84%E6%90%9E%E4%B8%80%E5%A5%97%E6%9C%AC%E5%9C%B0%E7%BC%96%E7%A0%81"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 各国各搞一套本地编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-Unicode%EF%BC%9A%E7%BB%9F%E4%B8%80%E5%A4%A7%E4%B8%80%E7%BB%9F%E6%96%B9%E6%A1%88"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 Unicode：统一大一统方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B8%B8%E8%A7%81%E5%AD%97%E7%AC%A6%E9%9B%86%E4%B8%8E%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text">3. 常见字符集与编码方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%97%A7%E5%BC%8F%E5%9C%B0%E5%8C%BA%E6%80%A7%E7%BC%96%E7%A0%81%EF%BC%88%E5%8D%95-%E5%8F%8C%E5%AD%97%E8%8A%82%EF%BC%89"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 旧式地区性编码（单&#x2F;双字节）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-Unicode-%E7%BC%96%E7%A0%81%E7%B3%BB%E5%88%97"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 Unicode 编码系列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-UTF-8-%E4%B8%8E-UTF-8-BOM-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.4.</span> <span class="toc-text">4. UTF-8 与 UTF-8 BOM 的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-BOM-%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 BOM 的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-UTF-8-vs-UTF-8-BOM"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 UTF-8 vs UTF-8 BOM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-BOM-%E5%B8%A6%E6%9D%A5%E7%9A%84%E5%85%BC%E5%AE%B9%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 BOM 带来的兼容性问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.4 工程实践建议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-MySQL-%E4%B8%AD%E7%9A%84-utf8-%E4%B8%8E-utf8mb4"><span class="toc-number">1.5.</span> <span class="toc-text">5. MySQL 中的 utf8 与 utf8mb4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-utf8-%E4%B8%8E%E6%A0%87%E5%87%86-UTF-8-%E7%9A%84%E4%B8%8D%E4%B8%80%E8%87%B4"><span class="toc-number">1.5.1.</span> <span class="toc-text">5.1 utf8 与标准 UTF-8 的不一致</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-utf8mb4%EF%BC%9AMySQL-%E5%AF%B9%E2%80%9C%E5%AE%8C%E6%95%B4-UTF-8%E2%80%9D%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.5.2.</span> <span class="toc-text">5.2 utf8mb4：MySQL 对“完整 UTF-8”的实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%E4%B8%8E%E9%97%AE%E9%A2%98"><span class="toc-number">1.5.3.</span> <span class="toc-text">5.3 使用场景与问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-%E6%8E%A8%E8%8D%90%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.5.4.</span> <span class="toc-text">5.4 推荐配置示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%AD%97%E7%AC%A6%E9%9B%86%E5%B7%AE%E5%BC%82%E5%9C%A8%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98"><span class="toc-number">1.6.</span> <span class="toc-text">6. 字符集差异在编程中的典型问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E4%B9%B1%E7%A0%81%E4%B8%8E%E5%AD%98%E5%82%A8%E9%94%99%E8%AF%AF"><span class="toc-number">1.6.1.</span> <span class="toc-text">6.1 乱码与存储错误</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E5%AD%97%E7%AC%A6%E9%95%BF%E5%BA%A6%E4%B8%8E%E6%88%AA%E6%96%AD%E9%97%AE%E9%A2%98"><span class="toc-number">1.6.2.</span> <span class="toc-text">6.2 字符长度与截断问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E8%BE%B9%E7%95%8C%E5%A4%84%E7%BC%96%E7%A0%81%E4%B8%8D%E4%B8%80%E8%87%B4"><span class="toc-number">1.6.3.</span> <span class="toc-text">6.3 边界处编码不一致</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-%E6%8E%92%E5%BA%8F-%E6%AF%94%E8%BE%83-Collation-%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="toc-number">1.6.4.</span> <span class="toc-text">6.4 排序&#x2F;比较&#x2F;Collation 相关问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%AE%9E%E6%88%98%E4%B8%AD%E7%9A%84%E9%80%9A%E7%94%A8%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.7.</span> <span class="toc-text">7. 实战中的通用建议</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/13/redis%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="redis基本数据类型">redis基本数据类型</a><time datetime="2025-12-13T07:16:50.000Z" title="Created 2025-12-13 15:16:50">2025-12-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/12/Spring-Boot%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC/" title="Spring Boot事件监听">Spring Boot事件监听</a><time datetime="2025-12-12T08:58:11.000Z" title="Created 2025-12-12 16:58:11">2025-12-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/12/Redis%E5%92%8CMysql%E5%B8%B8%E8%A7%81%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF/" title="Redis和Mysql常见应用场景">Redis和Mysql常见应用场景</a><time datetime="2025-12-12T08:44:20.000Z" title="Created 2025-12-12 16:44:20">2025-12-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/11/Mybatis-Plus%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3/" title="Mybatis-Plus使用文档">Mybatis-Plus使用文档</a><time datetime="2025-12-11T13:08:53.000Z" title="Created 2025-12-11 21:08:53">2025-12-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/11/Autowired%E5%92%8CResource%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%8C%BA%E5%88%AB/" title="Autowired和Resource注解的区别">Autowired和Resource注解的区别</a><time datetime="2025-12-11T12:52:46.000Z" title="Created 2025-12-11 20:52:46">2025-12-11</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bkground.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Zed</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
