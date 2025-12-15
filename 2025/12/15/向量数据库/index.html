@@ -1,0 +1,287 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>向量数据库 | Hexo</title><meta name="author" content="Zed"><meta name="copyright" content="Zed"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1) 向量数据库是什么向量数据库（Vector Database）可以理解为：专门用来存储、索引和查询“向量嵌入（embeddings）”的数据系统，支持用“相似度”去检索内容（kNN&#x2F;ANN），并且通常还能结合结构化元数据过滤、做水平扩展等工程能力。(Google Cloud)  向量嵌入：把文本&#x2F;图片&#x2F;音频&#x2F;代码等非结构化数据，用模型编码成一个固定维度的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="向量数据库">
+<meta property="og:url" content="http://example.com/2025/12/15/%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1) 向量数据库是什么向量数据库（Vector Database）可以理解为：专门用来存储、索引和查询“向量嵌入（embeddings）”的数据系统，支持用“相似度”去检索内容（kNN&#x2F;ANN），并且通常还能结合结构化元数据过滤、做水平扩展等工程能力。(Google Cloud)  向量嵌入：把文本&#x2F;图片&#x2F;音频&#x2F;代码等非结构化数据，用模型编码成一个固定维度的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/asuka.jpg">
+<meta property="article:published_time" content="2025-12-15T12:32:53.000Z">
+<meta property="article:modified_time" content="2025-12-15T13:09:40.332Z">
+<meta property="article:author" content="Zed">
+<meta property="article:tag" content="Database,Vector-Database">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/asuka.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "向量数据库",
+  "url": "http://example.com/2025/12/15/%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/",
+  "image": "http://example.com/img/asuka.jpg",
+  "datePublished": "2025-12-15T12:32:53.000Z",
+  "dateModified": "2025-12-15T13:09:40.332Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zed",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/12/15/%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '向量数据库',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bkground.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">31</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bkground.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">向量数据库</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">向量数据库</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-12-15T12:32:53.000Z" title="Created 2025-12-15 20:32:53">2025-12-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-12-15T13:09:40.332Z" title="Updated 2025-12-15 21:09:40">2025-12-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="1-向量数据库是什么"><a href="#1-向量数据库是什么" class="headerlink" title="1) 向量数据库是什么"></a>1) 向量数据库是什么</h2><p>向量数据库（Vector Database）可以理解为：<strong>专门用来存储、索引和查询“向量嵌入（embeddings）”的数据系统</strong>，支持用“相似度”去检索内容（kNN&#x2F;ANN），并且通常还能结合<strong>结构化元数据过滤</strong>、做<strong>水平扩展</strong>等工程能力。(<a target="_blank" rel="noopener" href="https://cloud.google.com/discover/what-is-a-vector-database?utm_source=chatgpt.com">Google Cloud</a>)</p>
+<blockquote>
+<p>向量嵌入：把文本&#x2F;图片&#x2F;音频&#x2F;代码等非结构化数据，用模型编码成一个固定维度的数值向量；语义越接近，向量在空间里越“近”。(<a target="_blank" rel="noopener" href="https://www.elastic.co/docs/solutions/search/vector/dense-vector?utm_source=chatgpt.com">Elastic</a>)</p>
+</blockquote>
+<hr>
+<h2 id="2-它是怎么工作的（核心机制）"><a href="#2-它是怎么工作的（核心机制）" class="headerlink" title="2) 它是怎么工作的（核心机制）"></a>2) 它是怎么工作的（核心机制）</h2><p>一个典型的向量检索链路如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原始数据 → 切分/清洗 → Embedding模型 → 向量(+metadata)写入</span><br><span class="line">      → 建索引(ANN) → 查询向量 → 近邻搜索(kNN/ANN) + 过滤 + 排序/重排</span><br></pre></td></tr></table></figure>
+
+<p>关键点有 4 个：</p>
+<ol>
+<li><strong>相似度度量</strong>：常见是 L2（欧氏距离）、IP（内积）、Cosine（余弦）。(<a target="_blank" rel="noopener" href="https://milvus.io/docs/index.md?utm_source=chatgpt.com">Milvus</a>)</li>
+<li><strong>近邻搜索</strong>：规模大时通常用<strong>近似最近邻（ANN）</strong>，在“延迟&#x2F;吞吐&#x2F;内存&#x2F;召回率”之间做权衡。(<a target="_blank" rel="noopener" href="https://www.yugabyte.com/blog/what-is-a-vector-database/?utm_source=chatgpt.com">Yugabyte</a>)</li>
+<li><strong>索引结构</strong>：常见包括 HNSW、IVF、PQ 等（不同产品实现细节不同）。Milvus 例如就支持 FLAT、IVF_FLAT、IVF_PQ、HNSW 等索引族。(<a target="_blank" rel="noopener" href="https://milvus.io/docs/index.md?utm_source=chatgpt.com">Milvus</a>)</li>
+<li><strong>过滤与混合检索</strong>：工程里几乎一定要“向量相似 + 条件过滤（metadata）”，很多系统还会把向量检索与 BM25&#x2F;全文检索融合做 <strong>Hybrid Search</strong>。(<a target="_blank" rel="noopener" href="https://docs.weaviate.io/weaviate/concepts/filtering?utm_source=chatgpt.com">Weaviate 文档</a>)</li>
+</ol>
+<hr>
+<h2 id="3-优势（为什么要用）"><a href="#3-优势（为什么要用）" class="headerlink" title="3) 优势（为什么要用）"></a>3) 优势（为什么要用）</h2><ul>
+<li><strong>语义检索能力强</strong>：不依赖关键词完全匹配，适合问答检索、RAG、相似内容召回。(<a target="_blank" rel="noopener" href="https://cloud.google.com/discover/what-is-a-vector-database?utm_source=chatgpt.com">Google Cloud</a>)</li>
+<li><strong>大规模近邻检索性能好</strong>：通过 ANN 索引避免全表扫描。(<a target="_blank" rel="noopener" href="https://www.yugabyte.com/blog/what-is-a-vector-database/?utm_source=chatgpt.com">Yugabyte</a>)</li>
+<li><strong>结构化过滤 + 语义检索融合</strong>：例如 Weaviate 支持“带过滤条件的向量检索”，Redis 也强调向量检索可与多种元数据过滤结合。(<a target="_blank" rel="noopener" href="https://docs.weaviate.io/weaviate/concepts/filtering?utm_source=chatgpt.com">Weaviate 文档</a>)</li>
+<li><strong>混合检索更稳</strong>：Hybrid（向量 + BM25&#x2F;稀疏检索）能兼顾“语义相关”和“关键词精确命中”。(<a target="_blank" rel="noopener" href="https://docs.weaviate.io/weaviate/search/hybrid?utm_source=chatgpt.com">Weaviate 文档</a>)</li>
+</ul>
+<hr>
+<h2 id="4-利弊与常见坑（上线前必须知道）"><a href="#4-利弊与常见坑（上线前必须知道）" class="headerlink" title="4) 利弊与常见坑（上线前必须知道）"></a>4) 利弊与常见坑（上线前必须知道）</h2><ul>
+<li><strong>“近似”带来不确定性</strong>：ANN 不是严格精确最近邻，召回率受索引与参数影响（需要压测与调参）。(<a target="_blank" rel="noopener" href="https://www.yugabyte.com/blog/what-is-a-vector-database/?utm_source=chatgpt.com">Yugabyte</a>)</li>
+<li><strong>内存&#x2F;存储成本可能很高</strong>：向量维度高、数据量大时，HNSW 等索引会显著吃内存；很多产品引入量化&#x2F;byte vector 来降低占用（例如 Elasticsearch 提到 byte 向量）。(<a target="_blank" rel="noopener" href="https://www.elastic.co/docs/solutions/search/vector/knn?utm_source=chatgpt.com">Elastic</a>)</li>
+<li><strong>更新&#x2F;删除更复杂</strong>：频繁 upsert、删除会影响索引质量与性能，有些系统需要重建或段合并策略（实现差异很大）。</li>
+<li><strong>过滤会改变性能曲线</strong>：向量检索 + 严格过滤可能让召回&#x2F;延迟变差，因此一些系统专门优化“可过滤索引”（如 Qdrant 解释向量索引 + payload 索引协同）。(<a target="_blank" rel="noopener" href="https://qdrant.tech/documentation/concepts/indexing/?utm_source=chatgpt.com">qdrant.tech</a>)</li>
+<li><strong>效果高度依赖 embedding 质量</strong>：模型变更会导致“向量空间漂移”，需要重算与回填策略（版本化字段、双写、灰度）。</li>
+</ul>
+<hr>
+<h2 id="5-操作方法（你实际怎么用）"><a href="#5-操作方法（你实际怎么用）" class="headerlink" title="5) 操作方法（你实际怎么用）"></a>5) 操作方法（你实际怎么用）</h2><h3 id="5-1-数据建模（最常见形态）"><a href="#5-1-数据建模（最常见形态）" class="headerlink" title="5.1 数据建模（最常见形态）"></a>5.1 数据建模（最常见形态）</h3><p>每条记录通常长这样：</p>
+<ul>
+<li><code>id</code>：唯一标识</li>
+<li><code>vector</code>：embedding 向量（如 384&#x2F;768&#x2F;1536 维）</li>
+<li><code>metadata/payload</code>：结构化字段（来源、时间、权限、标签、数值特征等）</li>
+<li><code>text/chunk</code>：可选，原文或摘要（用于展示&#x2F;重排）</li>
+</ul>
+<h3 id="5-2-基本-CRUD-建索引-查询"><a href="#5-2-基本-CRUD-建索引-查询" class="headerlink" title="5.2 基本 CRUD + 建索引 + 查询"></a>5.2 基本 CRUD + 建索引 + 查询</h3><p>通用操作集：</p>
+<ol>
+<li><strong>创建集合&#x2F;索引（collection&#x2F;index）</strong>：声明向量维度、距离度量、索引类型与参数</li>
+<li><strong>写入&#x2F;更新（upsert）</strong>：<code>(id, vector, metadata)</code></li>
+<li><strong>查询（search）</strong>：给定 query vector，返回 topK 相似记录</li>
+<li><strong>过滤（filter）</strong>：如 <code>tenant_id=... AND lang=&#39;zh&#39; AND time&gt;...</code></li>
+<li><strong>混合检索（hybrid）</strong>：向量结果 + BM25 结果融合&#x2F;加权&#x2F;重排 (<a target="_blank" rel="noopener" href="https://docs.weaviate.io/weaviate/search/hybrid?utm_source=chatgpt.com">Weaviate 文档</a>)</li>
+</ol>
+<h3 id="5-3-两个“最常用落地姿势”"><a href="#5-3-两个“最常用落地姿势”" class="headerlink" title="5.3 两个“最常用落地姿势”"></a>5.3 两个“最常用落地姿势”</h3><p><strong>A. 专用向量库做召回（推荐召回层）</strong></p>
+<ul>
+<li>用向量库做 TopK 召回 + 过滤</li>
+<li>再接一个 reranker&#x2F;业务规则做重排</li>
+<li>最终给 LLM（RAG）或推荐&#x2F;搜索结果页</li>
+</ul>
+<p><strong>B. 在现有数据库&#x2F;搜索引擎里启用向量能力（减少系统数量）</strong></p>
+<ul>
+<li>例如 PostgreSQL + pgvector（HNSW&#x2F;IVFFlat）(<a target="_blank" rel="noopener" href="https://github.com/pgvector/pgvector?utm_source=chatgpt.com">GitHub</a>)</li>
+<li>Elasticsearch &#x2F; OpenSearch 的向量字段与 kNN 查询 (<a target="_blank" rel="noopener" href="https://www.elastic.co/docs/solutions/search/vector/knn?utm_source=chatgpt.com">Elastic</a>)</li>
+<li>MongoDB Atlas Vector Search（<code>$vectorSearch</code>）(<a target="_blank" rel="noopener" href="https://www.mongodb.com/docs/atlas/atlas-vector-search/tutorials/vector-search-quick-start/?utm_source=chatgpt.com">MongoDB</a>)</li>
+<li>Redis 向量检索并可配合多类型过滤 (<a target="_blank" rel="noopener" href="https://redis.io/docs/latest/develop/ai/search-and-query/vectors/?utm_source=chatgpt.com">Redis</a>)</li>
+</ul>
+<hr>
+<h2 id="6-和其他数据库类型对比（怎么选）"><a href="#6-和其他数据库类型对比（怎么选）" class="headerlink" title="6) 和其他数据库类型对比（怎么选）"></a>6) 和其他数据库类型对比（怎么选）</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>强项</th>
+<th>弱项</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>关系型（MySQL&#x2F;PostgreSQL）</td>
+<td>强一致事务、复杂关联、报表</td>
+<td>不擅长语义相似检索（需扩展&#x2F;外置系统）</td>
+<td>业务主库、OLTP</td>
+</tr>
+<tr>
+<td>文档库（MongoDB）</td>
+<td>JSON 灵活、开发快</td>
+<td>语义检索需向量索引能力支持</td>
+<td>内容&#x2F;日志&#x2F;配置；加向量后可做 RAG</td>
+</tr>
+<tr>
+<td>搜索引擎（Elasticsearch&#x2F;OpenSearch）</td>
+<td>全文检索、聚合、倒排生态</td>
+<td>事务弱；向量检索调参与资源占用要评估</td>
+<td>站内搜索、日志检索、混合检索</td>
+</tr>
+<tr>
+<td>图数据库（Neo4j）</td>
+<td>关系&#x2F;路径查询强</td>
+<td>不是纯向量检索最优形态</td>
+<td>图关系 + 向量语义联合分析 (<a target="_blank" rel="noopener" href="https://neo4j.com/docs/cypher-manual/current/indexes/semantic-indexes/vector-indexes/?utm_source=chatgpt.com">Graph Database &amp; Analytics</a>)</td>
+</tr>
+<tr>
+<td>专用向量数据库</td>
+<td>向量检索&#x2F;过滤&#x2F;扩展专精</td>
+<td>系统多一套、数据一致性与回填要设计</td>
+<td>语义搜索、推荐召回、RAG</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="7-目前主流向量数据库-方案（按类别）"><a href="#7-目前主流向量数据库-方案（按类别）" class="headerlink" title="7) 目前主流向量数据库&#x2F;方案（按类别）"></a>7) 目前主流向量数据库&#x2F;方案（按类别）</h2><h3 id="专用向量数据库（最常见）"><a href="#专用向量数据库（最常见）" class="headerlink" title="专用向量数据库（最常见）"></a>专用向量数据库（最常见）</h3><ul>
+<li><strong>Milvus（开源）</strong>：支持多种 ANN 索引（FLAT&#x2F;IVF&#x2F;HNSW&#x2F;PQ…），面向大规模向量检索。(<a target="_blank" rel="noopener" href="https://milvus.io/docs/index.md?utm_source=chatgpt.com">Milvus</a>)</li>
+<li><strong>Weaviate（开源）</strong>：强调“向量检索 + 结构化过滤 + 混合检索”。(<a target="_blank" rel="noopener" href="https://docs.weaviate.io/weaviate/concepts/filtering?utm_source=chatgpt.com">Weaviate 文档</a>)</li>
+<li><strong>Qdrant（开源）</strong>：突出 payload（元数据）过滤与索引协同。(<a target="_blank" rel="noopener" href="https://qdrant.tech/documentation/concepts/indexing/?utm_source=chatgpt.com">qdrant.tech</a>)</li>
+<li><strong>Pinecone（托管）</strong>：商业化托管向量库，文档中提供 hybrid search 指南。(<a target="_blank" rel="noopener" href="https://docs.pinecone.io/guides/search/hybrid-search?utm_source=chatgpt.com">Pinecone 文档</a>)</li>
+</ul>
+<h3 id="“传统系统加向量能力”（降低引入成本）"><a href="#“传统系统加向量能力”（降低引入成本）" class="headerlink" title="“传统系统加向量能力”（降低引入成本）"></a>“传统系统加向量能力”（降低引入成本）</h3><ul>
+<li><strong>PostgreSQL + pgvector</strong>：用扩展提供向量相似检索，支持 HNSW&#x2F;IVFFlat 索引。(<a target="_blank" rel="noopener" href="https://github.com/pgvector/pgvector?utm_source=chatgpt.com">GitHub</a>)</li>
+<li><strong>Elasticsearch</strong>：<code>dense_vector</code> 字段 + kNN 检索能力。(<a target="_blank" rel="noopener" href="https://www.elastic.co/docs/solutions/search/vector/knn?utm_source=chatgpt.com">Elastic</a>)</li>
+<li><strong>OpenSearch</strong>：<code>knn_vector</code> 字段 + k-NN 插件查询能力。(<a target="_blank" rel="noopener" href="https://docs.opensearch.org/latest/mappings/supported-field-types/knn-vector/?utm_source=chatgpt.com">OpenSearch 文档</a>)</li>
+<li><strong>MongoDB Atlas Vector Search</strong>：通过 <code>$vectorSearch</code> 做 ANN&#x2F;ENN，并支持过滤字段。(<a target="_blank" rel="noopener" href="https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-overview/?utm_source=chatgpt.com">MongoDB</a>)</li>
+<li><strong>Redis Vector Search</strong>：提供向量字段与语义检索，并可配合多种元数据过滤。(<a target="_blank" rel="noopener" href="https://redis.io/docs/latest/develop/ai/search-and-query/vectors/?utm_source=chatgpt.com">Redis</a>)</li>
+<li><strong>Neo4j Vector Index</strong>：图结构上做向量相似检索（常用于“图关系 + 语义”组合）。(<a target="_blank" rel="noopener" href="https://neo4j.com/docs/cypher-manual/current/indexes/semantic-indexes/vector-indexes/?utm_source=chatgpt.com">Graph Database &amp; Analytics</a>)</li>
+</ul>
+<h3 id="轻量-本地开发常见"><a href="#轻量-本地开发常见" class="headerlink" title="轻量&#x2F;本地开发常见"></a>轻量&#x2F;本地开发常见</h3><ul>
+<li><strong>Chroma（开源）</strong>：面向 AI 应用开发的向量数据库（本地起步非常快）。(<a target="_blank" rel="noopener" href="https://docs.trychroma.com/getting-started?utm_source=chatgpt.com">Chroma Docs</a>)</li>
+</ul>
+<hr>
+<h2 id="8-快速选型建议（最实用的几条）"><a href="#8-快速选型建议（最实用的几条）" class="headerlink" title="8) 快速选型建议（最实用的几条）"></a>8) 快速选型建议（最实用的几条）</h2><ul>
+<li><strong>你已经有 Elasticsearch&#x2F;OpenSearch 做站内搜索</strong>：优先尝试在原体系做“全文 + 向量”的混合检索，系统最省。(<a target="_blank" rel="noopener" href="https://www.elastic.co/docs/solutions/search/vector/knn?utm_source=chatgpt.com">Elastic</a>)</li>
+<li><strong>你主库是 PostgreSQL，数据量中等且想少引系统</strong>：pgvector 是高性价比路线。(<a target="_blank" rel="noopener" href="https://github.com/pgvector/pgvector?utm_source=chatgpt.com">GitHub</a>)</li>
+<li><strong>你要做大规模语义召回&#x2F;RAG（百万到十亿级向量）</strong>：优先专用向量库（Milvus&#x2F;Weaviate&#x2F;Qdrant）或托管（Pinecone），再通过 metadata 做权限与租户隔离。(<a target="_blank" rel="noopener" href="https://milvus.io/docs/index.md?utm_source=chatgpt.com">Milvus</a>)</li>
+</ul>
+<p>如果你告诉我：<strong>数据量级（向量条数）、向量维度、是否多租户&#x2F;权限过滤、QPS&#x2F;延迟目标、你现有技术栈（Postgres&#x2F;ES&#x2F;Redis&#x2F;Mongo）</strong>，我可以直接给你一份更贴近你场景的“架构图 + 选型对比 + 参数调优清单”。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Zed</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2025/12/15/%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/">http://example.com/2025/12/15/%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Database-Vector-Database/">Database,Vector-Database</a></div><div class="post-share"><div class="social-share" data-image="/img/asuka.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/12/15/%E5%9B%BE%E6%95%B0%E6%8D%AE%E5%BA%93/" title="图数据库"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">图数据库</div></div><div class="info-2"><div class="info-item-1">1) 图数据库是什么图数据库（Graph Database）是一类用 “点（Vertex&#x2F;Node）+ 边（Edge&#x2F;Relationship）+ 属性（Property）” 来存储数据的数据库，核心目标是让你把“关系”当成一等公民来建模和查询。Neo4j 的入门文档里对属性图（Property Graph）的基本组成（节点、关系、属性）有清晰定义。(Graph Database &amp; Analytics)  2) 两大主流图模型：属性图 vs RDF（知识图谱语义栈）A. 属性图（Property Graph） 节点：实体（用户、设备、文章） 边：关系（关注、连接、调用），有方向&#x2F;类型，也可以带属性（时间、权重） 查询语言：Cypher &#x2F; openCypher、Gremlin、（正在走向）ISO GQL  Neo4j 的 Cypher 文档把 Cypher描述为面向属性图的声明式查询语言。(Graph Database &amp; Analytics) B. RDF 图（RDF...</div></div></div></a><a class="pagination-related" href="/2025/12/15/%E6%95%B0%E6%8D%AE%E5%BA%93JOIN%E6%9F%A5%E8%AF%A2%E6%95%88%E7%8E%87%E5%88%86%E6%9E%90/" title="数据库JOIN查询效率分析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">数据库JOIN查询效率分析</div></div><div class="info-2"><div class="info-item-1">1. JOIN 为什么会慢：本质是“中间结果 + 匹配代价”一条 JOIN 查询的耗时通常由下面几类成本叠加决定：  扫描成本：读多少行、是否走索引、是否顺序读还是随机读（回表）。 匹配成本：用什么连接算法（Nested Loop &#x2F; Hash &#x2F; Merge）。 中间结果膨胀：一对多、多对多会让行数“乘法增长”，后续的 JOIN&#x2F;排序&#x2F;聚合都会被放大。 内存与落盘（spill）：Hash Join 或排序（Merge Join 前置排序）内存不足会落盘，IO 暴涨。 优化器误判（基数估计不准）：导致选错 JOIN 顺序、选错算法、选错驱动表（常见性能灾难来源）。 数据倾斜：少数热门 key 导致 Hash Join 桶&#x2F;分区极不均衡，局部变慢。   2. 三种主流物理 JOIN 算法：适用场景与效率特征2.1 Nested Loop Join（NLJ，嵌套循环）思想：外表每一行去内表找匹配行。  无索引：近似 O(|A| * |B|)（非常慢） 内表 join key 有索引：近似 O(|A| *...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zed</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">31</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">1) 向量数据库是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%83%E6%98%AF%E6%80%8E%E4%B9%88%E5%B7%A5%E4%BD%9C%E7%9A%84%EF%BC%88%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">2) 它是怎么工作的（核心机制）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BC%98%E5%8A%BF%EF%BC%88%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">3) 优势（为什么要用）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%A9%E5%BC%8A%E4%B8%8E%E5%B8%B8%E8%A7%81%E5%9D%91%EF%BC%88%E4%B8%8A%E7%BA%BF%E5%89%8D%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">4) 利弊与常见坑（上线前必须知道）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%EF%BC%88%E4%BD%A0%E5%AE%9E%E9%99%85%E6%80%8E%E4%B9%88%E7%94%A8%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">5) 操作方法（你实际怎么用）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1%EF%BC%88%E6%9C%80%E5%B8%B8%E8%A7%81%E5%BD%A2%E6%80%81%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 数据建模（最常见形态）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%9F%BA%E6%9C%AC-CRUD-%E5%BB%BA%E7%B4%A2%E5%BC%95-%E6%9F%A5%E8%AF%A2"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 基本 CRUD + 建索引 + 查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E4%B8%A4%E4%B8%AA%E2%80%9C%E6%9C%80%E5%B8%B8%E7%94%A8%E8%90%BD%E5%9C%B0%E5%A7%BF%E5%8A%BF%E2%80%9D"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 两个“最常用落地姿势”</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%92%8C%E5%85%B6%E4%BB%96%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B1%BB%E5%9E%8B%E5%AF%B9%E6%AF%94%EF%BC%88%E6%80%8E%E4%B9%88%E9%80%89%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">6) 和其他数据库类型对比（怎么选）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E7%9B%AE%E5%89%8D%E4%B8%BB%E6%B5%81%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%96%B9%E6%A1%88%EF%BC%88%E6%8C%89%E7%B1%BB%E5%88%AB%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">7) 目前主流向量数据库&#x2F;方案（按类别）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%93%E7%94%A8%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%88%E6%9C%80%E5%B8%B8%E8%A7%81%EF%BC%89"><span class="toc-number">7.1.</span> <span class="toc-text">专用向量数据库（最常见）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9C%E4%BC%A0%E7%BB%9F%E7%B3%BB%E7%BB%9F%E5%8A%A0%E5%90%91%E9%87%8F%E8%83%BD%E5%8A%9B%E2%80%9D%EF%BC%88%E9%99%8D%E4%BD%8E%E5%BC%95%E5%85%A5%E6%88%90%E6%9C%AC%EF%BC%89"><span class="toc-number">7.2.</span> <span class="toc-text">“传统系统加向量能力”（降低引入成本）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%BB%E9%87%8F-%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91%E5%B8%B8%E8%A7%81"><span class="toc-number">7.3.</span> <span class="toc-text">轻量&#x2F;本地开发常见</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%BF%AB%E9%80%9F%E9%80%89%E5%9E%8B%E5%BB%BA%E8%AE%AE%EF%BC%88%E6%9C%80%E5%AE%9E%E7%94%A8%E7%9A%84%E5%87%A0%E6%9D%A1%EF%BC%89"><span class="toc-number">8.</span> <span class="toc-text">8) 快速选型建议（最实用的几条）</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/15/%E6%95%B0%E6%8D%AE%E5%BA%93JOIN%E6%9F%A5%E8%AF%A2%E6%95%88%E7%8E%87%E5%88%86%E6%9E%90/" title="数据库JOIN查询效率分析">数据库JOIN查询效率分析</a><time datetime="2025-12-15T12:50:17.000Z" title="Created 2025-12-15 20:50:17">2025-12-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/15/%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" title="向量数据库">向量数据库</a><time datetime="2025-12-15T12:32:53.000Z" title="Created 2025-12-15 20:32:53">2025-12-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/15/%E5%9B%BE%E6%95%B0%E6%8D%AE%E5%BA%93/" title="图数据库">图数据库</a><time datetime="2025-12-15T12:32:38.000Z" title="Created 2025-12-15 20:32:38">2025-12-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/15/Brotli%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95/" title="Brotli压缩算法">Brotli压缩算法</a><time datetime="2025-12-15T12:32:17.000Z" title="Created 2025-12-15 20:32:17">2025-12-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/13/redis%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="redis基本数据类型">redis基本数据类型</a><time datetime="2025-12-13T07:16:50.000Z" title="Created 2025-12-13 15:16:50">2025-12-13</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bkground.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Zed</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
