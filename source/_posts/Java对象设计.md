@@ -1,7 +1,7 @@
 ---
 title: Java对象设计
 date: 2025-12-03 19:12:23
-tags: java
+tags: Java
 ---
 
 ## 一、6种对象的职责边界

@@ -1,7 +1,7 @@
 ---
 title: MessageQueue
 date: 2025-08-01 16:42:33
-tags: Java MQ
+tags: [Java,MQ]
 ---
 
 ## 1. 消息队列（MQ）是什么

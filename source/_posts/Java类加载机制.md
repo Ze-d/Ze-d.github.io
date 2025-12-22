@@ -1,7 +1,7 @@
 ---
 title: Java类加载机制
 date: 2025-12-05 20:37:28
-tags: java jvm
+tags: [Java,Jvm]
 ---
 
 通过 xxd 命令来查看字节码文件，先看下面这段代码。

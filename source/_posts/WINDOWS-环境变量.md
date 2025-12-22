@@ -1,7 +1,7 @@
 ---
 title: WINDOWS 环境变量
 date: 2025-07-11 17:22:21
-tags: windows
+tags: os
 ---
 
 在Windows操作系统中，**环境变量（Environment Variables）** 是系统或应用程序用于存储配置信息的动态值，它们决定了系统如何运行程序、查找文件或管理路径。环境变量分为两类：**用户变量**和**系统变量**。

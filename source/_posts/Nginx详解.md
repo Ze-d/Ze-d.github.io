@@ -1,7 +1,7 @@
 ---
 title: Nginx详解
 date: 2025-12-03 17:13:59
-tags: 计算机网络 Nginx
+tags: [Network,Nginx]
 ---
 
 ## 一、Nginx是什么？

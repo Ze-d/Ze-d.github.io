@@ -1,7 +1,7 @@
 ---
 title: Session and Cookie
 date: 2025-08-21 10:43:34
-tags: session cookie 计算机网络
+tags: [Session,Cookie,Network]
 ---
 
 **HTTP 协议本身是无状态的**。这意味着每一次客户端（浏览器）向服务器发出的请求都是独立的，服务器不会自动记住上一次请求是谁发来的。为了创建连续、个性化的用户体验（比如保持用户登录状态），就需要 Session 和 Cookie 来帮助服务器“记住”客户端。

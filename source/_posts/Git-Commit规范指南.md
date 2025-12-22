@@ -1,7 +1,7 @@
 ---
 title: Git Commit规范指南
 date: 2025-05-28 11:28:43
-tags: Git Doc
+tags: Git
 ---
 
 ## **1. Commit Message 的基本结构**

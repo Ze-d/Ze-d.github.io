@@ -1,7 +1,7 @@
 ---
 title: Hexo新建个人博客
 date: 2025-03-15 20:20:37
-tags: hexo
+tags: Hexo
 ---
 
 ## 环境搭建

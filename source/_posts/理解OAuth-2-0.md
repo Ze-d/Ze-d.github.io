@@ -1,7 +1,7 @@
 ---
 title: 理解OAuth 2.0
 date: 2025-08-21 10:18:48
-tags: OAuth 计算机网络  
+tags: [OAuth,Nerwork]
 ---
 
 ### 一、OAuth 是什么？

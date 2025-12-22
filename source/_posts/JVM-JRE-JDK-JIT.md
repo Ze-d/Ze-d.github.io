@@ -1,7 +1,7 @@
 ---
 title: JVM,JRE,JDK&JIT
 date: 2025-12-04 16:20:15
-tags: java
+tags: [Java,Jvm]
 ---
 
 ## JVM、JRE、JDK、JIT 关系详解

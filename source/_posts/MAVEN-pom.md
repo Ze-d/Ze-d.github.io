@@ -1,7 +1,7 @@
 ---
 title: MAVEN pom
 date: 2025-11-28 17:22:02
-tags: java mavena
+tags: [Java,Mavens]
 ---
 
 Maven POM.xml 配置完整指南
@@ -24,6 +24,10 @@ Maven POM.xml 配置完整指南
 <description>项目描述信息</description>  <!-- 项目描述 -->
 <url>http://www.example.com</url>   <!-- 项目URL -->
 ```
+
+基础坐标标识：用于唯一标识一个项目，用于依赖引用，仓库定位和版本管理。
+
+项目元数据：用于开发者标识和描述项目
 
 ## 2. 依赖管理配置
 
@@ -68,6 +72,10 @@ Maven POM.xml 配置完整指南
 </dependencyManagement>
 ```
 
+Maven 使用dependencyManagement 元素来提供了一种**管理依赖版本号**的方式。通常会在一个组织或者项目的最顶层的父POM 中看到dependencyManagement 元素。
+
+这样做的好处：**统一管理项目的版本号，确保应用的各个项目的依赖和版本一致**，才能保证测试的和发布的是相同的成果，因此，在顶层pom中定义共同的依赖关系。同时可以避免在每个使用的子项目中都声明一个版本号，这样想升级或者切换到另一个版本时，只需要在父类容器里更新，不需要任何一个子项目的修改；**如果某个子项目需要另外一个版本号时，只需要在dependencies中声明一个版本号即可。子类就会使用子类声明的版本号，不继承于父类版本号**。
+
 ## 3. 构建配置详解
 
 ### 资源文件配置
@@ -99,7 +107,10 @@ Maven POM.xml 配置完整指南
 </build>
 ```
 
+可以通过指定多个资源文件目录实现多开发环境
+
 ### 过滤功能示例
+
 ```properties
 # 资源文件内容
 app.name=@project.name@
@@ -144,7 +155,10 @@ app.version=1.0.0
 
 ### 常用核心插件
 
-#### 编译器插件
+#### 编译器插件：
+
+指定 Java 版本、编码。
+
 ```xml
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
@@ -159,7 +173,10 @@ app.version=1.0.0
 </plugin>
 ```
 
-#### 打包插件
+#### 打包插件：
+
+配置 JAR 包清单和主类。
+
 ```xml
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
@@ -176,7 +193,10 @@ app.version=1.0.0
 </plugin>
 ```
 
-#### 依赖插件
+#### 依赖插件：
+
+复制依赖到指定目录。
+
 ```xml
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
@@ -197,9 +217,32 @@ app.version=1.0.0
 </plugin>
 ```
 
+#### Spring Boot Maven 插件：
+
+用于打包可执行jar
+
+
+```xml
+<plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+    <configuration>
+        <excludes>
+            <exclude>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+            </exclude>
+        </excludes>
+    </configuration>
+</plugin>
+```
+
 ## 4. 项目继承和聚合
 
-### 父项目继承
+### 父项目继承：
+
+复用父项目的依赖、插件、属性等配置。
+
 ```xml
 <parent>
     <groupId>org.springframework.boot</groupId>
@@ -209,7 +252,10 @@ app.version=1.0.0
 </parent>
 ```
 
-### 多模块聚合
+### 多模块聚合：
+
+将一个大型项目拆分为多个子模块，便于管理和构建。
+
 ```xml
 <!-- 父项目 packaging 必须为 pom -->
 <packaging>pom</packaging>
@@ -223,7 +269,10 @@ app.version=1.0.0
 
 ## 5. 属性配置
 
-### 自定义属性
+### 自定义属性：
+
+定义变量，便于统一管理版本号、编码、路径等，提高配置复用性。
+
 ```xml
 <properties>
     <!-- Java版本 -->
@@ -242,7 +291,10 @@ app.version=1.0.0
 
 ## 6. 环境配置
 
-### 仓库配置
+### 仓库配置：
+
+指定从哪里下载依赖。
+
 ```xml
 <repositories>
     <repository>
@@ -256,7 +308,10 @@ app.version=1.0.0
 </repositories>
 ```
 
-### 部署配置
+### 部署配置：
+
+指定项目打包后发布到哪个远程仓库。
+
 ```xml
 <distributionManagement>
     <repository>
@@ -270,7 +325,10 @@ app.version=1.0.0
 </distributionManagement>
 ```
 
-### 多环境配置
+### 多环境配置：
+
+根据环境（dev/test/prod）动态切换配置（如数据库地址、资源文件）
+
 ```xml
 <profiles>
     <profile>

@@ -1,7 +1,7 @@
 ---
 title: Maven使用与原理详解
 date: 2025-12-03 19:34:38
-tags: maven java
+tags: [Maven,Java]
 ---
 
 # Maven 使用和原理指南

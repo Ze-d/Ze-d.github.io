@@ -1,7 +1,7 @@
 ---
 title: RAG框架及其应用
 date: 2025-11-24 20:03:37
-tags: RAG
+tags: [RAG,LLM]
 ---
 
 # RAG 技术总结

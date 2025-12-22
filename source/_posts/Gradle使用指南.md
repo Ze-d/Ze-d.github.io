@@ -1,16 +1,7 @@
 ---
 title: Gradle使用指南
 date: 2025-11-23 16:07:19
-tags: java SpringBoot gradle
----
-
-# Gradle 入门与 Ant / Maven / Gradle 对比
-
-本文分两部分：
-
-1. 认识 Gradle：它是什么、能做什么，以及如何在实际开发中使用。  
-2. 对比 Ant / Maven / Gradle：从多个维度理解三者的差异和使用场景。  
-
+tags: [Java,SpringBoot,Gradle]
 ---
 
 ## 一、Gradle 是什么？
