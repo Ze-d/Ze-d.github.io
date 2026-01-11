@@ -1,0 +1,250 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>System Human and AI message | Hexo</title><meta name="author" content="Zed"><meta name="copyright" content="Zed"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1. 概述在 LangChain 的 Chat Model 架构中，消息对象（Message Objects）是与大语言模型（LLM）交互的原子单位。它们对底层 API（如 OpenAI Chat Completion API）的角色（Roles）进行了标准化封装，确保了不同模型提供商之间的接口一致性。 2. 组件定义2.1 SystemMessage (系统消息) 定义: 用于设定对话环境、模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="System Human and AI message">
+<meta property="og:url" content="http://example.com/2026/01/09/System-Human-and-AI-message/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 概述在 LangChain 的 Chat Model 架构中，消息对象（Message Objects）是与大语言模型（LLM）交互的原子单位。它们对底层 API（如 OpenAI Chat Completion API）的角色（Roles）进行了标准化封装，确保了不同模型提供商之间的接口一致性。 2. 组件定义2.1 SystemMessage (系统消息) 定义: 用于设定对话环境、模型">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/asuka.jpg">
+<meta property="article:published_time" content="2026-01-09T13:44:10.000Z">
+<meta property="article:modified_time" content="2026-01-09T13:48:08.416Z">
+<meta property="article:author" content="Zed">
+<meta property="article:tag" content="langchain1.0">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/asuka.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "System Human and AI message",
+  "url": "http://example.com/2026/01/09/System-Human-and-AI-message/",
+  "image": "http://example.com/img/asuka.jpg",
+  "datePublished": "2026-01-09T13:44:10.000Z",
+  "dateModified": "2026-01-09T13:48:08.416Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zed",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/01/09/System-Human-and-AI-message/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'System Human and AI message',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bkground.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">63</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">51</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bkground.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">System Human and AI message</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">System Human and AI message</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-01-09T13:44:10.000Z" title="Created 2026-01-09 21:44:10">2026-01-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-01-09T13:48:08.416Z" title="Updated 2026-01-09 21:48:08">2026-01-09</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><p>在 LangChain 的 Chat Model 架构中，消息对象（Message Objects）是与大语言模型（LLM）交互的原子单位。它们对底层 API（如 OpenAI Chat Completion API）的角色（Roles）进行了标准化封装，确保了不同模型提供商之间的接口一致性。</p>
+<h2 id="2-组件定义"><a href="#2-组件定义" class="headerlink" title="2. 组件定义"></a>2. 组件定义</h2><h3 id="2-1-SystemMessage-系统消息"><a href="#2-1-SystemMessage-系统消息" class="headerlink" title="2.1 SystemMessage (系统消息)"></a>2.1 SystemMessage (系统消息)</h3><ul>
+<li><strong>定义</strong>: 用于设定对话环境、模型行为、角色和边界条件的初始指令。</li>
+<li><strong>对应 LLM 角色</strong>: <code>system</code></li>
+<li><strong>生命周期</strong>: 通常位于消息列表的索引 0 位置，且贯穿整个对话会话。</li>
+<li><strong>技术用途</strong>:<ul>
+<li><strong>角色注入 (Persona Injection)</strong>: 定义模型是谁（如“资深法律顾问”）。</li>
+<li><strong>格式约束 (Output Guardrails)</strong>: 强制规定输出格式（如“仅输出 JSON”）。</li>
+<li><strong>安全围栏 (Safety Guidelines)</strong>: 设定拒绝回答的话题范围。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-HumanMessage-人类消息"><a href="#2-2-HumanMessage-人类消息" class="headerlink" title="2.2 HumanMessage (人类消息)"></a>2.2 HumanMessage (人类消息)</h3><ul>
+<li><strong>定义</strong>: 代表来自外部用户（或客户端应用）的输入内容。</li>
+<li><strong>对应 LLM 角色</strong>: <code>user</code></li>
+<li><strong>生命周期</strong>: 每一轮对话交互的触发点。</li>
+<li><strong>技术用途</strong>:<ul>
+<li><strong>用户查询 (Query)</strong>: 承载用户的实际问题。</li>
+<li><strong>指令输入 (Prompt)</strong>: 提供具体的任务指令。</li>
+<li><strong>Few-Shot 示例输入</strong>: 在构建样本时，充当“问题示例”。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-AIMessage-AI-消息"><a href="#2-3-AIMessage-AI-消息" class="headerlink" title="2.3 AIMessage (AI 消息)"></a>2.3 AIMessage (AI 消息)</h3><ul>
+<li><strong>定义</strong>: 代表大语言模型生成的响应内容。</li>
+<li><strong>对应 LLM 角色</strong>: <code>assistant</code></li>
+<li><strong>生命周期</strong>: 作为 <code>HumanMessage</code> 的响应生成；或作为历史上下文被手动构造。</li>
+<li><strong>技术用途</strong>:<ul>
+<li><strong>响应载体</strong>: 承载模型返回的文本结果。</li>
+<li><strong>工具调用 (Tool Calling)</strong>: 包含 <code>tool_calls</code> 参数，指示需执行的外部函数。</li>
+<li><strong>对话记忆 (Conversation History)</strong>: 在多轮对话中，开发者需将之前的模型回复封装为 <code>AIMessage</code> 再次传回给模型，以保持上下文连贯。</li>
+<li><strong>Few-Shot Prompting (少样本提示 &#x2F; 伪造历史)</strong>：</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="3-交互架构图"><a href="#3-交互架构图" class="headerlink" title="3. 交互架构图"></a>3. 交互架构图</h2><p>在标准的 Request&#x2F;Response 循环中，消息流如下：</p>
+<p>Plaintext</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[Input List to Model]</span><br><span class="line">├── SystemMessage (1个)       --&gt; 设定基准：&quot;你是一个Python专家&quot;</span><br><span class="line">├── HumanMessage  (历史)      --&gt; 上下文：&quot;什么是List？&quot;</span><br><span class="line">├── AIMessage     (历史)      --&gt; 上下文：&quot;List是可变序列...&quot;</span><br><span class="line">└── HumanMessage  (当前)      --&gt; 触发点：&quot;那Tuple呢？&quot;</span><br><span class="line"></span><br><span class="line">       ⬇️ (Invoke Model)</span><br><span class="line"></span><br><span class="line">[Output from Model]</span><br><span class="line">└── AIMessage     (响应)      --&gt; 结果：&quot;Tuple是不可变序列...&quot;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-实现代码规范"><a href="#4-实现代码规范" class="headerlink" title="4. 实现代码规范"></a>4. 实现代码规范</h2><p>以下代码展示了如何在 LangChain 1.0 环境下规范使用这三种消息。</p>
+<h3 id="4-1-基础调用"><a href="#4-1-基础调用" class="headerlink" title="4.1 基础调用"></a>4.1 基础调用</h3><p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">from langchain_core.messages import SystemMessage, HumanMessage, AIMessage</span><br><span class="line">from langchain_openai import ChatOpenAI</span><br><span class="line"></span><br><span class="line"># 1. 初始化模型</span><br><span class="line">chat = ChatOpenAI(model=&quot;gpt-4o&quot;, temperature=0)</span><br><span class="line"></span><br><span class="line"># 2. 构建消息列表</span><br><span class="line">messages = [</span><br><span class="line">    # System: 全局设定</span><br><span class="line">    SystemMessage(content=&quot;你是一个精通SQL的数据库管理员，只返回SQL代码，不包含解释。&quot;),</span><br><span class="line">    </span><br><span class="line">    # Human &amp; AI: 历史对话注入 (Few-Shot Learning)</span><br><span class="line">    HumanMessage(content=&quot;查询所有名为 &#x27;Alice&#x27; 的用户&quot;),</span><br><span class="line">    AIMessage(content=&quot;SELECT * FROM users WHERE name = &#x27;Alice&#x27;;&quot;),</span><br><span class="line">    </span><br><span class="line">    # Human: 当前任务</span><br><span class="line">    HumanMessage(content=&quot;统计过去24小时的订单总量&quot;)</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"># 3. 调用模型</span><br><span class="line">response = chat.invoke(messages)</span><br><span class="line"></span><br><span class="line"># 4. 处理结果</span><br><span class="line"># response 类型为 AIMessage</span><br><span class="line">print(f&quot;生成的SQL: &#123;response.content&#125;&quot;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-最佳实践-Best-Practices"><a href="#4-2-最佳实践-Best-Practices" class="headerlink" title="4.2 最佳实践 (Best Practices)"></a>4.2 最佳实践 (Best Practices)</h3><ol>
+<li><strong>始终引入 <code>langchain_core</code></strong>: 避免从旧的 <code>langchain.schema</code> 导入，以确保 1.0 版本的兼容性和轻量化。</li>
+<li><strong>角色隔离</strong>: 严禁将 System Instruction 放入 <code>HumanMessage</code>，这会降低指令遵循能力（Instruction Following），尤其是在处理越狱攻击（Jailbreaking）防护时。</li>
+<li><strong>记忆管理</strong>: 在构建 Chatbot 时，必须将 <code>AIMessage</code> 存入 Memory 组件（如 <code>ChatMessageHistory</code>），否则模型将无法“记住”上一句话。</li>
+</ol>
+<hr>
+<h2 id="5-属性对比矩阵"><a href="#5-属性对比矩阵" class="headerlink" title="5. 属性对比矩阵"></a>5. 属性对比矩阵</h2><table>
+<thead>
+<tr>
+<th><strong>特性维度</strong></th>
+<th><strong>SystemMessage</strong></th>
+<th><strong>HumanMessage</strong></th>
+<th><strong>AIMessage</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>语义权重</strong></td>
+<td><strong>最高</strong> (High Attention)</td>
+<td>高 (Recent) &#x2F; 低 (History)</td>
+<td>中等 (Contextual)</td>
+</tr>
+<tr>
+<td><strong>可变性</strong></td>
+<td>通常静态 (Static)</td>
+<td>高度动态 (Dynamic)</td>
+<td>由模型生成 (Generated)</td>
+</tr>
+<tr>
+<td><strong>内容源</strong></td>
+<td>开发者 &#x2F; 提示词工程师</td>
+<td>终端用户</td>
+<td>模型推理引擎</td>
+</tr>
+<tr>
+<td><strong>典型用途</strong></td>
+<td>设定规则 (<code>Rules</code>)</td>
+<td>提出需求 (<code>Ask</code>)</td>
+<td>提供结果 (<code>Answer</code>)</td>
+</tr>
+</tbody></table>
+<hr>
+<p>我可以为您做的下一步：</p>
+<p>这份文档是否满足您的需求？如果您正在构建多轮对话应用，我可以为您演示如何将这三种消息与 ChatPromptTemplate 和 MessagesPlaceholder 结合，实现自动化的历史记录管理。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Zed</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2026/01/09/System-Human-and-AI-message/">http://example.com/2026/01/09/System-Human-and-AI-message/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/langchain1-0/">langchain1.0</a></div><div class="post-share"><div class="social-share" data-image="/img/asuka.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/01/07/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E9%80%89%E5%9E%8B%E4%B8%8E%E8%AF%AD%E6%B3%95%E8%A7%84%E8%8C%83%E6%8C%87%E5%8D%97/" title="配置文件格式选型与语法规范指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">配置文件格式选型与语法规范指南</div></div><div class="info-2"><div class="info-item-1">1. 主流格式核心对比在选择配置格式时，主要权衡点在于**“人类可读性”与“机器解析效率”**。    格式 全称 核心特性 优点 缺点 典型应用场景    JSON JavaScript Object Notation 数据交换标准 解析速度极快，前后端通用，工具链完善。 不支持注释，语法严苛（多一个逗号即报错），可读性中等。 API 接口数据、前端配置 (package.json)、NoSQL 存储   YAML YAML Ain’t Markup Language 以人为本 极简、层级清晰、支持注释、阅读舒适。 缩进敏感，类型推断过于激进（易产生歧义），解析较慢。 Kubernetes、Ansible、CI&#x2F;CD 流程配置 (GitHub Actions)   XML eXtensible Markup Language 严谨的数据描述 拥有 Schema (XSD) 强校验，结构严谨，容错率高。 语法冗余，标签繁琐，文件体积大，肉眼阅读困难。 Java 生态 (Spring 老版本, Maven)、大型企业级数据交换   TOML Tom’s Obvious,...</div></div></div></a><a class="pagination-related" href="/2026/01/10/ReAct/" title="ReAct"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">ReAct</div></div><div class="info-2"><div class="info-item-1">这是一份关于 ReAct (Reasoning + Acting) 技术的深度技术白皮书。它涵盖了从核心原理、底层实现到进阶架构的完整知识体系。 1. 核心定义与背景 (Introduction)ReAct 是 Reasoning（推理） 与 Acting（行动） 的合成词。它是一种用于构建大语言模型（LLM）代理（Agent）的范式。  起源: Google Research (Yao et al., 2022) 提出的论文 “ReAct: Synergizing Reasoning and Acting in Language Models”。 解决的问题: 单纯的 推理 (Chain-of-Thought) 容易产生幻觉，无法获取外部世界的新知。 单纯的 行动 (Action) 缺乏规划，容易在复杂任务中迷失方向。   核心理念: 让 LLM 在执行任务时，交替进行“思考（生成推理轨迹）”和“行动（调用外部工具）”，并将行动的结果（观察）反哺给模型，形成闭环。   2. 技术架构与工作流 (Architecture &amp; Workflow)ReAct...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zed</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">63</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">51</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">1. 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BB%84%E4%BB%B6%E5%AE%9A%E4%B9%89"><span class="toc-number">2.</span> <span class="toc-text">2. 组件定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-SystemMessage-%E7%B3%BB%E7%BB%9F%E6%B6%88%E6%81%AF"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 SystemMessage (系统消息)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-HumanMessage-%E4%BA%BA%E7%B1%BB%E6%B6%88%E6%81%AF"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 HumanMessage (人类消息)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-AIMessage-AI-%E6%B6%88%E6%81%AF"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 AIMessage (AI 消息)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BA%A4%E4%BA%92%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-number">3.</span> <span class="toc-text">3. 交互架构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83"><span class="toc-number">4.</span> <span class="toc-text">4. 实现代码规范</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%9F%BA%E7%A1%80%E8%B0%83%E7%94%A8"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 基础调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-Best-Practices"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 最佳实践 (Best Practices)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%B1%9E%E6%80%A7%E5%AF%B9%E6%AF%94%E7%9F%A9%E9%98%B5"><span class="toc-number">5.</span> <span class="toc-text">5. 属性对比矩阵</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/11/langSmith%E5%8A%9F%E8%83%BD%E4%B8%8E%E5%B7%A5%E4%BD%9C%E6%B5%81/" title="langSmith功能与工作流">langSmith功能与工作流</a><time datetime="2026-01-11T10:02:41.000Z" title="Created 2026-01-11 18:02:41">2026-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/11/Python-%E6%A8%A1%E5%9D%97%E6%96%87%E6%A1%A3%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%84%E8%8C%83%E6%8C%87%E5%8D%97-PEP-257/" title="Python 模块文档字符串规范指南 (PEP 257)">Python 模块文档字符串规范指南 (PEP 257)</a><time datetime="2026-01-11T09:22:35.000Z" title="Created 2026-01-11 17:22:35">2026-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/11/langchain%E4%B8%ADAgent%E7%9A%84%E4%B8%89%E7%A7%8D%E8%B0%83%E7%94%A8%E6%96%B9%E5%BC%8F/" title="langchain中Agent的三种调用方式">langchain中Agent的三种调用方式</a><time datetime="2026-01-11T07:11:37.000Z" title="Created 2026-01-11 15:11:37">2026-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/11/langchain%E6%A0%87%E5%87%86%E5%8C%96prompt/" title="langchain标准化prompt">langchain标准化prompt</a><time datetime="2026-01-11T04:32:42.000Z" title="Created 2026-01-11 12:32:42">2026-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/10/ReAct/" title="ReAct">ReAct</a><time datetime="2026-01-10T14:11:32.000Z" title="Created 2026-01-10 22:11:32">2026-01-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bkground.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Zed</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
