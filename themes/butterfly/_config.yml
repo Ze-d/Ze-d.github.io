@@ -467,9 +467,22 @@ math:
 search:
   # Choose: algolia_search / local_search / docsearch
   # leave it empty if you don't need search
-  use:
-  placeholder:
-
+  use: 
+  placeholder: Search...
+  # algolia:
+  #   applicationID: 7JSHGLX10R
+  #   apiKey: 62a979ce44536b22d8516c11b50f47b1
+  #   indexName: hexoblog
+  #   chunkSize: 500
+  #   fields:
+  #   - content:strip:truncate,0,500
+  #   - excerpt:strip
+  #   - gallery
+  #   - permalink
+  #   - photos
+  #   - slug
+  #   - tags
+  #   - title
   # Algolia Search
   algolia_search:
     # Number of search results per page
@@ -492,6 +505,7 @@ search:
     apiKey:
     indexName:
     option:
+
 
 # --------------------------------------
 # Share System

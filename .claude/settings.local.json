@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(hexo:*)",
+      "Bash(npx hexo:*)",
+      "Bash(echo $?)",
+      "Bash(npm ls:*)"
+    ]
+  }
+}
