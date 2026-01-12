@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>LangChain LCEL管道符技术参考 | Hexo</title><meta name="author" content="Zed"><meta name="copyright" content="Zed"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="这是一份关于 LangChain 表达式语言 (LCEL) 核心组件——管道符 | 的综合技术参考文档。 1. 核心概述在 LangChain 中，管道符 | 是一种声明式的组合操作符，用于构建 LangChain 表达式语言 (LCEL)。它的核心作用是将不同的 Runnable 组件串联起来，将左侧组件的输出作为右侧组件的输入。 数学表达如果我们将组件视为函数，代码 chain &#x3D;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LangChain LCEL管道符技术参考">
+<meta property="og:url" content="http://example.com/2026/01/12/LangChain-LCEL%E7%AE%A1%E9%81%93%E7%AC%A6%E6%8A%80%E6%9C%AF%E5%8F%82%E8%80%83/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="这是一份关于 LangChain 表达式语言 (LCEL) 核心组件——管道符 | 的综合技术参考文档。 1. 核心概述在 LangChain 中，管道符 | 是一种声明式的组合操作符，用于构建 LangChain 表达式语言 (LCEL)。它的核心作用是将不同的 Runnable 组件串联起来，将左侧组件的输出作为右侧组件的输入。 数学表达如果我们将组件视为函数，代码 chain &#x3D;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/asuka.jpg">
+<meta property="article:published_time" content="2026-01-12T08:09:07.000Z">
+<meta property="article:modified_time" content="2026-01-12T08:09:34.352Z">
+<meta property="article:author" content="Zed">
+<meta property="article:tag" content="langchain">
+<meta property="article:tag" content="llm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/asuka.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "LangChain LCEL管道符技术参考",
+  "url": "http://example.com/2026/01/12/LangChain-LCEL%E7%AE%A1%E9%81%93%E7%AC%A6%E6%8A%80%E6%9C%AF%E5%8F%82%E8%80%83/",
+  "image": "http://example.com/img/asuka.jpg",
+  "datePublished": "2026-01-12T08:09:07.000Z",
+  "dateModified": "2026-01-12T08:09:34.352Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zed",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/01/12/LangChain-LCEL%E7%AE%A1%E9%81%93%E7%AC%A6%E6%8A%80%E6%9C%AF%E5%8F%82%E8%80%83/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'LangChain LCEL管道符技术参考',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bkground.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">65</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">52</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bkground.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">LangChain LCEL管道符技术参考</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">LangChain LCEL管道符技术参考</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-01-12T08:09:07.000Z" title="Created 2026-01-12 16:09:07">2026-01-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-01-12T08:09:34.352Z" title="Updated 2026-01-12 16:09:34">2026-01-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>这是一份关于 <strong>LangChain 表达式语言 (LCEL)</strong> 核心组件——管道符 <code>|</code> 的综合技术参考文档。</p>
+<h2 id="1-核心概述"><a href="#1-核心概述" class="headerlink" title="1. 核心概述"></a>1. 核心概述</h2><p>在 LangChain 中，管道符 <code>|</code> 是一种<strong>声明式</strong>的组合操作符，用于构建 LangChain 表达式语言 (LCEL)。它的核心作用是将不同的 <code>Runnable</code> 组件串联起来，<strong>将左侧组件的输出作为右侧组件的输入</strong>。</p>
+<h3 id="数学表达"><a href="#数学表达" class="headerlink" title="数学表达"></a>数学表达</h3><p>如果我们将组件视为函数，代码 chain &#x3D; A | B | C 等价于复合函数：</p>
+<p>$$Result &#x3D; C(B(A(Input)))$$</p>
+<h3 id="协议基础"><a href="#协议基础" class="headerlink" title="协议基础"></a>协议基础</h3><p>参与管道操作的所有对象（Prompt, LLM, Parser, Retriever 等）都必须实现 <strong><code>Runnable</code> 接口</strong>。这意味着它们都支持统一的调用方法：</p>
+<ul>
+<li><code>invoke()</code>: 同步调用</li>
+<li><code>stream()</code>: 流式输出</li>
+<li><code>batch()</code>: 批量处理</li>
+<li><code>ainvoke()</code> &#x2F; <code>astream()</code>: 异步方法</li>
+</ul>
+<hr>
+<h2 id="2-语法与使用模式详解"><a href="#2-语法与使用模式详解" class="headerlink" title="2. 语法与使用模式详解"></a>2. 语法与使用模式详解</h2><h3 id="2-1-线性串联-Linear-Chaining"><a href="#2-1-线性串联-Linear-Chaining" class="headerlink" title="2.1 线性串联 (Linear Chaining)"></a>2.1 线性串联 (Linear Chaining)</h3><p>最基础的用法，按顺序传递数据。</p>
+<p><strong>语法:</strong> <code>Component_A | Component_B | Component_C</code></p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 示例：Prompt -&gt; Model -&gt; OutputParser</span><br><span class="line">chain = prompt | model | StrOutputParser()</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-参数注入与透传-Passthrough"><a href="#2-2-参数注入与透传-Passthrough" class="headerlink" title="2.2 参数注入与透传 (Passthrough)"></a>2.2 参数注入与透传 (Passthrough)</h3><p>当后续组件需要多个参数，或者需要保留原始输入时使用。</p>
+<p><strong>组件:</strong> <code>RunnablePassthrough</code></p>
+<ul>
+<li><strong><code>RunnablePassthrough()</code></strong>: 占位符，原样传递接收到的输入。</li>
+<li><strong><code>RunnablePassthrough.assign(key=value)</code></strong>: 在输入字典中增加新的键值对，不覆盖旧数据。</li>
+</ul>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from langchain_core.runnables import RunnablePassthrough</span><br><span class="line"></span><br><span class="line"># 示例：在 RAG 中，同时传递检索到的 context 和原始 question</span><br><span class="line">rag_chain = (</span><br><span class="line">    &#123;&quot;context&quot;: retriever, &quot;question&quot;: RunnablePassthrough()&#125; </span><br><span class="line">    | prompt </span><br><span class="line">    | model</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-并行执行-Parallel-Execution"><a href="#2-3-并行执行-Parallel-Execution" class="headerlink" title="2.3 并行执行 (Parallel Execution)"></a>2.3 并行执行 (Parallel Execution)</h3><p>使用<strong>字典</strong>或 <code>RunnableParallel</code> 来定义分支，这些分支会并行运行。</p>
+<p><strong>语法:</strong> <code>&#123; &quot;key1&quot;: chain1, &quot;key2&quot;: chain2 &#125;</code></p>
+<p>LangChain 会自动检测字典中的 Runnable 对象并并行执行它们，最后将结果合并为一个字典返回。</p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 示例：同时生成摘要和提取意图</span><br><span class="line">map_chain = &#123;</span><br><span class="line">    &quot;summary&quot;: summary_chain,</span><br><span class="line">    &quot;intent&quot;: intent_chain</span><br><span class="line">&#125;</span><br><span class="line"># 输出: &#123;&quot;summary&quot;: &quot;...&quot;, &quot;intent&quot;: &quot;...&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-运行时配置-Runtime-Configuration"><a href="#2-4-运行时配置-Runtime-Configuration" class="headerlink" title="2.4 运行时配置 (Runtime Configuration)"></a>2.4 运行时配置 (Runtime Configuration)</h3><p>在管道中绑定静态参数（如 Stop Token、Temperature 或 Tools）。</p>
+<p><strong>方法:</strong> <code>.bind()</code></p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 示例：告诉模型遇到 &quot;END&quot; 时停止生成</span><br><span class="line">chain = prompt | model.bind(stop=[&quot;END&quot;]) | output_parser</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-自定义函数-Custom-Functions"><a href="#2-5-自定义函数-Custom-Functions" class="headerlink" title="2.5 自定义函数 (Custom Functions)"></a>2.5 自定义函数 (Custom Functions)</h3><p>将任意 Python 函数转换为管道的一部分。</p>
+<p><strong>组件:</strong> <code>RunnableLambda</code> 或 <code>@chain</code> 装饰器</p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from langchain_core.runnables import RunnableLambda</span><br><span class="line"></span><br><span class="line">def enhance_text(text: str):</span><br><span class="line">    return text.upper() + &quot;!!!&quot;</span><br><span class="line"></span><br><span class="line"># 使用 RunnableLambda 包装</span><br><span class="line">chain = prompt | model | RunnableLambda(enhance_text)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-应用场景指南"><a href="#3-应用场景指南" class="headerlink" title="3. 应用场景指南"></a>3. 应用场景指南</h2><p>在架构设计时，请根据<strong>任务的确定性</strong>来决定是否使用管道符。</p>
+<p>| 场景类型 | 描述 | 推荐架构 | 为什么使用管道 (|) |</p>
+<p>| :— | :— | :— | :— |</p>
+<p>| 基础 RAG | 检索文档并回答 | Chain | 流程固定（检索-增强-生成），需极低延迟。 |</p>
+<p>| 信息提取 | 从文本转 JSON | Chain | 结构化输出通常是一次性处理，无需循环。 |</p>
+<p>| 聊天机器人 | 带记忆的对话 | Chain | 历史记录注入 + 调用模型是线性过程。 |</p>
+<p>| 多重意图路由 | 分类后走不同逻辑 | Chain (Routing) | 使用 RunnableBranch 进行确定性分支跳转。 |</p>
+<p>| 复杂推理&#x2F;工具调用 | 需多步思考、查错 | Agent | 管道无法处理不确定次数的循环（While Loop）。 |</p>
+<hr>
+<h2 id="4-完整实战代码示例-RAG-模式"><a href="#4-完整实战代码示例-RAG-模式" class="headerlink" title="4. 完整实战代码示例 (RAG 模式)"></a>4. 完整实战代码示例 (RAG 模式)</h2><p>以下代码展示了如何利用管道符构建一个完整的、包含检索和流式输出的问答系统。</p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">import bs4</span><br><span class="line">from langchain_community.document_loaders import WebBaseLoader</span><br><span class="line">from langchain_community.vectorstores import Chroma</span><br><span class="line">from langchain_openai import OpenAIEmbeddings, ChatOpenAI</span><br><span class="line">from langchain_core.prompts import ChatPromptTemplate</span><br><span class="line">from langchain_core.output_parsers import StrOutputParser</span><br><span class="line">from langchain_core.runnables import RunnablePassthrough</span><br><span class="line">from langchain_text_splitters import RecursiveCharacterTextSplitter</span><br><span class="line"></span><br><span class="line"># 1. 准备数据 (Retriever)</span><br><span class="line">loader = WebBaseLoader(&quot;https://lilianweng.github.io/posts/2023-06-23-agent/&quot;)</span><br><span class="line">docs = loader.load()</span><br><span class="line">text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)</span><br><span class="line">splits = text_splitter.split_documents(docs)</span><br><span class="line">vectorstore = Chroma.from_documents(documents=splits, embedding=OpenAIEmbeddings())</span><br><span class="line">retriever = vectorstore.as_retriever()</span><br><span class="line"></span><br><span class="line"># 2. 定义 Prompt</span><br><span class="line">template = &quot;&quot;&quot;Answer the question based only on the following context:</span><br><span class="line">&#123;context&#125;</span><br><span class="line"></span><br><span class="line">Question: &#123;question&#125;</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">prompt = ChatPromptTemplate.from_template(template)</span><br><span class="line"></span><br><span class="line"># 3. 定义模型与解析器</span><br><span class="line">model = ChatOpenAI(model=&quot;gpt-3.5-turbo&quot;)</span><br><span class="line">output_parser = StrOutputParser()</span><br><span class="line"></span><br><span class="line"># 4. === 核心：使用管道符构建 LCEL 链 ===</span><br><span class="line"># logic: </span><br><span class="line">#   1. 并行: (检索 context) AND (保留 question)</span><br><span class="line">#   2. 格式化 prompt</span><br><span class="line">#   3. 模型推理</span><br><span class="line">#   4. 解析字符串</span><br><span class="line">rag_chain = (</span><br><span class="line">    &#123;&quot;context&quot;: retriever, &quot;question&quot;: RunnablePassthrough()&#125;</span><br><span class="line">    | prompt</span><br><span class="line">    | model</span><br><span class="line">    | output_parser</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 5. 调用 (支持流式)</span><br><span class="line">print(&quot;--- 开始流式输出 ---&quot;)</span><br><span class="line">for chunk in rag_chain.stream(&quot;What is Task Decomposition?&quot;):</span><br><span class="line">    print(chunk, end=&quot;&quot;, flush=True)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-调试技巧"><a href="#5-调试技巧" class="headerlink" title="5. 调试技巧"></a>5. 调试技巧</h2><p>由于管道符将逻辑高度抽象，调试时推荐使用 <strong>LangSmith</strong>。如果在本地调试，可以使用 <code>set_debug(True)</code> 查看中间环节。</p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from langchain.globals import set_debug</span><br><span class="line">set_debug(True) # 开启后，控制台会打印每一步的输入输出详细日志</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>下一步建议：</p>
+<p>如果您希望深入了解如何处理复杂的条件分支（例如：如果检索结果为空，则联网搜索；否则直接回答），我可以为您讲解 RunnableBranch 的用法。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Zed</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2026/01/12/LangChain-LCEL%E7%AE%A1%E9%81%93%E7%AC%A6%E6%8A%80%E6%9C%AF%E5%8F%82%E8%80%83/">http://example.com/2026/01/12/LangChain-LCEL%E7%AE%A1%E9%81%93%E7%AC%A6%E6%8A%80%E6%9C%AF%E5%8F%82%E8%80%83/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/langchain/">langchain</a><a class="post-meta__tags" href="/tags/llm/">llm</a></div><div class="post-share"><div class="social-share" data-image="/img/asuka.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/01/11/RAG%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%BA%90/" title="RAG系统数据来源"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">RAG系统数据来源</div></div><div class="info-2"><div class="info-item-1">1. 概述本系统旨在构建一个基于 LangChain 的 Java 问答系统，集成了向量检索（Vector DB）与知识图谱（Graph DB）。本通过明确“知识库数据”的获取渠道与清洗策略，以及“评估数据”的生成与验证方法，解决系统冷启动阶段的数据匮乏问题。  2. 知识库数据来源 (Knowledge Base)用于填充向量数据库（如 Milvus, Pinecone）和图数据库（如 Neo4j, NebulaGraph），作为系统回答问题的知识源。 2.1 权威文档与规范 (Textual Knowledge)适用存储： 向量数据库 (Vector DB) 核心价值： 提供准确的定义、API 使用说明和基础概念。    数据类型 推荐来源 获取与处理策略    官方文档 • Oracle Javadocs: JDK 核心库定义 • Spring&#x2F;Hibernate 官网: 常用框架文档 • 工具: LangChain RecursiveUrlLoader • 清洗: 去除 HTML 标签、导航栏；必须保留标题层级 (H1-H3)...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/01/11/langchain%E4%B8%ADAgent%E7%9A%84%E4%B8%89%E7%A7%8D%E8%B0%83%E7%94%A8%E6%96%B9%E5%BC%8F/" title="langchain中Agent的三种调用方式"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-11</div><div class="info-item-2">langchain中Agent的三种调用方式</div></div><div class="info-2"><div class="info-item-1">这份技术文档专门针对 LangChain Agent (智能体) 场景，深度解析三种核心调用方式。 相比于简单的线性链（Chain），Agent 包含复杂的循环、工具调用和自我修正逻辑，因此其调用模式（Execution Patterns）具有独特的行为特征。 1. 概述 (Overview)在 LangChain 1.0 架构中，Agent 本质上是一个实现了 Runnable 协议的复杂状态机。尽管其内部包含 ReAct 循环、工具路由和错误重试机制，但对外依然暴露统一的标准接口：  invoke (同步): 任务交付型。最常用，封装了复杂的中间过程。 stream (流式): 体验增强型。用于实时获取最终回答的 Token，或监控中间步骤。 batch (批量): 效率优化型。用于并发处理多个独立的 Agent 任务。   2. 同步调用：agent.invoke()这是开发 Agent 时最默认、最推荐的调用方式。 2.1 核心逻辑Agent 的工作往往是“结果导向”的。调用 invoke 意味着你启动了一个黑盒进程。  输入:...</div></div></div></a><a class="pagination-related" href="/2026/01/11/langchain%E6%A0%87%E5%87%86%E5%8C%96prompt/" title="langchain标准化prompt"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-11</div><div class="info-item-2">langchain标准化prompt</div></div><div class="info-2"><div class="info-item-1">1. 问题背景 (Problem Statement)在传统软件工程中，标准化依赖于精确的语法（Syntax）和强类型系统。而在基于 LangChain 的 LLM 应用开发中，核心逻辑依赖于自然语言（Prompts 和 Tool Descriptions）。 面临的挑战：  不确定性： 自然语言具有歧义性，导致系统行为难以像传统代码那样 100% 预测。 非标化： 不同的开发者编写 Prompt 的质量参差不齐，导致系统稳定性波动。  核心论点： LangChain 无法消除对 Prompt 的依赖（这是 LLM 的物理特性），但它提供了一套工程化框架，将模糊的自然语言逻辑包裹在标准化的软件架构中。  2. 范式转移：自然语言作为新汇编 (The Paradigm Shift)在 AI 工程中，我们需要重新映射编程概念：    传统编程概念 AI 工程对应物 本质变化    函数签名 (Signature) 工具描述 (Description) 从“类型匹配”变为“语义理解”。   业务逻辑 (Logic) Prompt Template 从“流程控制...</div></div></div></a><a class="pagination-related" href="/2026/01/11/langSmith%E5%8A%9F%E8%83%BD%E4%B8%8E%E5%B7%A5%E4%BD%9C%E6%B5%81/" title="langSmith功能与工作流"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-11</div><div class="info-item-2">langSmith功能与工作流</div></div><div class="info-2"><div class="info-item-1">这份文档为您总结了 LangSmith 的核心技术能力及其在 LLM 应用开发全生命周期中的工作流。 1. 核心定位LangSmith 是一个用于构建生产级 LLM 应用程序的 DevOps 平台。它弥补了传统软件开发工具在面对非确定性 LLM 时的不足，提供从原型开发、调试、评估到生产监控的全链路支持。  2. 核心功能详解 (Core Capabilities)2.1 全链路追踪与调试 (Tracing &amp; Debugging)解决 LLM 应用的“黑盒”问题，提供极其细颗粒度的可视性。  功能描述： 自动记录每一次 LLM 调用、Chain 执行、Agent 思考过程及 Tool 使用。 关键特性： 可视化调用树 (Run Tree)： 以层级结构展示调用链，清晰查看输入、输出、Prompt 渲染结果。 瀑布流视图 (Waterfall)：  可视化每个步骤的延迟，快速定位是检索慢还是生成慢。 元数据捕获： 自动记录 Token 消耗、模型参数、延迟和错误堆栈。 Playground 集成： 在 Trace 界面直接修改 Prompt 参数并“重放”...</div></div></div></a><a class="pagination-related" href="/2026/01/11/RAG%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%BA%90/" title="RAG系统数据来源"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-11</div><div class="info-item-2">RAG系统数据来源</div></div><div class="info-2"><div class="info-item-1">1. 概述本系统旨在构建一个基于 LangChain 的 Java 问答系统，集成了向量检索（Vector DB）与知识图谱（Graph DB）。本通过明确“知识库数据”的获取渠道与清洗策略，以及“评估数据”的生成与验证方法，解决系统冷启动阶段的数据匮乏问题。  2. 知识库数据来源 (Knowledge Base)用于填充向量数据库（如 Milvus, Pinecone）和图数据库（如 Neo4j, NebulaGraph），作为系统回答问题的知识源。 2.1 权威文档与规范 (Textual Knowledge)适用存储： 向量数据库 (Vector DB) 核心价值： 提供准确的定义、API 使用说明和基础概念。    数据类型 推荐来源 获取与处理策略    官方文档 • Oracle Javadocs: JDK 核心库定义 • Spring&#x2F;Hibernate 官网: 常用框架文档 • 工具: LangChain RecursiveUrlLoader • 清洗: 去除 HTML 标签、导航栏；必须保留标题层级 (H1-H3)...</div></div></div></a><a class="pagination-related" href="/2026/01/10/ReAct/" title="ReAct"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-10</div><div class="info-item-2">ReAct</div></div><div class="info-2"><div class="info-item-1">这是一份关于 ReAct (Reasoning + Acting) 技术的深度技术白皮书。它涵盖了从核心原理、底层实现到进阶架构的完整知识体系。 1. 核心定义与背景 (Introduction)ReAct 是 Reasoning（推理） 与 Acting（行动） 的合成词。它是一种用于构建大语言模型（LLM）代理（Agent）的范式。  起源: Google Research (Yao et al., 2022) 提出的论文 “ReAct: Synergizing Reasoning and Acting in Language Models”。 解决的问题: 单纯的 推理 (Chain-of-Thought) 容易产生幻觉，无法获取外部世界的新知。 单纯的 行动 (Action) 缺乏规划，容易在复杂任务中迷失方向。   核心理念: 让 LLM 在执行任务时，交替进行“思考（生成推理轨迹）”和“行动（调用外部工具）”，并将行动的结果（观察）反哺给模型，形成闭环。   2. 技术架构与工作流 (Architecture &amp; Workflow)ReAct...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zed</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">65</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">52</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">1. 核心概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%AD%A6%E8%A1%A8%E8%BE%BE"><span class="toc-number">1.1.</span> <span class="toc-text">数学表达</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80"><span class="toc-number">1.2.</span> <span class="toc-text">协议基础</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%AF%AD%E6%B3%95%E4%B8%8E%E4%BD%BF%E7%94%A8%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text">2. 语法与使用模式详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%BA%BF%E6%80%A7%E4%B8%B2%E8%81%94-Linear-Chaining"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 线性串联 (Linear Chaining)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%8F%82%E6%95%B0%E6%B3%A8%E5%85%A5%E4%B8%8E%E9%80%8F%E4%BC%A0-Passthrough"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 参数注入与透传 (Passthrough)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C-Parallel-Execution"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 并行执行 (Parallel Execution)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E8%BF%90%E8%A1%8C%E6%97%B6%E9%85%8D%E7%BD%AE-Runtime-Configuration"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 运行时配置 (Runtime Configuration)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0-Custom-Functions"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 自定义函数 (Custom Functions)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E6%8C%87%E5%8D%97"><span class="toc-number">3.</span> <span class="toc-text">3. 应用场景指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AE%8C%E6%95%B4%E5%AE%9E%E6%88%98%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B-RAG-%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">4. 完整实战代码示例 (RAG 模式)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="toc-number">5.</span> <span class="toc-text">5. 调试技巧</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/12/LangChain-LCEL%E7%AE%A1%E9%81%93%E7%AC%A6%E6%8A%80%E6%9C%AF%E5%8F%82%E8%80%83/" title="LangChain LCEL管道符技术参考">LangChain LCEL管道符技术参考</a><time datetime="2026-01-12T08:09:07.000Z" title="Created 2026-01-12 16:09:07">2026-01-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/11/RAG%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%BA%90/" title="RAG系统数据来源">RAG系统数据来源</a><time datetime="2026-01-11T12:19:04.000Z" title="Created 2026-01-11 20:19:04">2026-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/11/langSmith%E5%8A%9F%E8%83%BD%E4%B8%8E%E5%B7%A5%E4%BD%9C%E6%B5%81/" title="langSmith功能与工作流">langSmith功能与工作流</a><time datetime="2026-01-11T10:02:41.000Z" title="Created 2026-01-11 18:02:41">2026-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/11/Python-%E6%A8%A1%E5%9D%97%E6%96%87%E6%A1%A3%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%84%E8%8C%83%E6%8C%87%E5%8D%97-PEP-257/" title="Python 模块文档字符串规范指南 (PEP 257)">Python 模块文档字符串规范指南 (PEP 257)</a><time datetime="2026-01-11T09:22:35.000Z" title="Created 2026-01-11 17:22:35">2026-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/11/langchain%E4%B8%ADAgent%E7%9A%84%E4%B8%89%E7%A7%8D%E8%B0%83%E7%94%A8%E6%96%B9%E5%BC%8F/" title="langchain中Agent的三种调用方式">langchain中Agent的三种调用方式</a><time datetime="2026-01-11T07:11:37.000Z" title="Created 2026-01-11 15:11:37">2026-01-11</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bkground.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Zed</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
