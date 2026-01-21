@@ -1,0 +1,303 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>LangChain调用工具详解 | Hexo</title><meta name="author" content="Zed"><meta name="copyright" content="Zed"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="这份技术文档旨在为开发者提供关于在 LangChain (LCEL) 和 LangGraph 中定义、绑定及执行工具（Tools）的完整指南。 1. 概述 (Overview)在 LLM 应用开发中，“工具使用”（Tool Calling &#x2F; Function Calling）是指 LLM 输出结构化数据（JSON）以请求执行外部代码的能力。  LangChain (LCEL)：侧重于工">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LangChain调用工具详解">
+<meta property="og:url" content="http://example.com/2026/01/20/LangChain%E8%B0%83%E7%94%A8%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="这份技术文档旨在为开发者提供关于在 LangChain (LCEL) 和 LangGraph 中定义、绑定及执行工具（Tools）的完整指南。 1. 概述 (Overview)在 LLM 应用开发中，“工具使用”（Tool Calling &#x2F; Function Calling）是指 LLM 输出结构化数据（JSON）以请求执行外部代码的能力。  LangChain (LCEL)：侧重于工">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/asuka.jpg">
+<meta property="article:published_time" content="2026-01-20T08:34:25.000Z">
+<meta property="article:modified_time" content="2026-01-20T08:35:11.944Z">
+<meta property="article:author" content="Zed">
+<meta property="article:tag" content="langchain">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/asuka.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "LangChain调用工具详解",
+  "url": "http://example.com/2026/01/20/LangChain%E8%B0%83%E7%94%A8%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/",
+  "image": "http://example.com/img/asuka.jpg",
+  "datePublished": "2026-01-20T08:34:25.000Z",
+  "dateModified": "2026-01-20T08:35:11.944Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zed",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/01/20/LangChain%E8%B0%83%E7%94%A8%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'LangChain调用工具详解',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bkground.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">68</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">52</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bkground.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">LangChain调用工具详解</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">LangChain调用工具详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-01-20T08:34:25.000Z" title="Created 2026-01-20 16:34:25">2026-01-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-01-20T08:35:11.944Z" title="Updated 2026-01-20 16:35:11">2026-01-20</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>这份技术文档旨在为开发者提供关于在 <strong>LangChain</strong> (LCEL) 和 <strong>LangGraph</strong> 中定义、绑定及执行工具（Tools）的完整指南。</p>
+<h2 id="1-概述-Overview"><a href="#1-概述-Overview" class="headerlink" title="1. 概述 (Overview)"></a>1. 概述 (Overview)</h2><p>在 LLM 应用开发中，“工具使用”（Tool Calling &#x2F; Function Calling）是指 LLM 输出结构化数据（JSON）以请求执行外部代码的能力。</p>
+<ul>
+<li><strong>LangChain (LCEL)</strong>：侧重于工具的<strong>定义</strong>与<strong>绑定</strong>，以及线性的调用流程。</li>
+<li><strong>LangGraph</strong>：侧重于工具的<strong>自动化执行</strong>、<strong>状态管理</strong>及<strong>循环反馈</strong>（Agent 架构）。</li>
+</ul>
+<hr>
+<h2 id="2-定义工具-Defining-Tools"><a href="#2-定义工具-Defining-Tools" class="headerlink" title="2. 定义工具 (Defining Tools)"></a>2. 定义工具 (Defining Tools)</h2><p>无论是在 LangChain 还是 LangGraph 中，定义工具的方式是通用的。核心是创建一个带有<strong>名称</strong>、<strong>描述</strong>和<strong>参数类型 (Schema)</strong> 的可执行单元。</p>
+<h3 id="最佳实践：使用-tool-装饰器"><a href="#最佳实践：使用-tool-装饰器" class="headerlink" title="最佳实践：使用 @tool 装饰器"></a>最佳实践：使用 <code>@tool</code> 装饰器</h3><p>这是最简洁的方法，LangChain 会自动解析 Python 函数的类型提示（Type Hints）生成 JSON Schema。</p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from langchain_core.tools import tool</span><br><span class="line"></span><br><span class="line">@tool</span><br><span class="line">def get_weather(city: str) -&gt; str:</span><br><span class="line">    &quot;&quot;&quot;查询指定城市的当前天气信息。&quot;&quot;&quot;</span><br><span class="line">    # 模拟 API 调用</span><br><span class="line">    if &quot;东京&quot; in city:</span><br><span class="line">        return &quot;18°C&quot;</span><br><span class="line">    elif &quot;北京&quot; in city:</span><br><span class="line">        return &quot;22°C&quot;</span><br><span class="line">    return &quot;未知&quot;</span><br><span class="line"></span><br><span class="line">@tool</span><br><span class="line">def calculate_tax(income: int) -&gt; int:</span><br><span class="line">    &quot;&quot;&quot;根据收入计算税额。&quot;&quot;&quot;</span><br><span class="line">    return int(income * 0.2)</span><br><span class="line"></span><br><span class="line"># 工具列表</span><br><span class="line">tools = [get_weather, calculate_tax]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-在-LangChain-LCEL-中使用工具"><a href="#3-在-LangChain-LCEL-中使用工具" class="headerlink" title="3. 在 LangChain (LCEL) 中使用工具"></a>3. 在 LangChain (LCEL) 中使用工具</h2><p>在传统的 LangChain 链（Chain）中，工具的使用通常是<strong>线性</strong>的。你需要手动处理 LLM 的响应并决定是否执行工具。</p>
+<h3 id="3-1-核心步骤"><a href="#3-1-核心步骤" class="headerlink" title="3.1 核心步骤"></a>3.1 核心步骤</h3><ol>
+<li><strong>Bind (绑定)</strong>: 将工具 Schema 注入 LLM。</li>
+<li><strong>Invoke (调用)</strong>: 获取 LLM 响应。</li>
+<li><strong>Parse &amp; Execute (解析与执行)</strong>: 检查 <code>tool_calls</code> 并运行函数（通常需自定义逻辑或使用辅助链）。</li>
+</ol>
+<h3 id="3-2-代码实现"><a href="#3-2-代码实现" class="headerlink" title="3.2 代码实现"></a>3.2 代码实现</h3><p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">from langchain_openai import ChatOpenAI</span><br><span class="line"></span><br><span class="line"># 1. 初始化模型并绑定工具</span><br><span class="line">llm = ChatOpenAI(model=&quot;gpt-4o&quot;)</span><br><span class="line">llm_with_tools = llm.bind_tools(tools)</span><br><span class="line"></span><br><span class="line"># 2. 调用模型</span><br><span class="line">query = &quot;东京的天气怎么样？&quot;</span><br><span class="line">response = llm_with_tools.invoke(query)</span><br><span class="line"></span><br><span class="line"># 3. 检查并手动执行 (LCEL 风格)</span><br><span class="line">print(f&quot;AI 意图: &#123;response.tool_calls&#125;&quot;) </span><br><span class="line"># 输出: [&#123;&#x27;name&#x27;: &#x27;get_weather&#x27;, &#x27;args&#x27;: &#123;&#x27;city&#x27;: &#x27;东京&#x27;&#125;, &#x27;id&#x27;: &#x27;...&#x27;&#125;]</span><br><span class="line"></span><br><span class="line">if response.tool_calls:</span><br><span class="line">    for tool_call in response.tool_calls:</span><br><span class="line">        # 查找匹配的工具</span><br><span class="line">        selected_tool = &#123;&quot;get_weather&quot;: get_weather, &quot;calculate_tax&quot;: calculate_tax&#125;[tool_call[&quot;name&quot;]]</span><br><span class="line">        # 执行工具</span><br><span class="line">        tool_result = selected_tool.invoke(tool_call[&quot;args&quot;])</span><br><span class="line">        print(f&quot;工具结果: &#123;tool_result&#125;&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>局限性</strong>：在纯 LCEL 中，构建一个“LLM -&gt; 工具 -&gt; 结果回传 -&gt; LLM 继续回答”的完整闭环（ReAct 模式）代码量较大且难以管理状态。</p>
+<hr>
+<h2 id="4-在-LangGraph-中使用工具"><a href="#4-在-LangGraph-中使用工具" class="headerlink" title="4. 在 LangGraph 中使用工具"></a>4. 在 LangGraph 中使用工具</h2><p>LangGraph 引入了**图（Graph）**的概念，专门用于解决循环依赖和状态持久化。它提供了预构建组件（<code>ToolNode</code>）来自动化工具执行流程。</p>
+<h3 id="4-1-核心组件"><a href="#4-1-核心组件" class="headerlink" title="4.1 核心组件"></a>4.1 核心组件</h3><ul>
+<li><strong><code>State</code></strong>: 存储对话历史（Messages）。</li>
+<li><strong><code>ToolNode</code></strong>: 一个可运行节点，自动接收 <code>AIMessage</code>，解析 <code>tool_calls</code>，并行执行工具，并返回 <code>ToolMessage</code>。</li>
+<li><strong><code>tools_condition</code></strong>: 一个预置的路由逻辑，判断是去往 <code>ToolNode</code> 还是结束对话。</li>
+</ul>
+<h3 id="4-2-代码实现-Standard-ReAct-Pattern"><a href="#4-2-代码实现-Standard-ReAct-Pattern" class="headerlink" title="4.2 代码实现 (Standard ReAct Pattern)"></a>4.2 代码实现 (Standard ReAct Pattern)</h3><p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">from typing import Annotated</span><br><span class="line">from typing_extensions import TypedDict</span><br><span class="line">from langgraph.graph import StateGraph, START, END</span><br><span class="line">from langgraph.graph.message import add_messages</span><br><span class="line">from langgraph.prebuilt import ToolNode, tools_condition</span><br><span class="line"></span><br><span class="line"># 1. 定义状态 (State)</span><br><span class="line">class State(TypedDict):</span><br><span class="line">    # add_messages reducer 负责将新消息追加到历史记录中</span><br><span class="line">    messages: Annotated[list, add_messages]</span><br><span class="line"></span><br><span class="line"># 2. 准备组件</span><br><span class="line">llm = ChatOpenAI(model=&quot;gpt-4o&quot;)</span><br><span class="line">llm_with_tools = llm.bind_tools(tools) # 依然需要绑定</span><br><span class="line"></span><br><span class="line"># 3. 构建图</span><br><span class="line">builder = StateGraph(State)</span><br><span class="line"></span><br><span class="line"># 定义节点函数：调用 LLM</span><br><span class="line">def chatbot(state: State):</span><br><span class="line">    return &#123;&quot;messages&quot;: [llm_with_tools.invoke(state[&quot;messages&quot;])]&#125;</span><br><span class="line"></span><br><span class="line"># 添加节点</span><br><span class="line">builder.add_node(&quot;chatbot&quot;, chatbot)</span><br><span class="line">builder.add_node(&quot;tools&quot;, ToolNode(tools)) # ToolNode 自动处理执行逻辑</span><br><span class="line"></span><br><span class="line"># 4. 定义边 (Edges) - 构建控制流</span><br><span class="line">builder.add_edge(START, &quot;chatbot&quot;)</span><br><span class="line"></span><br><span class="line"># 条件边：chatbot 结束后，检查是否需要调用工具</span><br><span class="line">builder.add_conditional_edges(</span><br><span class="line">    &quot;chatbot&quot;,</span><br><span class="line">    tools_condition, </span><br><span class="line">    # 默认映射: 如果返回 True (有工具调用) -&gt; &quot;tools&quot;</span><br><span class="line">    #          如果返回 False (无工具调用) -&gt; END</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 闭环：工具执行完，必须回到 chatbot 让 AI 生成最终回复</span><br><span class="line">builder.add_edge(&quot;tools&quot;, &quot;chatbot&quot;)</span><br><span class="line"></span><br><span class="line"># 5. 编译与运行</span><br><span class="line">graph = builder.compile()</span><br><span class="line"></span><br><span class="line"># 执行</span><br><span class="line">inputs = &#123;&quot;messages&quot;: [(&quot;user&quot;, &quot;东京天气如何？&quot;)]&#125;</span><br><span class="line">for event in graph.stream(inputs):</span><br><span class="line">    for key, value in event.items():</span><br><span class="line">        print(f&quot;Node &#x27;&#123;key&#125;&#x27;:&quot;)</span><br><span class="line">        print(value)</span><br><span class="line">        print(&quot;---&quot;)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-对比总结-Comparison"><a href="#5-对比总结-Comparison" class="headerlink" title="5. 对比总结 (Comparison)"></a>5. 对比总结 (Comparison)</h2><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>LangChain (LCEL)</strong></th>
+<th><strong>LangGraph</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>主要用途</strong></td>
+<td>简单的、线性的工具调用链。</td>
+<td>复杂的、循环的 Agent 系统。</td>
+</tr>
+<tr>
+<td><strong>执行机制</strong></td>
+<td>通常需要开发者手动解析 <code>tool_calls</code> 并调用 <code>.invoke()</code>。</td>
+<td>通过 <code>ToolNode</code> 自动解析并并行执行。</td>
+</tr>
+<tr>
+<td><strong>流程控制</strong></td>
+<td>线性 (DAG)。实现循环（如重试）很困难。</td>
+<td>循环 (Cyclic)。原生支持 <code>Loop</code> 和 <code>Feedback</code>。</td>
+</tr>
+<tr>
+<td><strong>状态管理</strong></td>
+<td>无内置状态管理（Stateless），需外部传递。</td>
+<td>内置 <code>State</code>，自动追踪消息历史和工具输出。</td>
+</tr>
+<tr>
+<td><strong>错误处理</strong></td>
+<td>需在代码逻辑中手动 try&#x2F;except。</td>
+<td><code>ToolNode</code> 支持 <code>fallback</code> 机制，可将错误反馈给 LLM。</td>
+</tr>
+</tbody></table>
+<h3 id="什么时候用什么？"><a href="#什么时候用什么？" class="headerlink" title="什么时候用什么？"></a>什么时候用什么？</h3><ul>
+<li><strong>使用 LangChain (LCEL)</strong>：如果你只需要 LLM 帮你提取一次参数（例如：从文本中提取日期和地点），然后你的 Python 代码拿着这些参数去跑后续流程，不需要再回头问 LLM。</li>
+<li><strong>使用 LangGraph</strong>：如果你需要构建一个 Agent，它需要自己决定调用什么工具，根据工具的结果（可能报错）进行反思，多次交互直到完成任务。</li>
+</ul>
+<hr>
+<p>好的，这是基于前文内容的扩展，为您补充 <strong>Human-in-the-loop (人工介入)</strong> 和 <strong>错误恢复 (Error Recovery)</strong> 的详细技术文档。这两部分是将 Demo 级应用转化为生产级 Agent 的关键。</p>
+<hr>
+<h1 id="6-进阶模式：Human-in-the-loop-人工介入"><a href="#6-进阶模式：Human-in-the-loop-人工介入" class="headerlink" title="6. 进阶模式：Human-in-the-loop (人工介入)"></a>6. 进阶模式：Human-in-the-loop (人工介入)</h1><p>在涉及敏感操作（如写入数据库、发送邮件、大额转账）时，完全自动化的工具调用是危险的。LangGraph 提供了**中断（Interrupt）**机制，允许在执行特定节点（如 <code>tools</code>）之前暂停，等待人工确认或修改。</p>
+<h3 id="6-1-核心机制"><a href="#6-1-核心机制" class="headerlink" title="6.1 核心机制"></a>6.1 核心机制</h3><ol>
+<li><strong>Checkpointer (检查点保存器)</strong>: 必须配置 Checkpointer（如 <code>MemorySaver</code>），用于持久化保存图的状态。</li>
+<li><strong><code>interrupt_before</code></strong>: 在编译图时指定在哪个节点<strong>之前</strong>中断。</li>
+<li><strong>Thread ID</strong>: 使用 <code>thread_id</code> 来追踪同一个对话会话，确保中断后能找回状态。</li>
+</ol>
+<h3 id="6-2-代码示例：审批敏感工具"><a href="#6-2-代码示例：审批敏感工具" class="headerlink" title="6.2 代码示例：审批敏感工具"></a>6.2 代码示例：审批敏感工具</h3><p>假设我们有一个“转账”工具，在真正执行前需要人工确认。</p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">from langgraph.checkpoint.memory import MemorySaver</span><br><span class="line">from langgraph.graph import StateGraph, START</span><br><span class="line">from langgraph.prebuilt import ToolNode, tools_condition</span><br><span class="line"></span><br><span class="line"># ... (假设已定义 State, llm, tools 等，参考前文)</span><br><span class="line"></span><br><span class="line"># 1. 初始化 Checkpointer (用于保存暂停时的状态)</span><br><span class="line">memory = MemorySaver()</span><br><span class="line"></span><br><span class="line"># 2. 构建图</span><br><span class="line">builder = StateGraph(State)</span><br><span class="line">builder.add_node(&quot;chatbot&quot;, chatbot)</span><br><span class="line">builder.add_node(&quot;tools&quot;, ToolNode(tools))</span><br><span class="line"></span><br><span class="line">builder.add_edge(START, &quot;chatbot&quot;)</span><br><span class="line">builder.add_conditional_edges(&quot;chatbot&quot;, tools_condition)</span><br><span class="line">builder.add_edge(&quot;tools&quot;, &quot;chatbot&quot;)</span><br><span class="line"></span><br><span class="line"># 3. 关键步骤：编译时配置中断</span><br><span class="line">graph = builder.compile(</span><br><span class="line">    checkpointer=memory,</span><br><span class="line">    # 在进入 &#x27;tools&#x27; 节点前暂停，等待批准</span><br><span class="line">    interrupt_before=[&quot;tools&quot;] </span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 4. 执行流程模拟</span><br><span class="line">thread_config = &#123;&quot;configurable&quot;: &#123;&quot;thread_id&quot;: &quot;session_1&quot;&#125;&#125;</span><br><span class="line"></span><br><span class="line">print(&quot;--- 阶段 1: AI 发起请求 ---&quot;)</span><br><span class="line"># 用户请求转账</span><br><span class="line">initial_input = &#123;&quot;messages&quot;: [(&quot;user&quot;, &quot;请帮我向 Alice 转账 100 美元&quot;)]&#125;</span><br><span class="line"></span><br><span class="line"># 图会运行到 &#x27;chatbot&#x27; -&gt; 决定调用工具 -&gt; 准备进入 &#x27;tools&#x27; 时暂停</span><br><span class="line">for event in graph.stream(initial_input, config=thread_config):</span><br><span class="line">    print(event)</span><br><span class="line"></span><br><span class="line">print(&quot;\n--- 状态检查: 系统已暂停 ---&quot;)</span><br><span class="line"># 获取当前状态快照</span><br><span class="line">snapshot = graph.get_state(thread_config)</span><br><span class="line">next_step = snapshot.next</span><br><span class="line">print(f&quot;下一步计划执行的节点: &#123;next_step&#125;&quot;) # 输出: (&#x27;tools&#x27;,)</span><br><span class="line"></span><br><span class="line"># 此时，你可以检查 snapshot.values[&#x27;messages&#x27;] 里的 tool_call 内容</span><br><span class="line"># 例如展示给前端用户： &quot;AI 想要调用 transfer(to=&#x27;Alice&#x27;, amount=100)，是否批准？&quot;</span><br><span class="line"></span><br><span class="line">print(&quot;\n--- 阶段 2: 人工批准并恢复 ---&quot;)</span><br><span class="line">user_approval = input(&quot;是否批准操作? (y/n): &quot;)</span><br><span class="line"></span><br><span class="line">if user_approval.lower() == &quot;y&quot;:</span><br><span class="line">    # 传入 None 表示&quot;不修改状态，直接继续运行&quot;</span><br><span class="line">    # 图会从暂停的地方(即进入 tools 节点)继续执行</span><br><span class="line">    for event in graph.stream(None, config=thread_config):</span><br><span class="line">        print(event)</span><br><span class="line">else:</span><br><span class="line">    print(&quot;操作已取消。&quot;)</span><br><span class="line">    # 实际场景中，这里可以注入一条 ToolMessage 表示&quot;用户拒绝执行&quot;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="7-错误恢复-Error-Recovery-与自修正"><a href="#7-错误恢复-Error-Recovery-与自修正" class="headerlink" title="7. 错误恢复 (Error Recovery)与自修正"></a>7. 错误恢复 (Error Recovery)与自修正</h1><p>LLM 在调用工具时常犯两类错误：</p>
+<ol>
+<li><strong>参数错误</strong>（Hallucination）：例如 API 需要 JSON 格式，LLM 给了字符串；或者遗漏了必填参数。</li>
+<li><strong>运行时错误</strong>：例如查询的天气服务 API 挂了，或者数据库连接超时。</li>
+</ol>
+<p>如果没有错误处理，程序会抛出异常并崩溃。LangGraph 的哲学是：<strong>将错误转化为反馈（Feedback），让 LLM 自己去修。</strong></p>
+<h3 id="7-1-策略一：自动捕获并反馈-handle-tool-error"><a href="#7-1-策略一：自动捕获并反馈-handle-tool-error" class="headerlink" title="7.1 策略一：自动捕获并反馈 (handle_tool_error)"></a>7.1 策略一：自动捕获并反馈 (<code>handle_tool_error</code>)</h3><p>这是最简单的方法。在定义工具时启用 <code>handle_tool_error</code>。当工具抛出异常时，LangChain 会自动生成一个包含错误信息的 <code>ToolMessage</code> 发回给 LLM。</p>
+<p><strong>LLM 的反应</strong>：看到错误信息后，LLM 会分析原因，并尝试生成新的参数重新调用工具。</p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from langchain_core.tools import tool</span><br><span class="line"></span><br><span class="line"># 自定义错误处理函数 (可选)</span><br><span class="line">def handle_error(error: Exception) -&gt; str:</span><br><span class="line">    return f&quot;工具执行出错: &#123;error&#125;。请检查你的参数格式是否正确，然后重试。&quot;</span><br><span class="line"></span><br><span class="line">@tool(handle_tool_error=handle_error) </span><br><span class="line">def search_database(query: str):</span><br><span class="line">    &quot;&quot;&quot;查询数据库。Query 必须是合法的 SQL 语句。&quot;&quot;&quot;</span><br><span class="line">    if &quot;SELECT&quot; not in query.upper():</span><br><span class="line">        # 抛出异常，触发 handle_error</span><br><span class="line">        raise ValueError(&quot;Invalid SQL: Query must start with SELECT&quot;)</span><br><span class="line">    return f&quot;Results for &#123;query&#125;&quot;</span><br><span class="line"></span><br><span class="line"># 或者直接设为 True，使用默认的错误消息</span><br><span class="line"># @tool(handle_tool_error=True)</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-策略二：在-ToolNode-层面处理-Fallbacks"><a href="#7-2-策略二：在-ToolNode-层面处理-Fallbacks" class="headerlink" title="7.2 策略二：在 ToolNode 层面处理 (Fallbacks)"></a>7.2 策略二：在 ToolNode 层面处理 (Fallbacks)</h3><p>如果你使用的是预构建的 <code>ToolNode</code>，可以在初始化时配置回退逻辑。这对于处理不可预知的系统级错误（如网络超时）非常有用。</p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from langgraph.prebuilt import ToolNode</span><br><span class="line"></span><br><span class="line"># 定义工具列表</span><br><span class="line">tools = [search_database]</span><br><span class="line"></span><br><span class="line"># 初始化 ToolNode，并配置异常捕获</span><br><span class="line">tool_node = ToolNode(tools).with_fallbacks(</span><br><span class="line">    [fallback_llm_node], # 如果工具彻底失败，可以跳转到一个备用的 LLM 节点解释原因</span><br><span class="line">    exception_key=&quot;error&quot; # 将异常信息存储在 state 中</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3-完整的自修正流程示例"><a href="#7-3-完整的自修正流程示例" class="headerlink" title="7.3 完整的自修正流程示例"></a>7.3 完整的自修正流程示例</h3><p>当 <code>handle_tool_error</code> 生效时，对话历史会变成这样，形成一个<strong>自我修正的闭环</strong>：</p>
+<ol>
+<li><strong>User</strong>: “查询数据库：用户列表”</li>
+<li><strong>AI (AIMessage)</strong>: <code>tool_call: search_database(query=&quot;users&quot;)</code> <em>(错误：这不是 SQL)</em></li>
+<li><strong>Tool (ToolMessage)</strong>: <code>content=&quot;工具执行出错: Invalid SQL: Query must start with SELECT...&quot;</code> <em>(捕获了异常)</em></li>
+<li><strong>AI (AIMessage)</strong>: <em>(LLM 看到错误，思考修正)</em> <code>tool_call: search_database(query=&quot;SELECT * FROM users&quot;)</code></li>
+<li><strong>Tool (ToolMessage)</strong>: <code>content=&quot;[Alice, Bob, Charlie]&quot;</code> <em>(执行成功)</em></li>
+<li><strong>AI</strong>: “数据库中的用户有 Alice, Bob 和 Charlie。”</li>
+</ol>
+<hr>
+<h1 id="8-最佳实践总结"><a href="#8-最佳实践总结" class="headerlink" title="8. 最佳实践总结"></a>8. 最佳实践总结</h1><table>
+<thead>
+<tr>
+<th><strong>场景</strong></th>
+<th><strong>推荐方案</strong></th>
+<th><strong>关键技术点</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>只读操作</strong> (查询天气、搜索)</td>
+<td><strong>全自动</strong></td>
+<td><code>handle_tool_error=True</code> (允许 LLM 出错重试)</td>
+</tr>
+<tr>
+<td><strong>写操作</strong> (转账、删库)</td>
+<td><strong>Human-in-the-loop</strong></td>
+<td><code>interrupt_before=[&quot;tools&quot;]</code>, <code>MemorySaver</code></td>
+</tr>
+<tr>
+<td><strong>复杂参数</strong> (如生成代码)</td>
+<td><strong>Pydantic 校验</strong></td>
+<td>使用 Pydantic 定义工具参数，提供详细的校验错误信息</td>
+</tr>
+<tr>
+<td><strong>调试</strong></td>
+<td><strong>LangSmith</strong></td>
+<td>使用 LangSmith 追踪 Trace，查看 LLM 为什么参数传错了</td>
+</tr>
+</tbody></table>
+<p>通过结合 <strong>Human-in-the-loop</strong> 确保安全，以及 <strong>Error Recovery</strong> 确保鲁棒性，您就可以构建出真正可用的企业级 Agent。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Zed</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2026/01/20/LangChain%E8%B0%83%E7%94%A8%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/">http://example.com/2026/01/20/LangChain%E8%B0%83%E7%94%A8%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/langchain/">langchain</a></div><div class="post-share"><div class="social-share" data-image="/img/asuka.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/01/14/Python-os%E5%BA%93%E9%80%9F%E6%9F%A5%E6%8C%87%E5%8D%97/" title="Python os库速查指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Python os库速查指南</div></div><div class="info-2"><div class="info-item-1">这是一份整理好的 Python os 库核心功能速查手册。你可以将其保存为 Markdown 文件或打印出来作为日常开发的参考。 1. 路径处理大神：os.path场景：处理文件路径字符串，不涉及实际文件读写。    函数名 代码示例 应用场景与说明    os.path.join os.path.join(&#39;data&#39;, &#39;file.txt&#39;) 最核心。智能拼接路径，自动适配 / 或 \。   os.path.exists os.path.exists(path) 判断文件或文件夹是否存在。   os.path.splitext name, ext =...</div></div></div></a><a class="pagination-related" href="/2026/01/21/Java%E5%8E%86%E5%8F%B2%E9%81%97%E7%95%99%E9%97%AE%E9%A2%98-1/" title="Java历史遗留问题(1)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Java历史遗留问题(1)</div></div><div class="info-2"><div class="info-item-1">命名不一致其实是 Java 语言发展历史 和 不同设计理念 碰撞出来的结果。我们可以把它们分为三类来理解：length（属性）、length()（方法）、size()（方法）。 下面我为你揭开这背后的设计逻辑。  1. 数组 (Array)：为什么是 .length (属性)?代码： int[] arr = new int[10]; int len = arr.length; 原因：数组是 Java 中的“特权阶级”。  JVM 原生支持： 数组不是通过标准 Java 类库定义的普通类，它们是 JVM 直接支持的特殊对象。当你 new 一个数组时，JVM 会分配一块连续内存，并直接把长度“烙印”在数组的元数据（Header）里。 不可变性 (Immutability)： 数组一旦创建，长度绝不会变。 既然长度在生命周期内永远是固定的常量，那么把它作为一个 public final 属性暴露出来，在性能上最高效（省去了方法调用的开销，虽然现代 JIT 编译器能优化掉这个差异，但在 Java 早期这很重要）。   C 语言的遗产： Java 早期语法很大程度上参考了...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/01/10/ReAct/" title="ReAct"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-10</div><div class="info-item-2">ReAct</div></div><div class="info-2"><div class="info-item-1">这是一份关于 ReAct (Reasoning + Acting) 技术的深度技术白皮书。它涵盖了从核心原理、底层实现到进阶架构的完整知识体系。 1. 核心定义与背景 (Introduction)ReAct 是 Reasoning（推理） 与 Acting（行动） 的合成词。它是一种用于构建大语言模型（LLM）代理（Agent）的范式。  起源: Google Research (Yao et al., 2022) 提出的论文 “ReAct: Synergizing Reasoning and Acting in Language Models”。 解决的问题: 单纯的 推理 (Chain-of-Thought) 容易产生幻觉，无法获取外部世界的新知。 单纯的 行动 (Action) 缺乏规划，容易在复杂任务中迷失方向。   核心理念: 让 LLM 在执行任务时，交替进行“思考（生成推理轨迹）”和“行动（调用外部工具）”，并将行动的结果（观察）反哺给模型，形成闭环。   2. 技术架构与工作流 (Architecture &amp; Workflow)ReAct...</div></div></div></a><a class="pagination-related" href="/2026/01/11/langchain%E4%B8%ADAgent%E7%9A%84%E4%B8%89%E7%A7%8D%E8%B0%83%E7%94%A8%E6%96%B9%E5%BC%8F/" title="langchain中Agent的三种调用方式"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-11</div><div class="info-item-2">langchain中Agent的三种调用方式</div></div><div class="info-2"><div class="info-item-1">这份技术文档专门针对 LangChain Agent (智能体) 场景，深度解析三种核心调用方式。 相比于简单的线性链（Chain），Agent 包含复杂的循环、工具调用和自我修正逻辑，因此其调用模式（Execution Patterns）具有独特的行为特征。 1. 概述 (Overview)在 LangChain 1.0 架构中，Agent 本质上是一个实现了 Runnable 协议的复杂状态机。尽管其内部包含 ReAct 循环、工具路由和错误重试机制，但对外依然暴露统一的标准接口：  invoke (同步): 任务交付型。最常用，封装了复杂的中间过程。 stream (流式): 体验增强型。用于实时获取最终回答的 Token，或监控中间步骤。 batch (批量): 效率优化型。用于并发处理多个独立的 Agent 任务。   2. 同步调用：agent.invoke()这是开发 Agent 时最默认、最推荐的调用方式。 2.1 核心逻辑Agent 的工作往往是“结果导向”的。调用 invoke 意味着你启动了一个黑盒进程。  输入:...</div></div></div></a><a class="pagination-related" href="/2026/01/11/langchain%E6%A0%87%E5%87%86%E5%8C%96prompt/" title="langchain标准化prompt"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-11</div><div class="info-item-2">langchain标准化prompt</div></div><div class="info-2"><div class="info-item-1">1. 问题背景 (Problem Statement)在传统软件工程中，标准化依赖于精确的语法（Syntax）和强类型系统。而在基于 LangChain 的 LLM 应用开发中，核心逻辑依赖于自然语言（Prompts 和 Tool Descriptions）。 面临的挑战：  不确定性： 自然语言具有歧义性，导致系统行为难以像传统代码那样 100% 预测。 非标化： 不同的开发者编写 Prompt 的质量参差不齐，导致系统稳定性波动。  核心论点： LangChain 无法消除对 Prompt 的依赖（这是 LLM 的物理特性），但它提供了一套工程化框架，将模糊的自然语言逻辑包裹在标准化的软件架构中。  2. 范式转移：自然语言作为新汇编 (The Paradigm Shift)在 AI 工程中，我们需要重新映射编程概念：    传统编程概念 AI 工程对应物 本质变化    函数签名 (Signature) 工具描述 (Description) 从“类型匹配”变为“语义理解”。   业务逻辑 (Logic) Prompt Template 从“流程控制...</div></div></div></a><a class="pagination-related" href="/2026/01/11/langSmith%E5%8A%9F%E8%83%BD%E4%B8%8E%E5%B7%A5%E4%BD%9C%E6%B5%81/" title="langSmith功能与工作流"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-11</div><div class="info-item-2">langSmith功能与工作流</div></div><div class="info-2"><div class="info-item-1">这份文档为您总结了 LangSmith 的核心技术能力及其在 LLM 应用开发全生命周期中的工作流。 1. 核心定位LangSmith 是一个用于构建生产级 LLM 应用程序的 DevOps 平台。它弥补了传统软件开发工具在面对非确定性 LLM 时的不足，提供从原型开发、调试、评估到生产监控的全链路支持。  2. 核心功能详解 (Core Capabilities)2.1 全链路追踪与调试 (Tracing &amp; Debugging)解决 LLM 应用的“黑盒”问题，提供极其细颗粒度的可视性。  功能描述： 自动记录每一次 LLM 调用、Chain 执行、Agent 思考过程及 Tool 使用。 关键特性： 可视化调用树 (Run Tree)： 以层级结构展示调用链，清晰查看输入、输出、Prompt 渲染结果。 瀑布流视图 (Waterfall)：  可视化每个步骤的延迟，快速定位是检索慢还是生成慢。 元数据捕获： 自动记录 Token 消耗、模型参数、延迟和错误堆栈。 Playground 集成： 在 Trace 界面直接修改 Prompt 参数并“重放”...</div></div></div></a><a class="pagination-related" href="/2026/01/12/LangChain-LCEL%E7%AE%A1%E9%81%93%E7%AC%A6%E6%8A%80%E6%9C%AF%E5%8F%82%E8%80%83/" title="LangChain LCEL管道符技术参考"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-12</div><div class="info-item-2">LangChain LCEL管道符技术参考</div></div><div class="info-2"><div class="info-item-1">这是一份关于 LangChain 表达式语言 (LCEL) 核心组件——管道符 | 的综合技术参考文档。 1. 核心概述在 LangChain 中，管道符 | 是一种声明式的组合操作符，用于构建 LangChain 表达式语言 (LCEL)。它的核心作用是将不同的 Runnable 组件串联起来，将左侧组件的输出作为右侧组件的输入。 数学表达如果我们将组件视为函数，代码 chain &#x3D; A | B | C 等价于复合函数： $$Result &#x3D; C(B(A(Input)))$$ 协议基础参与管道操作的所有对象（Prompt, LLM, Parser, Retriever 等）都必须实现 Runnable 接口。这意味着它们都支持统一的调用方法：  invoke(): 同步调用 stream(): 流式输出 batch(): 批量处理 ainvoke() &#x2F; astream(): 异步方法   2. 语法与使用模式详解2.1 线性串联 (Linear Chaining)最基础的用法，按顺序传递数据。 语法: Component_A |...</div></div></div></a><a class="pagination-related" href="/2026/01/11/RAG%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%BA%90/" title="RAG系统数据来源"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-11</div><div class="info-item-2">RAG系统数据来源</div></div><div class="info-2"><div class="info-item-1">1. 概述本系统旨在构建一个基于 LangChain 的 Java 问答系统，集成了向量检索（Vector DB）与知识图谱（Graph DB）。本通过明确“知识库数据”的获取渠道与清洗策略，以及“评估数据”的生成与验证方法，解决系统冷启动阶段的数据匮乏问题。  2. 知识库数据来源 (Knowledge Base)用于填充向量数据库（如 Milvus, Pinecone）和图数据库（如 Neo4j, NebulaGraph），作为系统回答问题的知识源。 2.1 权威文档与规范 (Textual Knowledge)适用存储： 向量数据库 (Vector DB) 核心价值： 提供准确的定义、API 使用说明和基础概念。    数据类型 推荐来源 获取与处理策略    官方文档 • Oracle Javadocs: JDK 核心库定义 • Spring&#x2F;Hibernate 官网: 常用框架文档 • 工具: LangChain RecursiveUrlLoader • 清洗: 去除 HTML 标签、导航栏；必须保留标题层级 (H1-H3)...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zed</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">68</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">52</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0-Overview"><span class="toc-number">1.</span> <span class="toc-text">1. 概述 (Overview)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%9A%E4%B9%89%E5%B7%A5%E5%85%B7-Defining-Tools"><span class="toc-number">2.</span> <span class="toc-text">2. 定义工具 (Defining Tools)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%EF%BC%9A%E4%BD%BF%E7%94%A8-tool-%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="toc-number">2.1.</span> <span class="toc-text">最佳实践：使用 @tool 装饰器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%9C%A8-LangChain-LCEL-%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">3.</span> <span class="toc-text">3. 在 LangChain (LCEL) 中使用工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%A0%B8%E5%BF%83%E6%AD%A5%E9%AA%A4"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 核心步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 代码实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%9C%A8-LangGraph-%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">4.</span> <span class="toc-text">4. 在 LangGraph 中使用工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 核心组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-Standard-ReAct-Pattern"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 代码实现 (Standard ReAct Pattern)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%AF%B9%E6%AF%94%E6%80%BB%E7%BB%93-Comparison"><span class="toc-number">5.</span> <span class="toc-text">5. 对比总结 (Comparison)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E7%94%A8%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">5.1.</span> <span class="toc-text">什么时候用什么？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E8%BF%9B%E9%98%B6%E6%A8%A1%E5%BC%8F%EF%BC%9AHuman-in-the-loop-%E4%BA%BA%E5%B7%A5%E4%BB%8B%E5%85%A5"><span class="toc-number"></span> <span class="toc-text">6. 进阶模式：Human-in-the-loop (人工介入)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6"><span class="toc-number">0.1.</span> <span class="toc-text">6.1 核心机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B%EF%BC%9A%E5%AE%A1%E6%89%B9%E6%95%8F%E6%84%9F%E5%B7%A5%E5%85%B7"><span class="toc-number">0.2.</span> <span class="toc-text">6.2 代码示例：审批敏感工具</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E9%94%99%E8%AF%AF%E6%81%A2%E5%A4%8D-Error-Recovery-%E4%B8%8E%E8%87%AA%E4%BF%AE%E6%AD%A3"><span class="toc-number"></span> <span class="toc-text">7. 错误恢复 (Error Recovery)与自修正</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E7%AD%96%E7%95%A5%E4%B8%80%EF%BC%9A%E8%87%AA%E5%8A%A8%E6%8D%95%E8%8E%B7%E5%B9%B6%E5%8F%8D%E9%A6%88-handle-tool-error"><span class="toc-number">0.1.</span> <span class="toc-text">7.1 策略一：自动捕获并反馈 (handle_tool_error)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E7%AD%96%E7%95%A5%E4%BA%8C%EF%BC%9A%E5%9C%A8-ToolNode-%E5%B1%82%E9%9D%A2%E5%A4%84%E7%90%86-Fallbacks"><span class="toc-number">0.2.</span> <span class="toc-text">7.2 策略二：在 ToolNode 层面处理 (Fallbacks)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-%E5%AE%8C%E6%95%B4%E7%9A%84%E8%87%AA%E4%BF%AE%E6%AD%A3%E6%B5%81%E7%A8%8B%E7%A4%BA%E4%BE%8B"><span class="toc-number">0.3.</span> <span class="toc-text">7.3 完整的自修正流程示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93"><span class="toc-number"></span> <span class="toc-text">8. 最佳实践总结</span></a></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/21/Java%E5%8E%86%E5%8F%B2%E9%81%97%E7%95%99%E9%97%AE%E9%A2%98-1/" title="Java历史遗留问题(1)">Java历史遗留问题(1)</a><time datetime="2026-01-21T03:35:44.000Z" title="Created 2026-01-21 11:35:44">2026-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/20/LangChain%E8%B0%83%E7%94%A8%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="LangChain调用工具详解">LangChain调用工具详解</a><time datetime="2026-01-20T08:34:25.000Z" title="Created 2026-01-20 16:34:25">2026-01-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/14/Python-os%E5%BA%93%E9%80%9F%E6%9F%A5%E6%8C%87%E5%8D%97/" title="Python os库速查指南">Python os库速查指南</a><time datetime="2026-01-14T07:05:08.000Z" title="Created 2026-01-14 15:05:08">2026-01-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/12/LangChain-LCEL%E7%AE%A1%E9%81%93%E7%AC%A6%E6%8A%80%E6%9C%AF%E5%8F%82%E8%80%83/" title="LangChain LCEL管道符技术参考">LangChain LCEL管道符技术参考</a><time datetime="2026-01-12T08:09:07.000Z" title="Created 2026-01-12 16:09:07">2026-01-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/11/RAG%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%BA%90/" title="RAG系统数据来源">RAG系统数据来源</a><time datetime="2026-01-11T12:19:04.000Z" title="Created 2026-01-11 20:19:04">2026-01-11</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bkground.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Zed</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
