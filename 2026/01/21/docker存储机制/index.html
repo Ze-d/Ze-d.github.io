@@ -1,0 +1,263 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>docker存储机制 | Hexo</title><meta name="author" content="Zed"><meta name="copyright" content="Zed"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="这是一个非常好的问题。理解 Docker 的存储机制（Storage Mechanism），不仅能帮你解决刚才的报错，还能让你在未来的开发中避免很多“丢数据”或者“权限拒绝”的坑。 简单来说，Docker 容器本身是**“用完即扔”**的。如果不挂载卷，容器一删除，里面的数据（数据库记录、上传的文件）就全部消失了。 为了让数据持久化，Docker 提供了几种挂载方式。你可以把挂载想象成：在容器的墙">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker存储机制">
+<meta property="og:url" content="http://example.com/2026/01/21/docker%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="这是一个非常好的问题。理解 Docker 的存储机制（Storage Mechanism），不仅能帮你解决刚才的报错，还能让你在未来的开发中避免很多“丢数据”或者“权限拒绝”的坑。 简单来说，Docker 容器本身是**“用完即扔”**的。如果不挂载卷，容器一删除，里面的数据（数据库记录、上传的文件）就全部消失了。 为了让数据持久化，Docker 提供了几种挂载方式。你可以把挂载想象成：在容器的墙">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/asuka.jpg">
+<meta property="article:published_time" content="2026-01-21T12:48:59.000Z">
+<meta property="article:modified_time" content="2026-01-21T12:50:12.154Z">
+<meta property="article:author" content="Zed">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/asuka.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "docker存储机制",
+  "url": "http://example.com/2026/01/21/docker%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/",
+  "image": "http://example.com/img/asuka.jpg",
+  "datePublished": "2026-01-21T12:48:59.000Z",
+  "dateModified": "2026-01-21T12:50:12.154Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zed",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/01/21/docker%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'docker存储机制',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bkground.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">75</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bkground.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">docker存储机制</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">docker存储机制</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-01-21T12:48:59.000Z" title="Created 2026-01-21 20:48:59">2026-01-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-01-21T12:50:12.154Z" title="Updated 2026-01-21 20:50:12">2026-01-21</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>这是一个非常好的问题。理解 Docker 的存储机制（Storage Mechanism），不仅能帮你解决刚才的报错，还能让你在未来的开发中避免很多“丢数据”或者“权限拒绝”的坑。</p>
+<p>简单来说，Docker 容器本身是**“用完即扔”**的。如果不挂载卷，容器一删除，里面的数据（数据库记录、上传的文件）就全部消失了。</p>
+<p>为了让数据持久化，Docker 提供了几种挂载方式。你可以把挂载想象成：<strong>在容器的墙上打了一个洞，通过这个洞连接到了宿主机的硬盘上。</strong></p>
+<p>下面我为你详细拆解 Docker 最常用的两种挂载机制：<strong>Bind Mounts</strong> 和 <strong>Volumes</strong>。</p>
+<hr>
+<h3 id="1-Bind-Mounts（绑定挂载）"><a href="#1-Bind-Mounts（绑定挂载）" class="headerlink" title="1. Bind Mounts（绑定挂载）"></a>1. Bind Mounts（绑定挂载）</h3><p>这是最直观、最原始的方式。</p>
+<ul>
+<li><p><strong>机制：</strong> 直接把<strong>你电脑上的一个具体文件夹</strong>（比如 <code>C:\my-project\data</code>）映射到<strong>容器里的一个文件夹</strong>（比如 <code>/var/lib/postgresql/data</code>）。</p>
+</li>
+<li><p><strong>你可以把它想象成：</strong> Windows 的“快捷方式”或者 Linux 的软链接。</p>
+</li>
+<li><p><strong>语法特征：</strong> 冒号左边是一个具体的路径。</p>
+<p>YAML</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">volumes:</span><br><span class="line">  - ./postgres_data:/var/lib/postgresql/data</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>优点：</strong></p>
+<ul>
+<li><strong>开发方便：</strong> 你在本地改了代码文件，容器里立马生效（常用于 Node.js&#x2F;Python 代码的热重载）。</li>
+<li><strong>直观：</strong> 你可以直接在文件管理器里看到这些文件。</li>
+</ul>
+<p><strong>缺点（也就是你刚才遇到的坑）：</strong></p>
+<ul>
+<li><strong>依赖环境：</strong> 你的路径结构可能和同事的不一样。</li>
+<li><strong>权限地狱：</strong> Docker 容器里的用户（通常是 root）可能和你宿主机的用户权限不一致，导致“Permission Denied”或者无法删除文件。</li>
+<li><strong>清理麻烦：</strong> <code>docker-compose down -v</code> <strong>删除不了</strong>这种文件。Docker 无权删除你电脑上的物理文件夹，你必须手动 <code>rm -rf</code>。这就是为什么你之前重置总是失败的原因。</li>
+</ul>
+<hr>
+<h3 id="2-Docker-Volumes（Docker-托管卷）"><a href="#2-Docker-Volumes（Docker-托管卷）" class="headerlink" title="2. Docker Volumes（Docker 托管卷）"></a>2. Docker Volumes（Docker 托管卷）</h3><p>这是 Docker 推荐的生产环境用法，也是我们刚才最终解决问题的方案。</p>
+<ul>
+<li><p><strong>机制：</strong> Docker 在宿主机的一个<strong>特定、受保护的区域</strong>（Linux 上通常是 <code>/var/lib/docker/volumes/</code>）创建一个文件夹。你不需要关心它具体在哪，只需要给它起个名字。</p>
+</li>
+<li><p><strong>你可以把它想象成：</strong> 银行的保险箱。你只要拿钥匙（卷名）去取，不用管保险箱具体镶嵌在墙里的哪个位置。</p>
+</li>
+<li><p><strong>语法特征：</strong> 冒号左边是一个名字，不是路径。</p>
+<p>YAML</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">services:</span><br><span class="line">  db:</span><br><span class="line">    volumes:</span><br><span class="line">      - db_data:/var/lib/postgresql/data</span><br><span class="line"></span><br><span class="line">volumes: # 必须在底部声明</span><br><span class="line">  db_data:</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>优点：</strong></p>
+<ul>
+<li><strong>安全干净：</strong> 完全由 Docker 管理，没有权限问题。</li>
+<li><strong>易于管理：</strong> 可以用 <code>docker volume ls</code> 查看，用 <code>docker volume rm</code> 删除。</li>
+<li><strong>跨平台：</strong> 不管是在 Windows、Mac 还是 Linux 上，行为完全一致。</li>
+<li><strong>彻底重置：</strong> 使用 <code>docker-compose down -v</code> 可以一键把这个卷连同容器一起销毁，非常适合重置数据库。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li><strong>不直观：</strong> 你很难直接在文件管理器里找到并打开这些文件（通常需要通过命令行进入容器查看）。</li>
+</ul>
+<hr>
+<h3 id="3-你的故障复盘：为什么会报错？"><a href="#3-你的故障复盘：为什么会报错？" class="headerlink" title="3. 你的故障复盘：为什么会报错？"></a>3. 你的故障复盘：为什么会报错？</h3><p>让我们用刚才学到的知识，复盘一下你刚才经历的“噩梦”：</p>
+<ol>
+<li><p>起初 (Bind Mount)：</p>
+<p>你使用了 .&#x2F;postgres_data:&#x2F;var&#x2F;lib&#x2F;postgresql&#x2F;data。Docker 在你当前目录下生成了一堆数据库文件。</p>
+</li>
+<li><p>版本冲突：</p>
+<p>Postgres 镜像更新了，新版检测到这个文件夹里有旧版生成的文件（脏数据），于是报错停止。</p>
+</li>
+<li><p>尝试重置失败：</p>
+<p>你运行了 docker-compose down -v。</p>
+<ul>
+<li>Docker 说：“好的，我删除了容器。”</li>
+<li>Docker 接着看卷：“哦，这是一个 Bind Mount（本地文件夹），<strong>我无权删除用户的本地文件</strong>，跳过。”</li>
+</ul>
+</li>
+<li><p>恶性循环：</p>
+<p>你再次启动，容器又读取到了那个未被删除的本地文件夹里的脏数据，再次报错。</p>
+</li>
+<li><p>最终解决 (Named Volume)：</p>
+<p>我们改成了 db_data_new（托管卷）。</p>
+<ul>
+<li>Docker 发现这是一个新名字，于是在它的“保险库”里新建了一个完全空白的空间。</li>
+<li>Postgres 启动，发现目录是空的，开开心心地进行了初始化。成功！</li>
+</ul>
+</li>
+</ol>
+<h3 id="总结：什么时候用哪个？"><a href="#总结：什么时候用哪个？" class="headerlink" title="总结：什么时候用哪个？"></a>总结：什么时候用哪个？</h3><table>
+<thead>
+<tr>
+<th><strong>场景</strong></th>
+<th><strong>推荐方式</strong></th>
+<th><strong>例子</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>数据库存储</strong> (Postgres, MySQL, Redis)</td>
+<td><strong>Docker Volume (托管卷)</strong></td>
+<td><code>- db_data:/var/lib/mysql</code></td>
+</tr>
+<tr>
+<td><strong>代码开发</strong> (需要热更新的源代码)</td>
+<td><strong>Bind Mount (绑定挂载)</strong></td>
+<td><code>- ./src:/app/src</code></td>
+</tr>
+<tr>
+<td><strong>配置文件</strong> (nginx.conf)</td>
+<td><strong>Bind Mount (绑定挂载)</strong></td>
+<td><code>- ./nginx.conf:/etc/nginx/nginx.conf</code></td>
+</tr>
+</tbody></table>
+<p>你现在的配置使用了 Docker Volume 来存数据库，这是最标准、最稳健的做法。以后如果想重置数据库，记得直接运行：</p>
+<p>docker-compose down -v</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Zed</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2026/01/21/docker%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/">http://example.com/2026/01/21/docker%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/docker/">docker</a></div><div class="post-share"><div class="social-share" data-image="/img/asuka.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related  no-desc" href="/2026/01/21/JDK%E5%B7%A5%E5%85%B7%E7%B1%BB/" title="JDK工具类"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">JDK工具类</div></div></div></a><a class="pagination-related" href="/2026/01/26/Array-ArrayList-and-HashMap/" title="Array,ArrayList and HashMap"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Array,ArrayList and HashMap</div></div><div class="info-2"><div class="info-item-1">底层硬件效率（静态数组）、动态易用性（ArrayList）、非线性查找（HashMap）。 1. 维度对比表   特性 静态数组 (int[]) ArrayList HashMap&lt;K, V&gt;    本质 原生数据类型，内存连续空间 对象的动态包装，内部持有数组 散列表，数组+链表+红黑树   大小 固定，初始化后不可变 动态，自动扩容 动态，自动扩容   存储类型 支持基本类型 &amp; 引用类型 仅限引用类型 (装箱对象) 仅限引用类型 (装箱对象)   访问速度 极快 (硬件级寻址) 快 (多一层方法调用) 中 (需计算哈希值)   内存开销 极小 (几乎 100% 存储数据) 中 (对象头 + 预留空间开销) 极大 (Node节点 + 引用头)   功能性 极简，无内置方法 丰富 (add, remove, sort) 丰富 (put, get, checkKey)    2. 内存布局深挖静态数组是内存友好型的代表，而 HashMap 是功能强大但内存昂贵的典型。  静态数组：如果你声明 int[10]，它就在内存里开辟 40 字节。CPU...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/12/18/Docker%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/" title="Docker常用指令"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-18</div><div class="info-item-2">Docker常用指令</div></div><div class="info-2"><div class="info-item-1">1. 镜像管理 (Image Management)镜像（Image）是容器的只读模板。以下指令用于下载、构建和管理镜像。 搜索与拉取 docker search &lt;关键词&gt;: 在 Docker Hub 搜索镜像。 docker pull &lt;镜像名&gt;:&lt;标签&gt;: 拉取指定版本的镜像。 示例: docker pull mysql:5.7 (如果不写标签，默认拉取 :latest)    查看与删除 docker images (或 docker image ls): 列出本地所有镜像。 docker rmi &lt;镜像ID或名称&gt;: 删除镜像。 -f: 强制删除（即使有容器在使用该镜像）。    构建镜像 (Build) docker build -t &lt;镜像名&gt;:&lt;标签&gt; .: 根据当前目录下的 Dockerfile 构建镜像。 -t: 指定镜像的名称和标签 (Tag)。 -f: 指定 Dockerfile 文件的路径（如果文件名不是默认的 Dockerfile）。 .:...</div></div></div></a><a class="pagination-related" href="/2025/12/18/Docker%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84/" title="Docker核心架构"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-18</div><div class="info-item-2">Docker核心架构</div></div><div class="info-2"><div class="info-item-1">这份文档总结了我们之前关于 Docker 核心架构的讨论，重点阐述了**镜像（只读层）与容器（读写层）的关系，以及联合文件系统（UnionFS）**的工作原理。 你可以将此文档作为团队内部的技术分享资料或个人复习笔记。  Docker 核心架构技术文档：镜像、容器与分层存储版本: 1.0 关键词: Docker, Image, Container, UnionFS, Layer, Copy-on-Write 1. 核心概念概览Docker 的核心在于其独特的分层存储架构。与虚拟机（VM）不同，Docker 容器并不包含完整的操作系统内核，而是共享宿主机的内核，仅在文件系统层面进行了隔离。  镜像 (Image): 应用程序的静态打包，由一组只读层组成。 容器 (Container): 镜像的运行实例，本质上是只读镜像层 + 一个可读写层。   2. 镜像：只读层 (The Read-Only Layers)镜像可以被理解为一个**“精简版的文件系统快照”**。 2.1 结构组成镜像是分层构建的（Layered Build）。每一层都代表了 Dockerfile 中的一条指令（如...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zed</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">75</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Bind-Mounts%EF%BC%88%E7%BB%91%E5%AE%9A%E6%8C%82%E8%BD%BD%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">1. Bind Mounts（绑定挂载）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Docker-Volumes%EF%BC%88Docker-%E6%89%98%E7%AE%A1%E5%8D%B7%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">2. Docker Volumes（Docker 托管卷）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BD%A0%E7%9A%84%E6%95%85%E9%9A%9C%E5%A4%8D%E7%9B%98%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%8A%A5%E9%94%99%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">3. 你的故障复盘：为什么会报错？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E7%94%A8%E5%93%AA%E4%B8%AA%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">总结：什么时候用哪个？</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/31/TCP%E5%8D%8F%E8%AE%AE%E8%A7%A3%E6%9E%90/" title="TCP协议解析">TCP协议解析</a><time datetime="2026-01-31T11:56:34.000Z" title="Created 2026-01-31 19:56:34">2026-01-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/30/leetcode%E9%80%9F%E6%9F%A5%E5%8D%95/" title="leetcode速查单">leetcode速查单</a><time datetime="2026-01-30T14:05:48.000Z" title="Created 2026-01-30 22:05:48">2026-01-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/26/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/" title="双亲委派机制">双亲委派机制</a><time datetime="2026-01-26T09:40:45.000Z" title="Created 2026-01-26 17:40:45">2026-01-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/26/java%E5%B8%B8%E9%87%8F%E6%B1%A0/" title="java常量池">java常量池</a><time datetime="2026-01-26T09:33:06.000Z" title="Created 2026-01-26 17:33:06">2026-01-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/26/Array-ArrayList-and-HashMap/" title="Array,ArrayList and HashMap">Array,ArrayList and HashMap</a><time datetime="2026-01-26T09:03:44.000Z" title="Created 2026-01-26 17:03:44">2026-01-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bkground.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Zed</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

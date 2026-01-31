@@ -1,0 +1,540 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>leetcode速查单 | Hexo</title><meta name="author" content="Zed"><meta name="copyright" content="Zed"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="下面给你一份**“LeetCode 面试手册（按目录：每章 3–8 题必刷 + 最该背模板 + 难点&#x2F;重点&#x2F;易错点）”**。（我按“高频优先 + 模板覆盖面最大”来选题；少数章节我给到 3 题、热门章节给到 6–8 题。）  说明：第 0 章“方法论”没有刷题，但我给了口述与检查清单；其余每章都含：必刷题单 + 模板代码 + 难点重点易错点。   0. 通用方法论（口述 + 检">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode速查单">
+<meta property="og:url" content="http://example.com/2026/01/30/leetcode%E9%80%9F%E6%9F%A5%E5%8D%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="下面给你一份**“LeetCode 面试手册（按目录：每章 3–8 题必刷 + 最该背模板 + 难点&#x2F;重点&#x2F;易错点）”**。（我按“高频优先 + 模板覆盖面最大”来选题；少数章节我给到 3 题、热门章节给到 6–8 题。）  说明：第 0 章“方法论”没有刷题，但我给了口述与检查清单；其余每章都含：必刷题单 + 模板代码 + 难点重点易错点。   0. 通用方法论（口述 + 检">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/asuka.jpg">
+<meta property="article:published_time" content="2026-01-30T14:05:48.000Z">
+<meta property="article:modified_time" content="2026-01-30T14:10:12.142Z">
+<meta property="article:author" content="Zed">
+<meta property="article:tag" content="leetcode">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/asuka.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "leetcode速查单",
+  "url": "http://example.com/2026/01/30/leetcode%E9%80%9F%E6%9F%A5%E5%8D%95/",
+  "image": "http://example.com/img/asuka.jpg",
+  "datePublished": "2026-01-30T14:05:48.000Z",
+  "dateModified": "2026-01-30T14:10:12.142Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zed",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/01/30/leetcode%E9%80%9F%E6%9F%A5%E5%8D%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'leetcode速查单',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bkground.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">75</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bkground.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">leetcode速查单</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">leetcode速查单</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-01-30T14:05:48.000Z" title="Created 2026-01-30 22:05:48">2026-01-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-01-30T14:10:12.142Z" title="Updated 2026-01-30 22:10:12">2026-01-30</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>下面给你一份**“LeetCode 面试手册（按目录：每章 3–8 题必刷 + 最该背模板 + 难点&#x2F;重点&#x2F;易错点）”**。<br>（我按“高频优先 + 模板覆盖面最大”来选题；少数章节我给到 3 题、热门章节给到 6–8 题。）</p>
+<blockquote>
+<p>说明：第 0 章“方法论”没有刷题，但我给了口述与检查清单；其余每章都含：必刷题单 + 模板代码 + 难点重点易错点。</p>
+</blockquote>
+<hr>
+<h1 id="0-通用方法论（口述-检查清单）"><a href="#0-通用方法论（口述-检查清单）" class="headerlink" title="0. 通用方法论（口述 + 检查清单）"></a>0. 通用方法论（口述 + 检查清单）</h1><p><strong>面试口述 20 秒模板</strong></p>
+<ul>
+<li>“我先给出暴力，再找能否用哈希&#x2F;双指针&#x2F;单调栈&#x2F;DP&#x2F;二分把复杂度降下来；然后定义不变量（窗口合法、栈单调、BFS层序、check单调）；最后写边界与复杂度。”</li>
+</ul>
+<p><strong>检查清单（最常翻车点）</strong></p>
+<ul>
+<li>边界：空输入、1个元素、重复、负数、溢出（用 long）、不可达返回什么</li>
+<li>更新顺序：先查后更 &#x2F; 先更后查（前缀和、窗口、拓扑入度）</li>
+<li>visited 时机：<strong>入队标记</strong>（BFS）</li>
+<li>递归语义：返回值是什么（树&#x2F;DFS）</li>
+</ul>
+<hr>
+<h1 id="1-数组-哈希（6-题）"><a href="#1-数组-哈希（6-题）" class="headerlink" title="1. 数组 &amp; 哈希（6 题）"></a>1. 数组 &amp; 哈希（6 题）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>1 Two Sum（Easy）</li>
+<li>49 Group Anagrams（Medium）</li>
+<li>560 Subarray Sum Equals K（Medium）</li>
+<li>128 Longest Consecutive Sequence（Medium）</li>
+<li>238 Product of Array Except Self（Medium）</li>
+<li>347 Top K Frequent Elements（Medium）</li>
+</ul>
+<p><strong>最该背模板：前缀和 + 哈希计数</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Long, Integer&gt; cnt = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"><span class="type">long</span> <span class="variable">pre</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">cnt.put(<span class="number">0L</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> x : nums) &#123;</span><br><span class="line">    pre += x;</span><br><span class="line">    <span class="comment">// ans += cnt.getOrDefault(pre - k, 0);</span></span><br><span class="line">    cnt.put(pre, cnt.getOrDefault(pre, <span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>“key 的选择”决定一切：value→index，prefix→count&#x2F;firstIndex，signature→group</li>
+<li>560&#x2F;525 类：前缀和允许负数，滑窗不适用</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>用 int 存前缀和导致溢出（用 long）</li>
+<li>前缀和最长区间：要 <code>putIfAbsent</code> 保留最早位置</li>
+</ul>
+<hr>
+<h1 id="2-双指针-滑动窗口（8-题）"><a href="#2-双指针-滑动窗口（8-题）" class="headerlink" title="2. 双指针 &amp; 滑动窗口（8 题）"></a>2. 双指针 &amp; 滑动窗口（8 题）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>3 Longest Substring Without Repeating Characters（Medium）</li>
+<li>76 Minimum Window Substring（Hard）</li>
+<li>11 Container With Most Water（Medium）</li>
+<li>15 3Sum（Medium）</li>
+<li>209 Minimum Size Subarray Sum（Medium）</li>
+<li>283 Move Zeroes（Easy）</li>
+<li>26 Remove Duplicates from Sorted Array（Easy）</li>
+<li>844 Backspace String Compare（Easy&#x2F;Medium，双指针练手）</li>
+</ul>
+<p><strong>最该背模板：可变窗口</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">Map&lt;Character, Integer&gt; freq = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> <span class="number">0</span>; right &lt; s.length(); right++) &#123;</span><br><span class="line">    <span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> s.charAt(right);</span><br><span class="line">    freq.put(c, freq.getOrDefault(c, <span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="comment">/*窗口不合法*/</span> ) &#123;</span><br><span class="line">        <span class="type">char</span> <span class="variable">d</span> <span class="operator">=</span> s.charAt(left++);</span><br><span class="line">        freq.put(d, freq.get(d) - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (freq.get(d) == <span class="number">0</span>) freq.remove(d);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// update ans</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>明确“窗口代表什么”与“不变量”：合法&#x2F;刚好合法</li>
+<li>76：需要 <code>formed/required</code> 的思想（满足了多少种字符要求）</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li><code>while</code> 写成 <code>if</code>（没收缩干净）</li>
+<li>更新答案的位置错误（最短一般在 while 内）</li>
+<li>3&#x2F;76：字符计数更新顺序错导致 off-by-one</li>
+</ul>
+<hr>
+<h1 id="3-栈-单调栈（6-题）"><a href="#3-栈-单调栈（6-题）" class="headerlink" title="3. 栈 &amp; 单调栈（6 题）"></a>3. 栈 &amp; 单调栈（6 题）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>20 Valid Parentheses（Easy）</li>
+<li>155 Min Stack（Medium）</li>
+<li>739 Daily Temperatures（Medium，Next Greater）</li>
+<li>84 Largest Rectangle in Histogram（Hard，左右边界）</li>
+<li>42 Trapping Rain Water（Hard，栈&#x2F;双指针）</li>
+<li>496 Next Greater Element I（Easy，巩固模板）</li>
+</ul>
+<p><strong>最该背模板：Next Greater（单调递减栈存下标）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Deque&lt;Integer&gt; st = <span class="keyword">new</span> <span class="title class_">ArrayDeque</span>&lt;&gt;();</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="keyword">while</span> (!st.isEmpty() &amp;&amp; a[i] &gt; a[st.peek()]) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> st.pop();</span><br><span class="line">        ans[j] = i - j;</span><br><span class="line">    &#125;</span><br><span class="line">    st.push(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>最该背模板：左右边界（84，单调递增 + 哨兵）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>[] h2 = Arrays.copyOf(h, h.length + <span class="number">1</span>); <span class="comment">// 末尾0清栈</span></span><br><span class="line">Deque&lt;Integer&gt; st = <span class="keyword">new</span> <span class="title class_">ArrayDeque</span>&lt;&gt;();</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; h2.length; i++) &#123;</span><br><span class="line">    <span class="keyword">while</span> (!st.isEmpty() &amp;&amp; h2[i] &lt; h2[st.peek()]) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> st.pop();</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> st.isEmpty() ? -<span class="number">1</span> : st.peek();</span><br><span class="line">        <span class="type">int</span> <span class="variable">width</span> <span class="operator">=</span> i - left - <span class="number">1</span>;</span><br><span class="line">        ans = Math.max(ans, h2[mid] * width);</span><br><span class="line">    &#125;</span><br><span class="line">    st.push(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>栈里存<strong>下标</strong>不是值：距离&#x2F;宽度都靠下标</li>
+<li>弹栈瞬间：当前 i 是右边界，新栈顶是左边界</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>左边界计算错（<code>i - left - 1</code>）</li>
+<li>忘记哨兵导致栈没清空、漏算面积</li>
+<li>42 用栈时：接水高度取 <code>min(leftWall,rightWall)-midHeight</code></li>
+</ul>
+<hr>
+<h1 id="4-链表-指针技巧（7-题）"><a href="#4-链表-指针技巧（7-题）" class="headerlink" title="4. 链表 &amp; 指针技巧（7 题）"></a>4. 链表 &amp; 指针技巧（7 题）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>206 Reverse Linked List（Easy）</li>
+<li>21 Merge Two Sorted Lists（Easy）</li>
+<li>19 Remove Nth Node From End（Medium）</li>
+<li>141 Linked List Cycle（Easy）</li>
+<li>143 Reorder List（Medium）</li>
+<li>142 Linked List Cycle II（Medium，判环定位）</li>
+<li>24 Swap Nodes in Pairs（Medium，指针操作强化）</li>
+</ul>
+<p><strong>最该背模板：dummy 头 + 删除</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ListNode</span> <span class="variable">dummy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ListNode</span>(<span class="number">0</span>, head);</span><br><span class="line"><span class="type">ListNode</span> <span class="variable">prev</span> <span class="operator">=</span> dummy, cur = head;</span><br><span class="line"><span class="keyword">while</span> (cur != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="comment">/*delete cur*/</span>) prev.next = cur.next;</span><br><span class="line">    <span class="keyword">else</span> prev = cur;</span><br><span class="line">    cur = cur.next;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> dummy.next;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>dummy 统一“删头&#x2F;插头”</li>
+<li>改指针前保存 next 防丢链</li>
+<li>快慢指针：判环、找中点、倒数第 k</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>反转时 next 保存顺序错</li>
+<li>19：快指针先走 n+1 还是 n（取决于 dummy 是否使用）</li>
+<li>143：分三步（找中点、反转后半、合并），顺序容易乱</li>
+</ul>
+<hr>
+<h1 id="5-设计题（5-题）"><a href="#5-设计题（5-题）" class="headerlink" title="5. 设计题（5 题）"></a>5. 设计题（5 题）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>146 LRU Cache（Medium，必会）</li>
+<li>155 Min Stack（Medium）</li>
+<li>380 Insert Delete GetRandom O(1)（Medium）</li>
+<li>622 Design Circular Queue（Medium）</li>
+<li>295 Find Median from Data Stream（Hard，堆，设计味）</li>
+</ul>
+<p><strong>最该背模板：LRU 结构骨架</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LRUCache</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span> &#123; <span class="type">int</span> k,v; Node prev,next; Node(<span class="type">int</span> k,<span class="type">int</span> v)&#123;<span class="built_in">this</span>.k=k;<span class="built_in">this</span>.v=v;&#125; &#125;</span><br><span class="line">    <span class="type">int</span> cap;</span><br><span class="line">    Map&lt;Integer, Node&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    <span class="type">Node</span> <span class="variable">head</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>(<span class="number">0</span>,<span class="number">0</span>), tail = <span class="keyword">new</span> <span class="title class_">Node</span>(<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">LRUCache</span><span class="params">(<span class="type">int</span> capacity)</span>&#123;</span><br><span class="line">        cap = capacity;</span><br><span class="line">        head.next = tail; tail.prev = head;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(Node x)</span>&#123; x.prev.next = x.next; x.next.prev = x.prev; &#125;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Node x)</span>&#123; x.next = head.next; x.prev = head; head.next.prev = x; head.next = x; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">get</span><span class="params">(<span class="type">int</span> key)</span>&#123;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> map.get(key);</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        remove(x); addFirst(x);</span><br><span class="line">        <span class="keyword">return</span> x.v;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">put</span><span class="params">(<span class="type">int</span> key, <span class="type">int</span> value)</span>&#123;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> map.get(key);</span><br><span class="line">        <span class="keyword">if</span> (x != <span class="literal">null</span>) &#123; x.v = value; remove(x); addFirst(x); <span class="keyword">return</span>; &#125;</span><br><span class="line">        <span class="keyword">if</span> (map.size() == cap) &#123;</span><br><span class="line">            <span class="type">Node</span> <span class="variable">lru</span> <span class="operator">=</span> tail.prev;</span><br><span class="line">            remove(lru); map.remove(lru.k);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">nn</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>(key, value);</span><br><span class="line">        map.put(key, nn); addFirst(nn);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>“O(1)”来自：HashMap 定位 + 双向链表移动</li>
+<li>头最新、尾最旧，超容量删尾</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>忘记同步删 map</li>
+<li>remove&#x2F;addFirst 指针更新遗漏</li>
+<li>cap&#x3D;0 边界（面试偶尔会问）</li>
+</ul>
+<hr>
+<h1 id="6-堆-优先队列（6-题）"><a href="#6-堆-优先队列（6-题）" class="headerlink" title="6. 堆 &#x2F; 优先队列（6 题）"></a>6. 堆 &#x2F; 优先队列（6 题）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>215 Kth Largest Element in an Array（Medium）</li>
+<li>347 Top K Frequent Elements（Medium）</li>
+<li>23 Merge k Sorted Lists（Hard，堆&#x2F;分治）</li>
+<li>295 Median from Data Stream（Hard）</li>
+<li>973 K Closest Points to Origin（Medium）</li>
+<li>703 Kth Largest in a Stream（Easy）</li>
+</ul>
+<p><strong>最该背模板：TopK（小根堆保留K个）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PriorityQueue&lt;<span class="type">int</span>[]&gt; pq = <span class="keyword">new</span> <span class="title class_">PriorityQueue</span>&lt;&gt;((a,b) -&gt; a[<span class="number">0</span>]-b[<span class="number">0</span>]); <span class="comment">// 按key最小</span></span><br><span class="line"><span class="keyword">for</span> (...) &#123;</span><br><span class="line">    pq.offer(<span class="keyword">new</span> <span class="title class_">int</span>[]&#123;key, val&#125;);</span><br><span class="line">    <span class="keyword">if</span> (pq.size() &gt; k) pq.poll();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>TopK：小根堆维持 K 个最大（或相反）</li>
+<li>K 路归并：堆里放当前最小节点</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>比较器溢出：用 <code>Integer.compare(a,b)</code></li>
+<li>23：弹出节点后记得把 <code>next</code> 入堆</li>
+<li>295：两个堆平衡（size 差不超过 1）</li>
+</ul>
+<hr>
+<h1 id="7-贪心-区间（6-题）"><a href="#7-贪心-区间（6-题）" class="headerlink" title="7. 贪心 &amp; 区间（6 题）"></a>7. 贪心 &amp; 区间（6 题）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>56 Merge Intervals（Medium）</li>
+<li>435 Non-overlapping Intervals（Medium）</li>
+<li>452 Minimum Number of Arrows to Burst Balloons（Medium）</li>
+<li>55 Jump Game（Medium）</li>
+<li>45 Jump Game II（Medium）</li>
+<li>134 Gas Station（Medium）</li>
+</ul>
+<p><strong>最该背模板：区间（按右端点排序做选择）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Arrays.sort(intervals, (a,b) -&gt; Integer.compare(a[<span class="number">1</span>], b[<span class="number">1</span>]));</span><br><span class="line"><span class="type">int</span> <span class="variable">cnt</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">end</span> <span class="operator">=</span> Integer.MIN_VALUE;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span>[] it : intervals) &#123;</span><br><span class="line">    <span class="keyword">if</span> (it[<span class="number">0</span>] &gt;= end) &#123; cnt++; end = it[<span class="number">1</span>]; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>贪心要能说“为什么局部最优导出全局最优”</li>
+<li>区间类：排序依据（右端点常用于“最多不重叠”）</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>端点是否算重叠（&gt;&#x3D; 还是 &gt;，看题意）</li>
+<li>452：用 long 防溢出（坐标可大）</li>
+</ul>
+<hr>
+<h1 id="8-二叉树（8-题）"><a href="#8-二叉树（8-题）" class="headerlink" title="8. 二叉树（8 题）"></a>8. 二叉树（8 题）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>102 Level Order Traversal（Medium）</li>
+<li>104 Maximum Depth（Easy）</li>
+<li>98 Validate BST（Medium）</li>
+<li>236 LCA（Medium）</li>
+<li>124 Binary Tree Maximum Path Sum（Hard）</li>
+<li>105 Build Tree from Pre&#x2F;Inorder（Medium）</li>
+<li>199 Right Side View（Medium）</li>
+<li>230 Kth Smallest in BST（Medium）</li>
+</ul>
+<p><strong>最该背模板：DFS 自底向上（返回值语义）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">dfs</span><span class="params">(TreeNode node)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (node == <span class="literal">null</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">L</span> <span class="operator">=</span> dfs(node.left);</span><br><span class="line">    <span class="type">int</span> <span class="variable">R</span> <span class="operator">=</span> dfs(node.right);</span><br><span class="line">    <span class="comment">// combine L/R</span></span><br><span class="line">    <span class="keyword">return</span> ...;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>递归函数语义必须清晰（返回高度？贡献？是否找到？）</li>
+<li>124：返回“向上最大贡献”，全局更新“经过该点的最大路径”</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>BST 校验用中序或上下界，注意 long 边界</li>
+<li>105：哈希表存 inorder 位置，递归区间别写错</li>
+</ul>
+<hr>
+<h1 id="9-图（8-题，覆盖-BFS-拓扑-DSU-最短路）"><a href="#9-图（8-题，覆盖-BFS-拓扑-DSU-最短路）" class="headerlink" title="9. 图（8 题，覆盖 BFS&#x2F;拓扑&#x2F;DSU&#x2F;最短路）"></a>9. 图（8 题，覆盖 BFS&#x2F;拓扑&#x2F;DSU&#x2F;最短路）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>200 Number of Islands（Medium，DFS&#x2F;BFS）</li>
+<li>994 Rotting Oranges（Medium，多源 BFS）</li>
+<li>133 Clone Graph（Medium）</li>
+<li>207 Course Schedule（Medium，拓扑判环）</li>
+<li>210 Course Schedule II（Medium，输出序）</li>
+<li>547 Number of Provinces（Medium，DSU）</li>
+<li>684 Redundant Connection（Medium，DSU成环）</li>
+<li>743 Network Delay Time（Medium，Dijkstra，偏算法岗常见）</li>
+</ul>
+<p><strong>最该背模板：BFS（visited 入队标记 + 层序）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Deque&lt;Integer&gt; q = <span class="keyword">new</span> <span class="title class_">ArrayDeque</span>&lt;&gt;();</span><br><span class="line"><span class="type">boolean</span>[] vis = <span class="keyword">new</span> <span class="title class_">boolean</span>[n];</span><br><span class="line">q.add(s); vis[s] = <span class="literal">true</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">dist</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (!q.isEmpty()) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">sz</span> <span class="operator">=</span> q.size();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; sz; i++) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">u</span> <span class="operator">=</span> q.poll();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> v : g.get(u)) <span class="keyword">if</span> (!vis[v]) &#123; vis[v] = <span class="literal">true</span>; q.add(v); &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    dist++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>最该背模板：DSU</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">DSU</span> &#123;</span><br><span class="line">    <span class="type">int</span>[] p, r;</span><br><span class="line">    DSU(<span class="type">int</span> n)&#123; p=<span class="keyword">new</span> <span class="title class_">int</span>[n]; r=<span class="keyword">new</span> <span class="title class_">int</span>[n]; <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)p[i]=i; &#125;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> x)</span>&#123; <span class="keyword">return</span> p[x]==x?x:(p[x]=find(p[x])); &#125;</span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">union</span><span class="params">(<span class="type">int</span> a,<span class="type">int</span> b)</span>&#123;</span><br><span class="line">        <span class="type">int</span> ra=find(a), rb=find(b);</span><br><span class="line">        <span class="keyword">if</span>(ra==rb) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(r[ra]&lt;r[rb]) p[ra]=rb;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(r[ra]&gt;r[rb]) p[rb]=ra;</span><br><span class="line">        <span class="keyword">else</span> &#123; p[rb]=ra; r[ra]++; &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>BFS：visited 必须入队标记；多源 BFS &#x3D; 全源点先入队</li>
+<li>拓扑：处理数&lt; n 即有环</li>
+<li>Dijkstra：优先队列弹出的是当前最短“状态”，用 dist[] 剪枝</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>Clone Graph：节点可能不连通？题通常从一个节点给，但 map 必须做去重</li>
+<li>Dijkstra：堆里可能有过期状态，要 <code>if (d&gt;dist[u]) continue</code></li>
+</ul>
+<hr>
+<h1 id="10-二分（6-题）"><a href="#10-二分（6-题）" class="headerlink" title="10. 二分（6 题）"></a>10. 二分（6 题）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>704 Binary Search（Easy）</li>
+<li>34 Find First and Last Position（Medium）</li>
+<li>33 Search in Rotated Sorted Array（Medium）</li>
+<li>153 Find Minimum in Rotated Sorted Array（Medium）</li>
+<li>875 Koko Eating Bananas（Medium，二分答案）</li>
+<li>1011 Ship Within D Days（Medium，二分答案）</li>
+</ul>
+<p><strong>最该背模板：二分答案（最小可行）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">lo</span> <span class="operator">=</span> low, hi = high;</span><br><span class="line"><span class="keyword">while</span> (lo &lt; hi) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> lo + (hi - lo) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span> (check(mid)) hi = mid;</span><br><span class="line">    <span class="keyword">else</span> lo = mid + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> lo;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>关键是证明 check 单调性</li>
+<li>左&#x2F;右边界二分要明确返回哪个端点</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>mid 计算溢出（用 <code>lo + (hi-lo)/2</code>）</li>
+<li>34：两个二分找左右边界，条件略不同</li>
+</ul>
+<hr>
+<h1 id="11-DP（8-题）"><a href="#11-DP（8-题）" class="headerlink" title="11. DP（8 题）"></a>11. DP（8 题）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>70 Climbing Stairs（Easy）</li>
+<li>198 House Robber（Medium）</li>
+<li>213 House Robber II（Medium）</li>
+<li>322 Coin Change（Medium）</li>
+<li>300 Longest Increasing Subsequence（Medium）</li>
+<li>416 Partition Equal Subset Sum（Medium，01背包）</li>
+<li>1143 Longest Common Subsequence（Medium）</li>
+<li>62 Unique Paths（Medium，网格 DP）</li>
+</ul>
+<p><strong>最该背模板：01背包倒序</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">boolean</span>[] dp = <span class="keyword">new</span> <span class="title class_">boolean</span>[cap + <span class="number">1</span>];</span><br><span class="line">dp[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> w : weights) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> cap; c &gt;= w; c--) &#123;</span><br><span class="line">        dp[c] = dp[c] || dp[c - w];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>状态定义要“可解释”</li>
+<li>遍历顺序决定是否重复使用（完全背包正序、01倒序）</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>dp 初始化不当（最小值 INF、不可达）</li>
+<li>LCS：二维 dp 下标偏移（i-1&#x2F;j-1）</li>
+</ul>
+<hr>
+<h1 id="12-回溯（6-题）"><a href="#12-回溯（6-题）" class="headerlink" title="12. 回溯（6 题）"></a>12. 回溯（6 题）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>78 Subsets（Medium）</li>
+<li>46 Permutations（Medium）</li>
+<li>39 Combination Sum（Medium）</li>
+<li>40 Combination Sum II（Medium，去重）</li>
+<li>22 Generate Parentheses（Medium）</li>
+<li>79 Word Search（Medium）</li>
+</ul>
+<p><strong>最该背模板：组合（start）+ 同层去重</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span> start)</span> &#123;</span><br><span class="line">    ans.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(path));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> start; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &gt; start &amp;&amp; nums[i] == nums[i-<span class="number">1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">        path.add(nums[i]);</span><br><span class="line">        dfs(i + <span class="number">1</span>);</span><br><span class="line">        path.remove(path.size() - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>去重：同层去重 vs used 去重（排列）</li>
+<li>剪枝：排序后可用 “超过目标就 break”</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>path 引用复用导致结果全变（要 new ArrayList）</li>
+<li>Word Search：回溯后要恢复 visited&#x2F;字符</li>
+</ul>
+<hr>
+<h1 id="13-字符串专题（按岗位取舍，4-题）"><a href="#13-字符串专题（按岗位取舍，4-题）" class="headerlink" title="13. 字符串专题（按岗位取舍，4 题）"></a>13. 字符串专题（按岗位取舍，4 题）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>208 Implement Trie (Prefix Tree)（Medium）</li>
+<li>211 Design Add and Search Words Data Structure（Medium）</li>
+<li>5 Longest Palindromic Substring（Medium，中心扩展）</li>
+<li>28 Find the Index of the First Occurrence in a String（Easy&#x2F;Medium，KMP 可选）</li>
+</ul>
+<p><strong>最该背模板：Trie 节点骨架</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Trie</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">        Node[] next = <span class="keyword">new</span> <span class="title class_">Node</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="type">boolean</span> end;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">root</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(String w)</span>&#123;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">cur</span> <span class="operator">=</span> root;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">char</span> ch: w.toCharArray())&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> ch - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">            <span class="keyword">if</span>(cur.next[i]==<span class="literal">null</span>) cur.next[i]=<span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">            cur = cur.next[i];</span><br><span class="line">        &#125;</span><br><span class="line">        cur.end = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">search</span><span class="params">(String w)</span>&#123;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">cur</span> <span class="operator">=</span> root;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">char</span> ch: w.toCharArray())&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> ch - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">            <span class="keyword">if</span>(cur.next[i]==<span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            cur = cur.next[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> cur.end;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>211：<code>.</code> 通配符需要 DFS 搜索多个分支</li>
+<li>回文：中心扩展 O(n^2) 足够常见面试</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>Trie 字符集不是 a-z 要改结构（面试会问）</li>
+<li>211 DFS：递归终止条件与 end 判断</li>
+</ul>
+<hr>
+<h1 id="14-位运算（4-题，加分项）"><a href="#14-位运算（4-题，加分项）" class="headerlink" title="14. 位运算（4 题，加分项）"></a>14. 位运算（4 题，加分项）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>136 Single Number（Easy）</li>
+<li>191 Number of 1 Bits（Easy）</li>
+<li>268 Missing Number（Easy）</li>
+<li>231 Power of Two（Easy）</li>
+</ul>
+<p><strong>最该背模板：lowbit &#x2F; 去掉最低位 1</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (x != <span class="number">0</span>) &#123;</span><br><span class="line">    x &amp;= (x - <span class="number">1</span>); <span class="comment">// removes lowest set bit</span></span><br><span class="line">    cnt++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>异或性质：a^a&#x3D;0，a^0&#x3D;a</li>
+<li><code>x &amp; (x-1)</code> 判 2 的幂</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>Java int 有符号：位移与边界处理要小心（用 long 可避免）</li>
+</ul>
+<hr>
+<h1 id="15-数学与杂项（3-题，低频）"><a href="#15-数学与杂项（3-题，低频）" class="headerlink" title="15. 数学与杂项（3 题，低频）"></a>15. 数学与杂项（3 题，低频）</h1><p><strong>必刷题</strong></p>
+<ul>
+<li>50 Pow(x, n)（Medium，快速幂）</li>
+<li>169 Majority Element（Easy&#x2F;Medium，投票法）</li>
+<li>66 Plus One（Easy，细节模拟）</li>
+</ul>
+<p><strong>最该背模板：快速幂</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">fastPow</span><span class="params">(<span class="type">double</span> x, <span class="type">long</span> n)</span>&#123;</span><br><span class="line">    <span class="type">double</span> <span class="variable">ans</span> <span class="operator">=</span> <span class="number">1.0</span>;</span><br><span class="line">    <span class="type">long</span> <span class="variable">p</span> <span class="operator">=</span> Math.abs(n);</span><br><span class="line">    <span class="keyword">while</span> (p &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((p &amp; <span class="number">1</span>) == <span class="number">1</span>) ans *= x;</span><br><span class="line">        x *= x;</span><br><span class="line">        p &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> n &gt;= <span class="number">0</span> ? ans : <span class="number">1.0</span> / ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点&#x2F;难点</strong></p>
+<ul>
+<li>Pow：n 可能是 Integer.MIN_VALUE，先转 long</li>
+<li>投票法：候选+计数，最后可选二次验证</li>
+</ul>
+<p><strong>易错点</strong></p>
+<ul>
+<li>溢出与符号边界（尤其是 n&#x3D;-2^31）</li>
+</ul>
+<hr>
+<h2 id="最后：一份“面试前-1-小时必翻页”"><a href="#最后：一份“面试前-1-小时必翻页”" class="headerlink" title="最后：一份“面试前 1 小时必翻页”"></a>最后：一份“面试前 1 小时必翻页”</h2><p>如果你只复习最能提分的：</p>
+<ul>
+<li>76（窗口）&#x2F; 84（单调栈）&#x2F; 146（LRU）&#x2F; 236（LCA）&#x2F; 124（树递归语义）&#x2F; 207（拓扑）&#x2F; 875（二分答案）&#x2F; 560（前缀和哈希）</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Zed</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2026/01/30/leetcode%E9%80%9F%E6%9F%A5%E5%8D%95/">http://example.com/2026/01/30/leetcode%E9%80%9F%E6%9F%A5%E5%8D%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/leetcode/">leetcode</a></div><div class="post-share"><div class="social-share" data-image="/img/asuka.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/01/26/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/" title="双亲委派机制"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">双亲委派机制</div></div><div class="info-2"><div class="info-item-1">这份技术总结将从底层原理、运行流程、核心价值以及实战意义四个维度，为你详细梳理 Java 的双亲委派机制（Parent Delegation Model）。  1. 什么是双亲委派机制？双亲委派机制是 Java 类加载器（ClassLoader）在加载类时遵循的一种层级规则。 核心准则： 当一个类加载器收到类加载请求时，它首先不会尝试自己去加载这个类，而是把这个请求委派给父类加载器去完成。每一层的类加载器都是如此，因此所有的加载请求最终都应该传送到最顶层的启动类加载器中。只有当父类加载器反馈自己无法完成加载（在它的搜索范围中没有找到所需的类）时，子加载器才会尝试自己去加载。  2. 类加载器的层级结构在 Java 中，类加载器并非通过继承（Inheritance）关系实现父子，而是通过**组合（Composition）**关系来建立层级：  启动类加载器 (Bootstrap ClassLoader)：使用 C++ 实现，是 JVM 的一部分。负责加载核心类库（如 rt.jar、java.lang.* 等）。 扩展类加载器 (Extension...</div></div></div></a><a class="pagination-related" href="/2026/01/31/TCP%E5%8D%8F%E8%AE%AE%E8%A7%A3%E6%9E%90/" title="TCP协议解析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">TCP协议解析</div></div><div class="info-2"><div class="info-item-1">一、 TCP 报文段格式 (The Segment Format)TCP 的所有功能都封装在 20 到 60 字节的头部（Header）中。理解这些字段是理解 TCP 约定的基础。    字段名称 长度 核心作用    源端口&#x2F;目的端口 各 16 bits 多路复用：确保数据能准确送达某个特定的应用程序。   序列号 (Seq) 32 bits 数据编号：标记本数据段第一个字节的序号，解决乱序问题。   确认号 (Ack) 32 bits 期待接收：告诉对方下一次我希望收到哪个序号的包，实现可靠性。   数据偏移 4 bits 标记头部长度（因为 Options 是变长的）。   标志位 (Flags) 9 bits 控制状态：如 SYN(同步)、ACK(确认)、FIN(释放)、RST(重置)。   窗口大小 (Window) 16 bits 流量控制：接收方告诉发送方自己还能收多少，防止缓冲区溢出。   校验和 (Checksum) 16 bits 数据完整性：检测传输过程中是否有比特错误。   可选项 (Options) 0-40 bytes 扩展功能，如...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zed</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">75</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%88%E5%8F%A3%E8%BF%B0-%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">0. 通用方法论（口述 + 检查清单）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%95%B0%E7%BB%84-%E5%93%88%E5%B8%8C%EF%BC%886-%E9%A2%98%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">1. 数组 &amp; 哈希（6 题）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%8F%8C%E6%8C%87%E9%92%88-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%EF%BC%888-%E9%A2%98%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">2. 双指针 &amp; 滑动窗口（8 题）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E6%A0%88-%E5%8D%95%E8%B0%83%E6%A0%88%EF%BC%886-%E9%A2%98%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">3. 栈 &amp; 单调栈（6 题）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E9%93%BE%E8%A1%A8-%E6%8C%87%E9%92%88%E6%8A%80%E5%B7%A7%EF%BC%887-%E9%A2%98%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">4. 链表 &amp; 指针技巧（7 题）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E8%AE%BE%E8%AE%A1%E9%A2%98%EF%BC%885-%E9%A2%98%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">5. 设计题（5 题）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E5%A0%86-%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%EF%BC%886-%E9%A2%98%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">6. 堆 &#x2F; 优先队列（6 题）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E8%B4%AA%E5%BF%83-%E5%8C%BA%E9%97%B4%EF%BC%886-%E9%A2%98%EF%BC%89"><span class="toc-number">8.</span> <span class="toc-text">7. 贪心 &amp; 区间（6 题）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E4%BA%8C%E5%8F%89%E6%A0%91%EF%BC%888-%E9%A2%98%EF%BC%89"><span class="toc-number">9.</span> <span class="toc-text">8. 二叉树（8 题）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-%E5%9B%BE%EF%BC%888-%E9%A2%98%EF%BC%8C%E8%A6%86%E7%9B%96-BFS-%E6%8B%93%E6%89%91-DSU-%E6%9C%80%E7%9F%AD%E8%B7%AF%EF%BC%89"><span class="toc-number">10.</span> <span class="toc-text">9. 图（8 题，覆盖 BFS&#x2F;拓扑&#x2F;DSU&#x2F;最短路）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-%E4%BA%8C%E5%88%86%EF%BC%886-%E9%A2%98%EF%BC%89"><span class="toc-number">11.</span> <span class="toc-text">10. 二分（6 题）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-DP%EF%BC%888-%E9%A2%98%EF%BC%89"><span class="toc-number">12.</span> <span class="toc-text">11. DP（8 题）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-%E5%9B%9E%E6%BA%AF%EF%BC%886-%E9%A2%98%EF%BC%89"><span class="toc-number">13.</span> <span class="toc-text">12. 回溯（6 题）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13-%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%93%E9%A2%98%EF%BC%88%E6%8C%89%E5%B2%97%E4%BD%8D%E5%8F%96%E8%88%8D%EF%BC%8C4-%E9%A2%98%EF%BC%89"><span class="toc-number">14.</span> <span class="toc-text">13. 字符串专题（按岗位取舍，4 题）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#14-%E4%BD%8D%E8%BF%90%E7%AE%97%EF%BC%884-%E9%A2%98%EF%BC%8C%E5%8A%A0%E5%88%86%E9%A1%B9%EF%BC%89"><span class="toc-number">15.</span> <span class="toc-text">14. 位运算（4 题，加分项）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#15-%E6%95%B0%E5%AD%A6%E4%B8%8E%E6%9D%82%E9%A1%B9%EF%BC%883-%E9%A2%98%EF%BC%8C%E4%BD%8E%E9%A2%91%EF%BC%89"><span class="toc-number">16.</span> <span class="toc-text">15. 数学与杂项（3 题，低频）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%EF%BC%9A%E4%B8%80%E4%BB%BD%E2%80%9C%E9%9D%A2%E8%AF%95%E5%89%8D-1-%E5%B0%8F%E6%97%B6%E5%BF%85%E7%BF%BB%E9%A1%B5%E2%80%9D"><span class="toc-number">16.1.</span> <span class="toc-text">最后：一份“面试前 1 小时必翻页”</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/31/TCP%E5%8D%8F%E8%AE%AE%E8%A7%A3%E6%9E%90/" title="TCP协议解析">TCP协议解析</a><time datetime="2026-01-31T11:56:34.000Z" title="Created 2026-01-31 19:56:34">2026-01-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/30/leetcode%E9%80%9F%E6%9F%A5%E5%8D%95/" title="leetcode速查单">leetcode速查单</a><time datetime="2026-01-30T14:05:48.000Z" title="Created 2026-01-30 22:05:48">2026-01-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/26/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/" title="双亲委派机制">双亲委派机制</a><time datetime="2026-01-26T09:40:45.000Z" title="Created 2026-01-26 17:40:45">2026-01-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/26/java%E5%B8%B8%E9%87%8F%E6%B1%A0/" title="java常量池">java常量池</a><time datetime="2026-01-26T09:33:06.000Z" title="Created 2026-01-26 17:33:06">2026-01-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/26/Array-ArrayList-and-HashMap/" title="Array,ArrayList and HashMap">Array,ArrayList and HashMap</a><time datetime="2026-01-26T09:03:44.000Z" title="Created 2026-01-26 17:03:44">2026-01-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bkground.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Zed</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
