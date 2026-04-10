@@ -1,0 +1,494 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SSE通信方式 | Hexo</title><meta name="author" content="Zed"><meta name="copyright" content="Zed"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="SSE 面试知识点总结 1. 什么是 SSESSE，全称 Server-Sent Events，是一种基于 HTTP 的服务端向客户端单向推送消息的技术。 它的核心特点是：  客户端发起一次 HTTP 请求 服务端不立即关闭连接 后续通过这个连接持续向客户端推送事件数据 客户端实时接收并处理这些数据  前端通常使用浏览器原生提供的 EventSource 来接收 SSE 消息。  2. 一句话定义">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSE通信方式">
+<meta property="og:url" content="http://example.com/2026/04/10/SSE%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="SSE 面试知识点总结 1. 什么是 SSESSE，全称 Server-Sent Events，是一种基于 HTTP 的服务端向客户端单向推送消息的技术。 它的核心特点是：  客户端发起一次 HTTP 请求 服务端不立即关闭连接 后续通过这个连接持续向客户端推送事件数据 客户端实时接收并处理这些数据  前端通常使用浏览器原生提供的 EventSource 来接收 SSE 消息。  2. 一句话定义">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/asuka.jpg">
+<meta property="article:published_time" content="2026-04-10T12:33:07.000Z">
+<meta property="article:modified_time" content="2026-04-10T12:34:07.434Z">
+<meta property="article:author" content="Zed">
+<meta property="article:tag" content="cn">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/asuka.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "SSE通信方式",
+  "url": "http://example.com/2026/04/10/SSE%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/",
+  "image": "http://example.com/img/asuka.jpg",
+  "datePublished": "2026-04-10T12:33:07.000Z",
+  "dateModified": "2026-04-10T12:34:07.434Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zed",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/04/10/SSE%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SSE通信方式',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bkground.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">83</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">56</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bkground.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">SSE通信方式</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">SSE通信方式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-04-10T12:33:07.000Z" title="Created 2026-04-10 20:33:07">2026-04-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-04-10T12:34:07.434Z" title="Updated 2026-04-10 20:34:07">2026-04-10</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>SSE 面试知识点总结</p>
+<h2 id="1-什么是-SSE"><a href="#1-什么是-SSE" class="headerlink" title="1. 什么是 SSE"></a>1. 什么是 SSE</h2><p>SSE，全称 <strong>Server-Sent Events</strong>，是一种基于 <strong>HTTP</strong> 的服务端向客户端<strong>单向推送</strong>消息的技术。</p>
+<p>它的核心特点是：</p>
+<ul>
+<li>客户端发起一次 HTTP 请求</li>
+<li>服务端不立即关闭连接</li>
+<li>后续通过这个连接持续向客户端推送事件数据</li>
+<li>客户端实时接收并处理这些数据</li>
+</ul>
+<p>前端通常使用浏览器原生提供的 <code>EventSource</code> 来接收 SSE 消息。</p>
+<hr>
+<h2 id="2-一句话定义"><a href="#2-一句话定义" class="headerlink" title="2. 一句话定义"></a>2. 一句话定义</h2><p>面试里可以这样回答：</p>
+<blockquote>
+<p>SSE 是一种基于 HTTP 的服务端单向流式推送技术，适合将服务端持续产生的数据实时发送给客户端，比如大模型流式输出、任务进度通知、日志推送等。</p>
+</blockquote>
+<hr>
+<h2 id="3-SSE-的本质"><a href="#3-SSE-的本质" class="headerlink" title="3. SSE 的本质"></a>3. SSE 的本质</h2><p>SSE 本质上不是一个全新的复杂协议，而是：</p>
+<ul>
+<li>仍然使用 HTTP</li>
+<li>响应头通常设置为 <code>Content-Type: text/event-stream</code></li>
+<li>服务端将响应保持打开</li>
+<li>按约定格式不断向响应流中写入事件</li>
+</ul>
+<p>所以你可以把它理解成：</p>
+<p><strong>“长连接版的 HTTP 响应流 + 事件格式约定”</strong></p>
+<hr>
+<h2 id="4-SSE-的通信模型"><a href="#4-SSE-的通信模型" class="headerlink" title="4. SSE 的通信模型"></a>4. SSE 的通信模型</h2><h3 id="4-1-单向通信"><a href="#4-1-单向通信" class="headerlink" title="4.1 单向通信"></a>4.1 单向通信</h3><p>SSE 是 <strong>服务端 -&gt; 客户端</strong> 的单向通信。</p>
+<p>也就是说：</p>
+<ul>
+<li>客户端只能在最开始通过 HTTP 请求发起连接</li>
+<li>后续不能像 WebSocket 那样在同一连接上自由发送消息</li>
+<li>服务端持续推送内容给客户端</li>
+</ul>
+<h3 id="4-2-典型场景"><a href="#4-2-典型场景" class="headerlink" title="4.2 典型场景"></a>4.2 典型场景</h3><p>适合 SSE 的场景：</p>
+<ul>
+<li>LLM &#x2F; ChatGPT 类应用的流式输出</li>
+<li>Agent 执行过程展示</li>
+<li>检索进度推送</li>
+<li>日志流</li>
+<li>任务执行状态通知</li>
+<li>股票价格、监控数据等单向推送场景</li>
+</ul>
+<hr>
+<h2 id="5-SSE-的消息格式"><a href="#5-SSE-的消息格式" class="headerlink" title="5. SSE 的消息格式"></a>5. SSE 的消息格式</h2><p>SSE 消息是文本格式，每条消息由若干行组成，事件之间用空行分隔。</p>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">event: token</span><br><span class="line">id: 1</span><br><span class="line">data: hello</span><br><span class="line"></span><br><span class="line">event: token</span><br><span class="line">id: 2</span><br><span class="line">data: world</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-1-常见字段"><a href="#5-1-常见字段" class="headerlink" title="5.1 常见字段"></a>5.1 常见字段</h3><h4 id="event"><a href="#event" class="headerlink" title="event"></a><code>event</code></h4><p>表示事件名。</p>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">event: token</span><br></pre></td></tr></table></figure>
+
+<p>前端可以根据不同事件名做不同处理。</p>
+<h4 id="data"><a href="#data" class="headerlink" title="data"></a><code>data</code></h4><p>表示事件数据，是最核心的字段。</p>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data: &#123;&quot;text&quot;:&quot;hello&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="id"><a href="#id" class="headerlink" title="id"></a><code>id</code></h4><p>表示当前事件的唯一 ID。</p>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id: 123</span><br></pre></td></tr></table></figure>
+
+<p>用于断线重连时恢复状态。</p>
+<h4 id="retry"><a href="#retry" class="headerlink" title="retry"></a><code>retry</code></h4><p>表示建议客户端断线后重连的等待时间，单位毫秒。</p>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">retry: 3000</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-事件结束标志"><a href="#5-2-事件结束标志" class="headerlink" title="5.2 事件结束标志"></a>5.2 事件结束标志</h3><p>SSE 中一条完整事件必须以<strong>空行</strong>结束。</p>
+<hr>
+<h2 id="6-SSE-和普通-HTTP-的区别"><a href="#6-SSE-和普通-HTTP-的区别" class="headerlink" title="6. SSE 和普通 HTTP 的区别"></a>6. SSE 和普通 HTTP 的区别</h2><h3 id="普通-HTTP"><a href="#普通-HTTP" class="headerlink" title="普通 HTTP"></a>普通 HTTP</h3><p>普通 HTTP 是：</p>
+<ul>
+<li>请求一次</li>
+<li>响应一次</li>
+<li>连接结束</li>
+</ul>
+<h3 id="SSE"><a href="#SSE" class="headerlink" title="SSE"></a>SSE</h3><p>SSE 是：</p>
+<ul>
+<li>请求一次</li>
+<li>响应持续不断地产生</li>
+<li>连接保持打开</li>
+<li>服务端不断往里面写事件</li>
+</ul>
+<p>所以 SSE 其实就是：</p>
+<p><strong>将 HTTP 从“一次性返回”变成“持续流式返回”</strong></p>
+<hr>
+<h2 id="7-SSE-和-WebSocket-的区别"><a href="#7-SSE-和-WebSocket-的区别" class="headerlink" title="7. SSE 和 WebSocket 的区别"></a>7. SSE 和 WebSocket 的区别</h2><p>这是面试里的高频问题。</p>
+<h2 id="7-1-核心区别总结"><a href="#7-1-核心区别总结" class="headerlink" title="7.1 核心区别总结"></a>7.1 核心区别总结</h2><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>SSE</th>
+<th>WebSocket</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>通信方向</td>
+<td>单向，服务端推客户端</td>
+<td>双向，客户端和服务端都可主动发消息</td>
+</tr>
+<tr>
+<td>底层协议</td>
+<td>HTTP</td>
+<td>握手后升级为 WebSocket 协议</td>
+</tr>
+<tr>
+<td>复杂度</td>
+<td>相对简单</td>
+<td>更复杂</td>
+</tr>
+<tr>
+<td>浏览器支持方式</td>
+<td><code>EventSource</code></td>
+<td><code>WebSocket</code></td>
+</tr>
+<tr>
+<td>自动重连</td>
+<td>浏览器天然支持</td>
+<td>通常需要自己实现</td>
+</tr>
+<tr>
+<td>适合场景</td>
+<td>流式输出、进度、日志、通知</td>
+<td>聊天、协同编辑、实时对战等强交互</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="8-面试时如何回答-SSE-和-WebSocket-的选型"><a href="#8-面试时如何回答-SSE-和-WebSocket-的选型" class="headerlink" title="8. 面试时如何回答 SSE 和 WebSocket 的选型"></a>8. 面试时如何回答 SSE 和 WebSocket 的选型</h2><p>可以这样说：</p>
+<blockquote>
+<p>如果场景只是服务端持续向前端推送数据，比如大模型 token 流式输出、Agent 执行进度、日志推送，我会优先选 SSE，因为它基于 HTTP，实现简单，前端接收也方便。<br>如果场景需要高频双向交互，比如聊天室、协同编辑、实时控制，我会选择 WebSocket，因为它支持客户端和服务端双向通信。</p>
+</blockquote>
+<hr>
+<h2 id="9-SSE-的优点"><a href="#9-SSE-的优点" class="headerlink" title="9. SSE 的优点"></a>9. SSE 的优点</h2><h3 id="9-1-实现简单"><a href="#9-1-实现简单" class="headerlink" title="9.1 实现简单"></a>9.1 实现简单</h3><p>因为 SSE 基于 HTTP，不需要像 WebSocket 那样处理升级协议和复杂双向通信。</p>
+<h3 id="9-2-对流式输出天然友好"><a href="#9-2-对流式输出天然友好" class="headerlink" title="9.2 对流式输出天然友好"></a>9.2 对流式输出天然友好</h3><p>特别适合大模型输出 token 流。</p>
+<h3 id="9-3-浏览器原生支持"><a href="#9-3-浏览器原生支持" class="headerlink" title="9.3 浏览器原生支持"></a>9.3 浏览器原生支持</h3><p>前端可以直接使用 <code>EventSource</code>。</p>
+<h3 id="9-4-自动重连机制"><a href="#9-4-自动重连机制" class="headerlink" title="9.4 自动重连机制"></a>9.4 自动重连机制</h3><p>浏览器端默认支持断线重连。</p>
+<h3 id="9-5-更容易接入现有-HTTP-基础设施"><a href="#9-5-更容易接入现有-HTTP-基础设施" class="headerlink" title="9.5 更容易接入现有 HTTP 基础设施"></a>9.5 更容易接入现有 HTTP 基础设施</h3><p>很多网关、鉴权、日志、监控链路都是围绕 HTTP 构建的，SSE 更容易融入现有系统。</p>
+<hr>
+<h2 id="10-SSE-的缺点"><a href="#10-SSE-的缺点" class="headerlink" title="10. SSE 的缺点"></a>10. SSE 的缺点</h2><h3 id="10-1-只能单向通信"><a href="#10-1-只能单向通信" class="headerlink" title="10.1 只能单向通信"></a>10.1 只能单向通信</h3><p>客户端无法像 WebSocket 那样在同一连接中自由发送业务消息。</p>
+<h3 id="10-2-不适合强交互场景"><a href="#10-2-不适合强交互场景" class="headerlink" title="10.2 不适合强交互场景"></a>10.2 不适合强交互场景</h3><p>比如实时聊天、多人协作、游戏对战等。</p>
+<h3 id="10-3-代理和网关可能缓冲响应"><a href="#10-3-代理和网关可能缓冲响应" class="headerlink" title="10.3 代理和网关可能缓冲响应"></a>10.3 代理和网关可能缓冲响应</h3><p>如果代理层开启缓冲，可能导致服务端已经推了数据，但客户端迟迟收不到。</p>
+<h3 id="10-4-需要处理心跳保活"><a href="#10-4-需要处理心跳保活" class="headerlink" title="10.4 需要处理心跳保活"></a>10.4 需要处理心跳保活</h3><p>连接长时间没数据时，中间层可能断开连接。</p>
+<hr>
+<h2 id="11-SSE-的核心-HTTP-头"><a href="#11-SSE-的核心-HTTP-头" class="headerlink" title="11. SSE 的核心 HTTP 头"></a>11. SSE 的核心 HTTP 头</h2><p>面试中常被问到。</p>
+<p>常见响应头：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/event-stream</span><br><span class="line"><span class="attribute">Cache-Control</span><span class="punctuation">: </span>no-cache</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br></pre></td></tr></table></figure>
+
+<h3 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h3><ul>
+<li><code>Content-Type: text/event-stream</code><br>告诉客户端这是 SSE 事件流</li>
+<li><code>Cache-Control: no-cache</code><br>避免缓存影响实时性</li>
+<li><code>Connection: keep-alive</code><br>保持连接不断开</li>
+</ul>
+<hr>
+<h2 id="12-前端如何接收-SSE"><a href="#12-前端如何接收-SSE" class="headerlink" title="12. 前端如何接收 SSE"></a>12. 前端如何接收 SSE</h2><p>前端最常见写法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> es = <span class="keyword">new</span> <span class="title class_">EventSource</span>(<span class="string">&quot;/sse&quot;</span>);</span><br><span class="line"></span><br><span class="line">es.<span class="property">onmessage</span> = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(event.<span class="property">data</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">es.<span class="title function_">addEventListener</span>(<span class="string">&quot;token&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;token:&quot;</span>, event.<span class="property">data</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">es.<span class="property">onerror</span> = <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&quot;error:&quot;</span>, err);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="面试回答点"><a href="#面试回答点" class="headerlink" title="面试回答点"></a>面试回答点</h3><ul>
+<li>前端一般通过 <code>EventSource</code> 建立 SSE 连接</li>
+<li>可以监听默认的 <code>message</code> 事件</li>
+<li>也可以监听自定义事件名</li>
+<li>出错时可以在 <code>onerror</code> 里处理</li>
+<li>浏览器会自动尝试重连</li>
+</ul>
+<hr>
+<h2 id="13-Python-中如何实现-SSE"><a href="#13-Python-中如何实现-SSE" class="headerlink" title="13. Python 中如何实现 SSE"></a>13. Python 中如何实现 SSE</h2><p>在 Python 面试中，通常结合 <strong>FastAPI</strong> 来回答。</p>
+<h3 id="13-1-基本思路"><a href="#13-1-基本思路" class="headerlink" title="13.1 基本思路"></a>13.1 基本思路</h3><ul>
+<li>写一个生成器或异步生成器</li>
+<li>每次 <code>yield</code> 一段符合 SSE 格式的字符串</li>
+<li>使用 <code>StreamingResponse</code> 返回</li>
+<li>设置 <code>media_type=&quot;text/event-stream&quot;</code></li>
+</ul>
+<h3 id="13-2-示例"><a href="#13-2-示例" class="headerlink" title="13.2 示例"></a>13.2 示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI</span><br><span class="line"><span class="keyword">from</span> fastapi.responses <span class="keyword">import</span> StreamingResponse</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">event_generator</span>():</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">        <span class="keyword">yield</span> <span class="string">f&quot;event: message\ndata: hello <span class="subst">&#123;i&#125;</span>\n\n&quot;</span></span><br><span class="line">        <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/sse&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">sse</span>():</span><br><span class="line">    <span class="keyword">return</span> StreamingResponse(</span><br><span class="line">        event_generator(),</span><br><span class="line">        media_type=<span class="string">&quot;text/event-stream&quot;</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<h3 id="13-3-面试中要能讲清楚"><a href="#13-3-面试中要能讲清楚" class="headerlink" title="13.3 面试中要能讲清楚"></a>13.3 面试中要能讲清楚</h3><ul>
+<li><code>StreamingResponse</code> 用于流式响应</li>
+<li>SSE 本质上是不断 <code>yield</code> 数据</li>
+<li>每个事件要符合 SSE 格式</li>
+<li><code>\n\n</code> 表示一条事件结束</li>
+<li>FastAPI 下常配合协程和异步生成器使用</li>
+</ul>
+<hr>
+<h2 id="14-Java-中如何实现-SSE"><a href="#14-Java-中如何实现-SSE" class="headerlink" title="14. Java 中如何实现 SSE"></a>14. Java 中如何实现 SSE</h2><p>Java 面试里通常结合 Spring 来讲。</p>
+<hr>
+<h3 id="14-1-Spring-MVC：SseEmitter"><a href="#14-1-Spring-MVC：SseEmitter" class="headerlink" title="14.1 Spring MVC：SseEmitter"></a>14.1 Spring MVC：<code>SseEmitter</code></h3><p>这是最常见的回答方式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/sse&quot;)</span></span><br><span class="line"><span class="keyword">public</span> SseEmitter <span class="title function_">stream</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">SseEmitter</span> <span class="variable">emitter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SseEmitter</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">                emitter.send(SseEmitter.event().name(<span class="string">&quot;message&quot;</span>).data(<span class="string">&quot;hello &quot;</span> + i));</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            emitter.complete();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            emitter.completeWithError(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> emitter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="面试回答点-1"><a href="#面试回答点-1" class="headerlink" title="面试回答点"></a>面试回答点</h3><ul>
+<li><code>SseEmitter</code> 是 Spring MVC 对 SSE 的支持</li>
+<li>Controller 返回 <code>SseEmitter</code></li>
+<li>后台线程持续往里面 <code>send</code></li>
+<li>最后调用 <code>complete()</code> 结束连接</li>
+</ul>
+<hr>
+<h3 id="14-2-Spring-WebFlux：Flux"><a href="#14-2-Spring-WebFlux：Flux" class="headerlink" title="14.2 Spring WebFlux：Flux&lt;ServerSentEvent&lt;T&gt;&gt;"></a>14.2 Spring WebFlux：<code>Flux&lt;ServerSentEvent&lt;T&gt;&gt;</code></h3><p>如果项目使用响应式编程，可以这样实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(value = &quot;/sse&quot;, produces = MediaType.TEXT_EVENT_STREAM_VALUE)</span></span><br><span class="line"><span class="keyword">public</span> Flux&lt;ServerSentEvent&lt;String&gt;&gt; <span class="title function_">stream</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Flux.interval(Duration.ofSeconds(<span class="number">1</span>))</span><br><span class="line">        .map(i -&gt; ServerSentEvent.&lt;String&gt;builder()</span><br><span class="line">            .event(<span class="string">&quot;message&quot;</span>)</span><br><span class="line">            .data(<span class="string">&quot;hello &quot;</span> + i)</span><br><span class="line">            .build());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="面试回答点-2"><a href="#面试回答点-2" class="headerlink" title="面试回答点"></a>面试回答点</h3><ul>
+<li>WebFlux 中通常返回 <code>Flux</code></li>
+<li>每个元素就是一个 SSE 事件</li>
+<li>更适合响应式、非阻塞场景</li>
+<li>比 <code>SseEmitter</code> 更适合高并发流式系统</li>
+</ul>
+<hr>
+<h2 id="15-Python-和-Java-实现-SSE-的区别"><a href="#15-Python-和-Java-实现-SSE-的区别" class="headerlink" title="15. Python 和 Java 实现 SSE 的区别"></a>15. Python 和 Java 实现 SSE 的区别</h2><h3 id="Python-FastAPI"><a href="#Python-FastAPI" class="headerlink" title="Python &#x2F; FastAPI"></a>Python &#x2F; FastAPI</h3><p>思路更偏向：</p>
+<ul>
+<li>生成器 &#x2F; 异步生成器</li>
+<li>手动拼 SSE 格式</li>
+<li>用 <code>StreamingResponse</code> 输出</li>
+</ul>
+<h3 id="Java-Spring-MVC"><a href="#Java-Spring-MVC" class="headerlink" title="Java &#x2F; Spring MVC"></a>Java &#x2F; Spring MVC</h3><p>思路更偏向：</p>
+<ul>
+<li>用 <code>SseEmitter</code> 作为抽象</li>
+<li>后台线程不断 <code>send</code></li>
+</ul>
+<h3 id="Java-WebFlux"><a href="#Java-WebFlux" class="headerlink" title="Java &#x2F; WebFlux"></a>Java &#x2F; WebFlux</h3><p>思路更偏向：</p>
+<ul>
+<li>返回响应式事件流 <code>Flux</code></li>
+<li>框架自动处理流式输出</li>
+</ul>
+<h3 id="面试总结说法"><a href="#面试总结说法" class="headerlink" title="面试总结说法"></a>面试总结说法</h3><blockquote>
+<p>Python 更像是自己手动生成事件流；Java Spring MVC 更像是往 <code>SseEmitter</code> 中持续发送事件；WebFlux 则是直接返回一个响应式事件流。</p>
+</blockquote>
+<hr>
+<h2 id="16-SSE-在-LLM-Agent-场景中的应用"><a href="#16-SSE-在-LLM-Agent-场景中的应用" class="headerlink" title="16. SSE 在 LLM &#x2F; Agent 场景中的应用"></a>16. SSE 在 LLM &#x2F; Agent 场景中的应用</h2><p>这是现在面试中特别高频的点。</p>
+<h3 id="16-1-为什么适合-LLM-流式输出"><a href="#16-1-为什么适合-LLM-流式输出" class="headerlink" title="16.1 为什么适合 LLM 流式输出"></a>16.1 为什么适合 LLM 流式输出</h3><p>LLM 的生成过程天然是增量式的：</p>
+<ul>
+<li>用户发送一个问题</li>
+<li>服务端开始调用模型</li>
+<li>模型持续返回 token</li>
+<li>服务端边收到边推给前端</li>
+<li>前端边接收边渲染</li>
+</ul>
+<p>这和 SSE 的单向持续推送模型非常契合。</p>
+<hr>
+<h3 id="16-2-Agent-场景中可以推哪些事件"><a href="#16-2-Agent-场景中可以推哪些事件" class="headerlink" title="16.2 Agent 场景中可以推哪些事件"></a>16.2 Agent 场景中可以推哪些事件</h3><p>不要只推文本，可以设计为结构化事件：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">event: status</span><br><span class="line">data: &#123;&quot;phase&quot;:&quot;retrieving&quot;&#125;</span><br><span class="line"></span><br><span class="line">event: tool_call</span><br><span class="line">data: &#123;&quot;tool&quot;:&quot;search&quot;,&quot;query&quot;:&quot;SSE&quot;&#125;</span><br><span class="line"></span><br><span class="line">event: tool_result</span><br><span class="line">data: &#123;&quot;count&quot;:3&#125;</span><br><span class="line"></span><br><span class="line">event: token</span><br><span class="line">data: &#123;&quot;text&quot;:&quot;SSE 是一种...&quot;&#125;</span><br><span class="line"></span><br><span class="line">event: done</span><br><span class="line">data: &#123;&quot;finish_reason&quot;:&quot;stop&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="这样设计的好处"><a href="#这样设计的好处" class="headerlink" title="这样设计的好处"></a>这样设计的好处</h3><ul>
+<li>前端可以区分不同类型的信息</li>
+<li>更容易展示工具调用过程</li>
+<li>更适合做 tracing 和调试</li>
+<li>更利于面试时体现工程思维</li>
+</ul>
+<hr>
+<h2 id="17-SSE-的工程问题"><a href="#17-SSE-的工程问题" class="headerlink" title="17. SSE 的工程问题"></a>17. SSE 的工程问题</h2><p>面试里如果你能说到这些，会很加分。</p>
+<h3 id="17-1-客户端断开检测"><a href="#17-1-客户端断开检测" class="headerlink" title="17.1 客户端断开检测"></a>17.1 客户端断开检测</h3><p>客户端刷新页面或关闭页面后，服务端要尽快停止推送，避免资源浪费。</p>
+<p>Python&#x2F;FastAPI 中一般会检测请求是否断开。<br>Java 中也要监听连接状态或捕获发送异常。</p>
+<hr>
+<h3 id="17-2-心跳机制"><a href="#17-2-心跳机制" class="headerlink" title="17.2 心跳机制"></a>17.2 心跳机制</h3><p>为了防止长时间无数据导致连接被中间层断开，可以周期性发送注释行：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">: ping</span><br></pre></td></tr></table></figure>
+
+<p>这不属于业务事件，但可以起到保活作用。</p>
+<hr>
+<h3 id="17-3-代理缓冲问题"><a href="#17-3-代理缓冲问题" class="headerlink" title="17.3 代理缓冲问题"></a>17.3 代理缓冲问题</h3><p>某些 Nginx 或网关默认会缓冲响应，导致前端接收不到实时数据。</p>
+<p>所以部署 SSE 时要注意：</p>
+<ul>
+<li>关闭代理缓冲</li>
+<li>确保响应是实时刷出的</li>
+<li>检查超时配置</li>
+</ul>
+<hr>
+<h3 id="17-4-显式结束事件"><a href="#17-4-显式结束事件" class="headerlink" title="17.4 显式结束事件"></a>17.4 显式结束事件</h3><p>不要只依赖连接断开来表示结束，最好显式发送一个 <code>done</code> 事件。</p>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">event: done</span><br><span class="line">data: &#123;&quot;ok&quot;: true&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样前端更容易做状态管理。</p>
+<hr>
+<h3 id="17-5-错误事件统一设计"><a href="#17-5-错误事件统一设计" class="headerlink" title="17.5 错误事件统一设计"></a>17.5 错误事件统一设计</h3><p>建议将错误也作为事件输出：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">event: error</span><br><span class="line">data: &#123;&quot;message&quot;:&quot;tool timeout&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样前端能更优雅地处理异常，而不是只感知到连接中断。</p>
+<hr>
+<h2 id="18-SSE-的断线重连"><a href="#18-SSE-的断线重连" class="headerlink" title="18. SSE 的断线重连"></a>18. SSE 的断线重连</h2><p>SSE 的一个优势是浏览器支持自动重连。</p>
+<h3 id="相关机制"><a href="#相关机制" class="headerlink" title="相关机制"></a>相关机制</h3><ul>
+<li>服务端可以发送 <code>id</code></li>
+<li>客户端重连时可携带上次收到的事件 ID</li>
+<li>服务端可以基于这个 ID 判断是否需要恢复</li>
+</ul>
+<h3 id="面试里要注意的点"><a href="#面试里要注意的点" class="headerlink" title="面试里要注意的点"></a>面试里要注意的点</h3><p>浏览器自动重连只是基础能力。<br>如果想真正实现“断点续传”，服务端必须自己保存事件状态或可恢复的上下文。</p>
+<hr>
+<h2 id="19-高频面试题整理"><a href="#19-高频面试题整理" class="headerlink" title="19. 高频面试题整理"></a>19. 高频面试题整理</h2><h2 id="题目-1：SSE-是什么？"><a href="#题目-1：SSE-是什么？" class="headerlink" title="题目 1：SSE 是什么？"></a>题目 1：SSE 是什么？</h2><p><strong>答：</strong><br>SSE 是一种基于 HTTP 的服务端单向推送技术，服务端可以通过长连接持续向客户端推送事件流，常用于流式输出、日志、进度通知等场景。</p>
+<hr>
+<h2 id="题目-2：SSE-和-WebSocket-的区别？"><a href="#题目-2：SSE-和-WebSocket-的区别？" class="headerlink" title="题目 2：SSE 和 WebSocket 的区别？"></a>题目 2：SSE 和 WebSocket 的区别？</h2><p><strong>答：</strong><br>SSE 是单向的，只能服务端推客户端，基于 HTTP；WebSocket 是双向的，支持客户端和服务端互相主动发消息，适合更强的实时交互场景。</p>
+<hr>
+<h2 id="题目-3：为什么-LLM-流式输出常用-SSE？"><a href="#题目-3：为什么-LLM-流式输出常用-SSE？" class="headerlink" title="题目 3：为什么 LLM 流式输出常用 SSE？"></a>题目 3：为什么 LLM 流式输出常用 SSE？</h2><p><strong>答：</strong><br>因为 LLM 输出通常是服务端持续向前端推送 token，属于典型的单向流式场景，SSE 实现简单、前端接收方便、天然适合这种模式。</p>
+<hr>
+<h2 id="题目-4：SSE-的消息格式是怎样的？"><a href="#题目-4：SSE-的消息格式是怎样的？" class="headerlink" title="题目 4：SSE 的消息格式是怎样的？"></a>题目 4：SSE 的消息格式是怎样的？</h2><p><strong>答：</strong><br>SSE 消息由文本行构成，常见字段有 <code>event</code>、<code>data</code>、<code>id</code>、<code>retry</code>，事件之间通过空行分隔。</p>
+<hr>
+<h2 id="题目-5：FastAPI-如何实现-SSE？"><a href="#题目-5：FastAPI-如何实现-SSE？" class="headerlink" title="题目 5：FastAPI 如何实现 SSE？"></a>题目 5：FastAPI 如何实现 SSE？</h2><p><strong>答：</strong><br>通常使用异步生成器不断 <code>yield</code> 符合 SSE 格式的字符串，再通过 <code>StreamingResponse</code> 返回，并设置 <code>media_type=&quot;text/event-stream&quot;</code>。</p>
+<hr>
+<h2 id="题目-6：Spring-如何实现-SSE？"><a href="#题目-6：Spring-如何实现-SSE？" class="headerlink" title="题目 6：Spring 如何实现 SSE？"></a>题目 6：Spring 如何实现 SSE？</h2><p><strong>答：</strong><br>Spring MVC 通常使用 <code>SseEmitter</code>；Spring WebFlux 通常使用 <code>Flux&lt;ServerSentEvent&lt;T&gt;&gt;</code> 来实现流式事件推送。</p>
+<hr>
+<h2 id="题目-7：SSE-的缺点是什么？"><a href="#题目-7：SSE-的缺点是什么？" class="headerlink" title="题目 7：SSE 的缺点是什么？"></a>题目 7：SSE 的缺点是什么？</h2><p><strong>答：</strong><br>只能单向通信，不适合高频双向交互；在代理和网关场景下可能存在缓冲和超时问题；需要额外考虑心跳和连接管理。</p>
+<hr>
+<h2 id="题目-8：SSE-为什么比-WebSocket-更适合某些-AI-场景？"><a href="#题目-8：SSE-为什么比-WebSocket-更适合某些-AI-场景？" class="headerlink" title="题目 8：SSE 为什么比 WebSocket 更适合某些 AI 场景？"></a>题目 8：SSE 为什么比 WebSocket 更适合某些 AI 场景？</h2><p><strong>答：</strong><br>因为很多 AI 场景只需要服务端持续向客户端输出数据，不需要双向通信。SSE 基于 HTTP，接入简单，更容易和现有后端系统整合。</p>
+<hr>
+<h2 id="20-面试时推荐的总结模板"><a href="#20-面试时推荐的总结模板" class="headerlink" title="20. 面试时推荐的总结模板"></a>20. 面试时推荐的总结模板</h2><p>可以直接背这一段：</p>
+<blockquote>
+<p>SSE 是基于 HTTP 的服务端单向事件推送机制，客户端通过 <code>EventSource</code> 建立连接，服务端通过 <code>text/event-stream</code> 持续返回事件数据。<br>它特别适合大模型 token 流式输出、Agent 执行过程展示、日志和进度通知。<br>和 WebSocket 相比，SSE 实现更简单、天然适合单向流式场景，但不支持双向通信。<br>在 Python 中通常通过 FastAPI 的 <code>StreamingResponse</code> 配合异步生成器实现，在 Java 中可以通过 Spring MVC 的 <code>SseEmitter</code> 或 WebFlux 的 <code>Flux&lt;ServerSentEvent&gt;</code> 来实现。<br>工程上还需要关注断线重连、心跳保活、代理缓冲和显式结束事件等问题。</p>
+</blockquote>
+<hr>
+<h2 id="21-复习重点清单"><a href="#21-复习重点清单" class="headerlink" title="21. 复习重点清单"></a>21. 复习重点清单</h2><p>面试前重点记住以下内容：</p>
+<h3 id="必会概念"><a href="#必会概念" class="headerlink" title="必会概念"></a>必会概念</h3><ul>
+<li>SSE 是什么</li>
+<li>单向通信</li>
+<li>基于 HTTP</li>
+<li><code>text/event-stream</code></li>
+</ul>
+<h3 id="必会对比"><a href="#必会对比" class="headerlink" title="必会对比"></a>必会对比</h3><ul>
+<li>SSE vs WebSocket</li>
+<li>SSE vs 普通 HTTP 流式响应</li>
+</ul>
+<h3 id="必会实现"><a href="#必会实现" class="headerlink" title="必会实现"></a>必会实现</h3><ul>
+<li>FastAPI <code>StreamingResponse</code></li>
+<li>Spring <code>SseEmitter</code></li>
+<li>WebFlux <code>Flux&lt;ServerSentEvent&lt;T&gt;&gt;</code></li>
+</ul>
+<h3 id="必会场景"><a href="#必会场景" class="headerlink" title="必会场景"></a>必会场景</h3><ul>
+<li>LLM 流式输出</li>
+<li>Agent 执行步骤展示</li>
+<li>日志和进度通知</li>
+</ul>
+<h3 id="必会工程点"><a href="#必会工程点" class="headerlink" title="必会工程点"></a>必会工程点</h3><ul>
+<li>心跳</li>
+<li>断线重连</li>
+<li>代理缓冲</li>
+<li>显式 done 事件</li>
+<li>错误事件设计</li>
+</ul>
+<hr>
+<h2 id="22-最后一句话总结"><a href="#22-最后一句话总结" class="headerlink" title="22. 最后一句话总结"></a>22. 最后一句话总结</h2><blockquote>
+<p>SSE 本质上就是“基于 HTTP 的服务端单向事件流推送”，它不是为了替代 WebSocket，而是为“服务端持续输出、客户端实时接收”这类场景提供一种更简单、更贴近 HTTP 的解决方案。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果你需要，我下一条可以继续帮你把这份内容再整理成一份 **更适合背诵的面试八股版**，或者整理成 **Q&amp;A 题库版 md 文档**。</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Zed</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2026/04/10/SSE%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/">http://example.com/2026/04/10/SSE%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/cn/">cn</a><a class="post-meta__tags" href="/tags/agent/">agent</a></div><div class="post-share"><div class="social-share" data-image="/img/asuka.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/03/27/ACM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A8%A1%E6%9D%BF/" title="ACM输入输出模板"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">ACM输入输出模板</div></div><div class="info-2"><div class="info-item-1">下面我给你整理一份 Java ACM 模式输入输出用法文档。我会以 Scanner 和 System.out 为主线，再把 ACM 里真正高频、你刷牛客时最容易卡住的补充内容一并写进去：StringBuilder、BufferedReader + StringTokenizer、PrintWriter、常见模板、常见坑。  Java ACM 模式输入输出用法文档1. ACM 模式的核心特点和 LeetCode 核心代码模式不同，ACM 模式通常要求你自己完成：  输入读取 输出格式控制 主类 Main 主函数 main 有时还要处理多组输入、EOF、整行字符串、数组、矩阵等  最基本的 Java ACM 模板如下： 12345678import java.util.*;// 注意类名必须为 Main，不要写 packagepublic class Main &#123;    public static void main(String[] args) &#123;            &#125;&#125;   2. Scanner：最常用的输入类Scanner...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/01/06/CDN-%E5%86%85%E5%AE%B9%E5%88%86%E5%8F%91%E7%BD%91%E7%BB%9C-%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/" title="CDN (内容分发网络) 架构与最佳实践"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-06</div><div class="info-item-2">CDN (内容分发网络) 架构与最佳实践</div></div><div class="info-2"><div class="info-item-1">1. 概述 (Overview)CDN (Content Delivery Network) 是一组分布在不同地理位置的服务器群。其核心目的是通过将内容缓存到离用户最近的网络边缘（Edge Nodes），来解决互联网网络拥塞状况，提高用户访问网站的响应速度。 核心价值 低延迟 (Low Latency): 用户就近获取数据，物理距离缩短。 削峰填谷 (Offloading): 承担绝大部分流量，保护源站（Origin Server）不被海量请求击垮。 安全性 (Security): 隐藏源站真实 IP，提供 DDoS 防护和防盗链功能。   2. 工作原理 (Architecture)CDN 的工作流程可以概括为“智能调度”与“缓存代理”。 2.1 请求流程 DNS 解析: 用户访问域名时，DNS 将请求指向最近的 CDN 节点（而非源站）。 命中 (Cache Hit): 边缘节点已有该资源缓存 -&gt; 直接返回给用户 (速度极快)。 未命中&#x2F;回源 (Cache Miss): 边缘节点没有该资源 -&gt; 向源站发起请求 -&gt; 获取资源 -&gt;...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zed</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">83</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">56</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-SSE"><span class="toc-number">1.</span> <span class="toc-text">1. 什么是 SSE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%80%E5%8F%A5%E8%AF%9D%E5%AE%9A%E4%B9%89"><span class="toc-number">2.</span> <span class="toc-text">2. 一句话定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-SSE-%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="toc-number">3.</span> <span class="toc-text">3. SSE 的本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-SSE-%E7%9A%84%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text">4. SSE 的通信模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%8D%95%E5%90%91%E9%80%9A%E4%BF%A1"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 单向通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%85%B8%E5%9E%8B%E5%9C%BA%E6%99%AF"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 典型场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-SSE-%E7%9A%84%E6%B6%88%E6%81%AF%E6%A0%BC%E5%BC%8F"><span class="toc-number">5.</span> <span class="toc-text">5. SSE 的消息格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%B8%B8%E8%A7%81%E5%AD%97%E6%AE%B5"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 常见字段</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#event"><span class="toc-number">5.1.1.</span> <span class="toc-text">event</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#data"><span class="toc-number">5.1.2.</span> <span class="toc-text">data</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#id"><span class="toc-number">5.1.3.</span> <span class="toc-text">id</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#retry"><span class="toc-number">5.1.4.</span> <span class="toc-text">retry</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E4%BA%8B%E4%BB%B6%E7%BB%93%E6%9D%9F%E6%A0%87%E5%BF%97"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 事件结束标志</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-SSE-%E5%92%8C%E6%99%AE%E9%80%9A-HTTP-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">6.</span> <span class="toc-text">6. SSE 和普通 HTTP 的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%AE%E9%80%9A-HTTP"><span class="toc-number">6.1.</span> <span class="toc-text">普通 HTTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSE"><span class="toc-number">6.2.</span> <span class="toc-text">SSE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-SSE-%E5%92%8C-WebSocket-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">7.</span> <span class="toc-text">7. SSE 和 WebSocket 的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB%E6%80%BB%E7%BB%93"><span class="toc-number">8.</span> <span class="toc-text">7.1 核心区别总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E9%9D%A2%E8%AF%95%E6%97%B6%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94-SSE-%E5%92%8C-WebSocket-%E7%9A%84%E9%80%89%E5%9E%8B"><span class="toc-number">9.</span> <span class="toc-text">8. 面试时如何回答 SSE 和 WebSocket 的选型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-SSE-%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-number">10.</span> <span class="toc-text">9. SSE 的优点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95"><span class="toc-number">10.1.</span> <span class="toc-text">9.1 实现简单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-%E5%AF%B9%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA%E5%A4%A9%E7%84%B6%E5%8F%8B%E5%A5%BD"><span class="toc-number">10.2.</span> <span class="toc-text">9.2 对流式输出天然友好</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-3-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%94%9F%E6%94%AF%E6%8C%81"><span class="toc-number">10.3.</span> <span class="toc-text">9.3 浏览器原生支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-4-%E8%87%AA%E5%8A%A8%E9%87%8D%E8%BF%9E%E6%9C%BA%E5%88%B6"><span class="toc-number">10.4.</span> <span class="toc-text">9.4 自动重连机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-5-%E6%9B%B4%E5%AE%B9%E6%98%93%E6%8E%A5%E5%85%A5%E7%8E%B0%E6%9C%89-HTTP-%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD"><span class="toc-number">10.5.</span> <span class="toc-text">9.5 更容易接入现有 HTTP 基础设施</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-SSE-%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-number">11.</span> <span class="toc-text">10. SSE 的缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#10-1-%E5%8F%AA%E8%83%BD%E5%8D%95%E5%90%91%E9%80%9A%E4%BF%A1"><span class="toc-number">11.1.</span> <span class="toc-text">10.1 只能单向通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-2-%E4%B8%8D%E9%80%82%E5%90%88%E5%BC%BA%E4%BA%A4%E4%BA%92%E5%9C%BA%E6%99%AF"><span class="toc-number">11.2.</span> <span class="toc-text">10.2 不适合强交互场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-3-%E4%BB%A3%E7%90%86%E5%92%8C%E7%BD%91%E5%85%B3%E5%8F%AF%E8%83%BD%E7%BC%93%E5%86%B2%E5%93%8D%E5%BA%94"><span class="toc-number">11.3.</span> <span class="toc-text">10.3 代理和网关可能缓冲响应</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-4-%E9%9C%80%E8%A6%81%E5%A4%84%E7%90%86%E5%BF%83%E8%B7%B3%E4%BF%9D%E6%B4%BB"><span class="toc-number">11.4.</span> <span class="toc-text">10.4 需要处理心跳保活</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-SSE-%E7%9A%84%E6%A0%B8%E5%BF%83-HTTP-%E5%A4%B4"><span class="toc-number">12.</span> <span class="toc-text">11. SSE 的核心 HTTP 头</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-number">12.1.</span> <span class="toc-text">解释</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-%E5%89%8D%E7%AB%AF%E5%A6%82%E4%BD%95%E6%8E%A5%E6%94%B6-SSE"><span class="toc-number">13.</span> <span class="toc-text">12. 前端如何接收 SSE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%E5%9B%9E%E7%AD%94%E7%82%B9"><span class="toc-number">13.1.</span> <span class="toc-text">面试回答点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-Python-%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0-SSE"><span class="toc-number">14.</span> <span class="toc-text">13. Python 中如何实现 SSE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#13-1-%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF"><span class="toc-number">14.1.</span> <span class="toc-text">13.1 基本思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-2-%E7%A4%BA%E4%BE%8B"><span class="toc-number">14.2.</span> <span class="toc-text">13.2 示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-3-%E9%9D%A2%E8%AF%95%E4%B8%AD%E8%A6%81%E8%83%BD%E8%AE%B2%E6%B8%85%E6%A5%9A"><span class="toc-number">14.3.</span> <span class="toc-text">13.3 面试中要能讲清楚</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-Java-%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0-SSE"><span class="toc-number">15.</span> <span class="toc-text">14. Java 中如何实现 SSE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#14-1-Spring-MVC%EF%BC%9ASseEmitter"><span class="toc-number">15.1.</span> <span class="toc-text">14.1 Spring MVC：SseEmitter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%E5%9B%9E%E7%AD%94%E7%82%B9-1"><span class="toc-number">15.2.</span> <span class="toc-text">面试回答点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-2-Spring-WebFlux%EF%BC%9AFlux"><span class="toc-number">15.3.</span> <span class="toc-text">14.2 Spring WebFlux：Flux&lt;ServerSentEvent&lt;T&gt;&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%E5%9B%9E%E7%AD%94%E7%82%B9-2"><span class="toc-number">15.4.</span> <span class="toc-text">面试回答点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-Python-%E5%92%8C-Java-%E5%AE%9E%E7%8E%B0-SSE-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">16.</span> <span class="toc-text">15. Python 和 Java 实现 SSE 的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-FastAPI"><span class="toc-number">16.1.</span> <span class="toc-text">Python &#x2F; FastAPI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java-Spring-MVC"><span class="toc-number">16.2.</span> <span class="toc-text">Java &#x2F; Spring MVC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java-WebFlux"><span class="toc-number">16.3.</span> <span class="toc-text">Java &#x2F; WebFlux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E8%AF%B4%E6%B3%95"><span class="toc-number">16.4.</span> <span class="toc-text">面试总结说法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-SSE-%E5%9C%A8-LLM-Agent-%E5%9C%BA%E6%99%AF%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">17.</span> <span class="toc-text">16. SSE 在 LLM &#x2F; Agent 场景中的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#16-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%82%E5%90%88-LLM-%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA"><span class="toc-number">17.1.</span> <span class="toc-text">16.1 为什么适合 LLM 流式输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-2-Agent-%E5%9C%BA%E6%99%AF%E4%B8%AD%E5%8F%AF%E4%BB%A5%E6%8E%A8%E5%93%AA%E4%BA%9B%E4%BA%8B%E4%BB%B6"><span class="toc-number">17.2.</span> <span class="toc-text">16.2 Agent 场景中可以推哪些事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E6%A0%B7%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="toc-number">17.3.</span> <span class="toc-text">这样设计的好处</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#17-SSE-%E7%9A%84%E5%B7%A5%E7%A8%8B%E9%97%AE%E9%A2%98"><span class="toc-number">18.</span> <span class="toc-text">17. SSE 的工程问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#17-1-%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%96%AD%E5%BC%80%E6%A3%80%E6%B5%8B"><span class="toc-number">18.1.</span> <span class="toc-text">17.1 客户端断开检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#17-2-%E5%BF%83%E8%B7%B3%E6%9C%BA%E5%88%B6"><span class="toc-number">18.2.</span> <span class="toc-text">17.2 心跳机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#17-3-%E4%BB%A3%E7%90%86%E7%BC%93%E5%86%B2%E9%97%AE%E9%A2%98"><span class="toc-number">18.3.</span> <span class="toc-text">17.3 代理缓冲问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#17-4-%E6%98%BE%E5%BC%8F%E7%BB%93%E6%9D%9F%E4%BA%8B%E4%BB%B6"><span class="toc-number">18.4.</span> <span class="toc-text">17.4 显式结束事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#17-5-%E9%94%99%E8%AF%AF%E4%BA%8B%E4%BB%B6%E7%BB%9F%E4%B8%80%E8%AE%BE%E8%AE%A1"><span class="toc-number">18.5.</span> <span class="toc-text">17.5 错误事件统一设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#18-SSE-%E7%9A%84%E6%96%AD%E7%BA%BF%E9%87%8D%E8%BF%9E"><span class="toc-number">19.</span> <span class="toc-text">18. SSE 的断线重连</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E6%9C%BA%E5%88%B6"><span class="toc-number">19.1.</span> <span class="toc-text">相关机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%E9%87%8C%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E7%82%B9"><span class="toc-number">19.2.</span> <span class="toc-text">面试里要注意的点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#19-%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86"><span class="toc-number">20.</span> <span class="toc-text">19. 高频面试题整理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE-1%EF%BC%9ASSE-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">21.</span> <span class="toc-text">题目 1：SSE 是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE-2%EF%BC%9ASSE-%E5%92%8C-WebSocket-%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">22.</span> <span class="toc-text">题目 2：SSE 和 WebSocket 的区别？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE-3%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88-LLM-%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA%E5%B8%B8%E7%94%A8-SSE%EF%BC%9F"><span class="toc-number">23.</span> <span class="toc-text">题目 3：为什么 LLM 流式输出常用 SSE？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE-4%EF%BC%9ASSE-%E7%9A%84%E6%B6%88%E6%81%AF%E6%A0%BC%E5%BC%8F%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="toc-number">24.</span> <span class="toc-text">题目 4：SSE 的消息格式是怎样的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE-5%EF%BC%9AFastAPI-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0-SSE%EF%BC%9F"><span class="toc-number">25.</span> <span class="toc-text">题目 5：FastAPI 如何实现 SSE？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE-6%EF%BC%9ASpring-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0-SSE%EF%BC%9F"><span class="toc-number">26.</span> <span class="toc-text">题目 6：Spring 如何实现 SSE？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE-7%EF%BC%9ASSE-%E7%9A%84%E7%BC%BA%E7%82%B9%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">27.</span> <span class="toc-text">题目 7：SSE 的缺点是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE-8%EF%BC%9ASSE-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%AF%94-WebSocket-%E6%9B%B4%E9%80%82%E5%90%88%E6%9F%90%E4%BA%9B-AI-%E5%9C%BA%E6%99%AF%EF%BC%9F"><span class="toc-number">28.</span> <span class="toc-text">题目 8：SSE 为什么比 WebSocket 更适合某些 AI 场景？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#20-%E9%9D%A2%E8%AF%95%E6%97%B6%E6%8E%A8%E8%8D%90%E7%9A%84%E6%80%BB%E7%BB%93%E6%A8%A1%E6%9D%BF"><span class="toc-number">29.</span> <span class="toc-text">20. 面试时推荐的总结模板</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-%E5%A4%8D%E4%B9%A0%E9%87%8D%E7%82%B9%E6%B8%85%E5%8D%95"><span class="toc-number">30.</span> <span class="toc-text">21. 复习重点清单</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%85%E4%BC%9A%E6%A6%82%E5%BF%B5"><span class="toc-number">30.1.</span> <span class="toc-text">必会概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%85%E4%BC%9A%E5%AF%B9%E6%AF%94"><span class="toc-number">30.2.</span> <span class="toc-text">必会对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%85%E4%BC%9A%E5%AE%9E%E7%8E%B0"><span class="toc-number">30.3.</span> <span class="toc-text">必会实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%85%E4%BC%9A%E5%9C%BA%E6%99%AF"><span class="toc-number">30.4.</span> <span class="toc-text">必会场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%85%E4%BC%9A%E5%B7%A5%E7%A8%8B%E7%82%B9"><span class="toc-number">30.5.</span> <span class="toc-text">必会工程点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#22-%E6%9C%80%E5%90%8E%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93"><span class="toc-number">31.</span> <span class="toc-text">22. 最后一句话总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/04/10/SSE%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="SSE通信方式">SSE通信方式</a><time datetime="2026-04-10T12:33:07.000Z" title="Created 2026-04-10 20:33:07">2026-04-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/27/ACM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A8%A1%E6%9D%BF/" title="ACM输入输出模板">ACM输入输出模板</a><time datetime="2026-03-27T09:18:41.000Z" title="Created 2026-03-27 17:18:41">2026-03-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/12/%E7%BA%BF%E7%A8%8B%E6%89%A7%E8%A1%8C%E7%8E%B0%E5%9C%BA/" title="线程执行现场">线程执行现场</a><time datetime="2026-03-12T08:01:59.000Z" title="Created 2026-03-12 16:01:59">2026-03-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/06/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/" title="进程和线程">进程和线程</a><time datetime="2026-03-06T13:31:11.000Z" title="Created 2026-03-06 21:31:11">2026-03-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/28/LeetCode%E6%A8%A1%E6%9D%BF%E9%80%9F%E6%9F%A5/" title="LeetCode模板速查">LeetCode模板速查</a><time datetime="2026-02-28T11:51:55.000Z" title="Created 2026-02-28 19:51:55">2026-02-28</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bkground.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Zed</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
