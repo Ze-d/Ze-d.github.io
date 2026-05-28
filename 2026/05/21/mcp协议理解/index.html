@@ -1,0 +1,388 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>mcp协议理解 | Hexo</title><meta name="author" content="Zed"><meta name="copyright" content="Zed"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="技术理解卡：MCP1. 一句话定义MCP，Model Context Protocol，是一种让 AI Agent &#x2F; LLM 应用以标准化方式连接外部工具、数据源和上下文资源的协议。 它常用于：  AI IDE 接入代码仓库、文件系统、GitHub、数据库； 企业 Agent 接入内部知识库、业务系统、工单系统； 多工具 Agent 平台统一管理本地工具、远程工具和外部 API。  简">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mcp协议理解">
+<meta property="og:url" content="http://example.com/2026/05/21/mcp%E5%8D%8F%E8%AE%AE%E7%90%86%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="技术理解卡：MCP1. 一句话定义MCP，Model Context Protocol，是一种让 AI Agent &#x2F; LLM 应用以标准化方式连接外部工具、数据源和上下文资源的协议。 它常用于：  AI IDE 接入代码仓库、文件系统、GitHub、数据库； 企业 Agent 接入内部知识库、业务系统、工单系统； 多工具 Agent 平台统一管理本地工具、远程工具和外部 API。  简">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/asuka.jpg">
+<meta property="article:published_time" content="2026-05-21T08:26:15.000Z">
+<meta property="article:modified_time" content="2026-05-21T08:31:49.867Z">
+<meta property="article:author" content="Zed">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/asuka.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "mcp协议理解",
+  "url": "http://example.com/2026/05/21/mcp%E5%8D%8F%E8%AE%AE%E7%90%86%E8%A7%A3/",
+  "image": "http://example.com/img/asuka.jpg",
+  "datePublished": "2026-05-21T08:26:15.000Z",
+  "dateModified": "2026-05-21T08:31:49.867Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zed",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/05/21/mcp%E5%8D%8F%E8%AE%AE%E7%90%86%E8%A7%A3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'mcp协议理解',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bkground.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">56</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bkground.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">mcp协议理解</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-images"></i><span> Picture</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tag</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">mcp协议理解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-05-21T08:26:15.000Z" title="Created 2026-05-21 16:26:15">2026-05-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-05-21T08:31:49.867Z" title="Updated 2026-05-21 16:31:49">2026-05-21</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="技术理解卡：MCP"><a href="#技术理解卡：MCP" class="headerlink" title="技术理解卡：MCP"></a>技术理解卡：MCP</h1><h2 id="1-一句话定义"><a href="#1-一句话定义" class="headerlink" title="1. 一句话定义"></a>1. 一句话定义</h2><p><strong>MCP，Model Context Protocol，是一种让 AI Agent &#x2F; LLM 应用以标准化方式连接外部工具、数据源和上下文资源的协议。</strong></p>
+<p>它常用于：</p>
+<ul>
+<li>AI IDE 接入代码仓库、文件系统、GitHub、数据库；</li>
+<li>企业 Agent 接入内部知识库、业务系统、工单系统；</li>
+<li>多工具 Agent 平台统一管理本地工具、远程工具和外部 API。</li>
+</ul>
+<p>简单说：</p>
+<blockquote>
+<p>MCP 是 Agent 连接外部世界的标准协议层。</p>
+</blockquote>
+<p>官方定位是：MCP 标准化了应用向 LLM 提供上下文的方式，并让 AI 应用可以连接不同数据源和工具。(<a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/routing?utm_source=chatgpt.com">Model Context Protocol</a>)</p>
+<hr>
+<h2 id="2-没有它之前怎么做？"><a href="#2-没有它之前怎么做？" class="headerlink" title="2. 没有它之前怎么做？"></a>2. 没有它之前怎么做？</h2><p>没有 MCP 之前，通常是每个 Agent 项目自己写工具集成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Agent Runtime</span><br><span class="line">  ├── 手写 GitHub API 调用</span><br><span class="line">  ├── 手写数据库查询工具</span><br><span class="line">  ├── 手写文件系统工具</span><br><span class="line">  ├── 手写搜索工具</span><br><span class="line">  ├── 手写 Jira / 飞书 / Notion API 适配</span><br><span class="line">  └── 手写工具 schema 注入逻辑</span><br></pre></td></tr></table></figure>
+
+<p>也就是说：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">每个 AI 应用 × 每个外部系统 = 一套单独适配代码</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<ul>
+<li>Cursor 要接 GitHub，写一套；</li>
+<li>Claude Desktop 要接 GitHub，再写一套；</li>
+<li>你自己的 Agent 要接 GitHub，又写一套；</li>
+<li>每个系统的鉴权、参数校验、返回格式、错误处理都不统一。</li>
+</ul>
+<hr>
+<h2 id="3-旧方案的核心痛点"><a href="#3-旧方案的核心痛点" class="headerlink" title="3. 旧方案的核心痛点"></a>3. 旧方案的核心痛点</h2><ul>
+<li><p>痛点 1：<strong>集成成本高</strong></p>
+<p>每个 Agent 应用都要重复对接外部系统，代码复用性差。</p>
+</li>
+<li><p>痛点 2：<strong>工具没有统一发现机制</strong></p>
+<p>以前工具通常是写死在代码里的。Agent 很难动态知道：当前有哪些工具、工具参数是什么、哪些工具可用、哪些工具不可用。</p>
+</li>
+<li><p>痛点 3：<strong>安全和权限边界混乱</strong></p>
+<p>如果每个工具都自己处理权限、鉴权、日志、审计，就容易出现工具越权、敏感数据泄露、高风险操作误执行等问题。</p>
+</li>
+</ul>
+<hr>
+<h2 id="4-它的核心抽象"><a href="#4-它的核心抽象" class="headerlink" title="4. 它的核心抽象"></a>4. 它的核心抽象</h2><ul>
+<li><p>抽象 1：<strong>Host</strong></p>
+<p>Host 是 AI 应用本体，比如 Claude Desktop、Cursor、AI IDE、你自己写的 Agent Runtime。<br>它负责管理模型调用、用户会话、上下文、权限策略和多个 MCP Client。</p>
+</li>
+<li><p>抽象 2：<strong>Client</strong></p>
+<p>Client 是 Host 内部的协议客户端。一个 MCP Client 通常连接一个 MCP Server，并维护一条隔离的会话连接。官方架构里，一个 Host 可以创建多个 Client，每个 Client 与一个 Server 建立 1:1 连接。(<a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/specification/2025-06-18/architecture?utm_source=chatgpt.com">Model Context Protocol</a>)</p>
+</li>
+<li><p>抽象 3：<strong>Server</strong></p>
+<p>Server 是能力提供方，负责暴露外部工具、资源和 Prompt 模板。比如 filesystem-server、github-server、database-server、browser-server。MCP Server 可以提供 tools、resources、prompts 等能力。(<a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/specification/2025-06-18/architecture?utm_source=chatgpt.com">Model Context Protocol</a>)</p>
+</li>
+</ul>
+<p>核心结构：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">User</span><br><span class="line">  ↓</span><br><span class="line">Host：AI 应用 / Agent Runtime</span><br><span class="line">  ↓</span><br><span class="line">MCP Client</span><br><span class="line">  ↓</span><br><span class="line">MCP Server</span><br><span class="line">  ↓</span><br><span class="line">外部系统：文件、数据库、GitHub、搜索、业务 API</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-它解决了什么问题？"><a href="#5-它解决了什么问题？" class="headerlink" title="5. 它解决了什么问题？"></a>5. 它解决了什么问题？</h2><ul>
+<li><p>解决问题 1：<strong>统一外部能力接入</strong></p>
+<p>MCP 把文件、数据库、GitHub、搜索、内部 API 等能力统一抽象成标准协议，Host 可以用统一方式连接不同 Server。</p>
+</li>
+<li><p>解决问题 2：<strong>支持动态能力发现</strong></p>
+<p>MCP Server 可以声明自己支持哪些 tools、resources、prompts。Host 不需要提前把所有工具硬编码死，而是可以连接后动态发现。</p>
+</li>
+<li><p>解决问题 3：<strong>分层隔离和权限治理</strong></p>
+<p>MCP 把 AI 应用、协议连接、外部能力提供方分开。Host 负责用户授权、上下文聚合和安全策略；Server 只暴露专门能力，不应该看到完整对话，也不应该看到其他 Server 的内容。官方架构原则也强调 Server 不应读取完整对话，跨 Server 交互应由 Host 控制。(<a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/specification/2025-06-18/architecture?utm_source=chatgpt.com">Model Context Protocol</a>)</p>
+</li>
+</ul>
+<hr>
+<h2 id="6-它引入了什么问题？"><a href="#6-它引入了什么问题？" class="headerlink" title="6. 它引入了什么问题？"></a>6. 它引入了什么问题？</h2><ul>
+<li><p>新问题 1：<strong>安全风险变大</strong></p>
+<p>MCP 让 Agent 更容易接触真实系统，例如文件、数据库、代码仓库、邮件、工单系统。能力越强，误调用、越权调用、Prompt Injection、敏感信息泄露的风险越高。</p>
+</li>
+<li><p>新问题 2：<strong>工具数量膨胀</strong></p>
+<p>一个 MCP Server 可能暴露几十个工具，多个 Server 叠加后工具数量会非常多。如果全部塞进模型上下文，会造成 token 浪费、工具选择混乱和调用准确率下降。</p>
+</li>
+<li><p>新问题 3：<strong>工程治理复杂</strong></p>
+<p>生产环境不能只“能调用 MCP Server”就结束，还要补鉴权、限流、超时、重试、熔断、审计、日志、指标、权限审批、工具结果清洗等能力。</p>
+</li>
+</ul>
+<hr>
+<h2 id="7-为什么这样设计？"><a href="#7-为什么这样设计？" class="headerlink" title="7. 为什么这样设计？"></a>7. 为什么这样设计？</h2><h3 id="为什么要有-Host？"><a href="#为什么要有-Host？" class="headerlink" title="为什么要有 Host？"></a>为什么要有 Host？</h3><p>因为 Host 是用户真正交互的 AI 应用，它最适合做全局控制：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">用户权限</span><br><span class="line">模型调用</span><br><span class="line">上下文管理</span><br><span class="line">工具选择</span><br><span class="line">安全策略</span><br><span class="line">用户确认</span><br><span class="line">结果回填</span><br></pre></td></tr></table></figure>
+
+<p>如果让 MCP Server 直接管理完整上下文和用户权限，会导致安全边界不清晰。</p>
+<p>所以 MCP 的设计是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">完整上下文留在 Host；</span><br><span class="line">Server 只拿到完成任务所需的最小上下文。</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="为什么要有-Client？"><a href="#为什么要有-Client？" class="headerlink" title="为什么要有 Client？"></a>为什么要有 Client？</h3><p>Client 是 Host 和 Server 之间的协议适配层。</p>
+<p>它负责：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">连接管理</span><br><span class="line">initialize 初始化</span><br><span class="line">协议版本协商</span><br><span class="line">capability 能力协商</span><br><span class="line">消息路由</span><br><span class="line">通知处理</span><br><span class="line">会话隔离</span><br></pre></td></tr></table></figure>
+
+<p>官方生命周期中，MCP 连接包含 Initialization、Operation、Shutdown 三个阶段；初始化阶段会进行协议版本兼容和能力协商。(<a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle?utm_source=chatgpt.com">Model Context Protocol</a>)</p>
+<hr>
+<h3 id="为什么要有-Server？"><a href="#为什么要有-Server？" class="headerlink" title="为什么要有 Server？"></a>为什么要有 Server？</h3><p>Server 的目标是把外部系统封装成 Agent 可用的能力。</p>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GitHub MCP Server：封装 GitHub API</span><br><span class="line">Filesystem MCP Server：封装文件读写</span><br><span class="line">Database MCP Server：封装数据库查询</span><br><span class="line">Browser MCP Server：封装网页浏览能力</span><br></pre></td></tr></table></figure>
+
+<p>这样外部系统只需要实现一次 MCP Server，就可以被多个 AI Host 使用。</p>
+<hr>
+<h3 id="为什么不是直接-REST-API？"><a href="#为什么不是直接-REST-API？" class="headerlink" title="为什么不是直接 REST API？"></a>为什么不是直接 REST API？</h3><p>REST API 面向普通软件系统，主要是开发者手写调用。</p>
+<p>MCP 面向 Agent，更关注：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">工具发现</span><br><span class="line">上下文资源</span><br><span class="line">Prompt 模板</span><br><span class="line">能力协商</span><br><span class="line">双向消息</span><br><span class="line">模型采样</span><br><span class="line">用户补充信息</span><br><span class="line">权限隔离</span><br></pre></td></tr></table></figure>
+
+<p>MCP 底层消息基于 JSON-RPC，并支持 stdio 和 Streamable HTTP 等传输方式。官方传输规范中，stdio 用于本地进程通信，Streamable HTTP 适合远程 Server，并可结合 SSE 做流式消息。(<a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/specification/2025-06-18/basic/transports?utm_source=chatgpt.com">Model Context Protocol</a>)</p>
+<hr>
+<h2 id="8-替代方案对比"><a href="#8-替代方案对比" class="headerlink" title="8. 替代方案对比"></a>8. 替代方案对比</h2><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>优点</th>
+<th>缺点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>手写工具函数</td>
+<td>简单、直接、可控</td>
+<td>复用差、标准化差、每个项目重复写</td>
+<td>小 Demo、工具数量少、短期项目</td>
+</tr>
+<tr>
+<td>Function Calling &#x2F; Tool Calling</td>
+<td>模型能结构化表达工具调用意图</td>
+<td>不负责工具发现、远程连接、协议通信、能力协商</td>
+<td>单个 Agent 内部调用本地函数</td>
+</tr>
+<tr>
+<td>OpenAPI &#x2F; REST API</td>
+<td>生态成熟、适合传统服务调用</td>
+<td>对 Agent 的上下文、Prompt、资源、能力协商支持弱</td>
+<td>传统后端服务、业务 API</td>
+</tr>
+<tr>
+<td>插件系统</td>
+<td>可以扩展能力</td>
+<td>各家插件标准不统一，迁移成本高</td>
+<td>特定平台生态</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>标准化、可发现、可组合、适合 Agent 工具生态</td>
+<td>引入协议复杂度和安全治理成本</td>
+<td>AI IDE、Agent 平台、企业内部工具接入</td>
+</tr>
+</tbody></table>
+<p>一句话区分：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Function Calling 解决“模型怎么表达要调用哪个工具”；</span><br><span class="line">MCP 解决“工具从哪里来、怎么发现、怎么连接、怎么隔离、怎么治理”。</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="9-适用边界"><a href="#9-适用边界" class="headerlink" title="9. 适用边界"></a>9. 适用边界</h2><h3 id="适合什么时候用？"><a href="#适合什么时候用？" class="headerlink" title="适合什么时候用？"></a>适合什么时候用？</h3><p>适合：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. Agent 需要接入多个外部工具</span><br><span class="line">2. 工具来源不固定，需要动态发现</span><br><span class="line">3. 多个 AI 应用希望复用同一批工具</span><br><span class="line">4. 企业内部有很多系统要接入 Agent</span><br><span class="line">5. 需要统一做权限、审计、安全治理</span><br><span class="line">6. 需要本地工具和远程工具混合接入</span><br></pre></td></tr></table></figure>
+
+<p>典型场景：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">AI IDE</span><br><span class="line">企业知识库 Agent</span><br><span class="line">代码审查 Agent</span><br><span class="line">数据分析 Agent</span><br><span class="line">自动化运维 Agent</span><br><span class="line">Deep Research Agent</span><br><span class="line">多工具个人助手</span><br></pre></td></tr></table></figure>
+
+<h3 id="不适合什么时候用？"><a href="#不适合什么时候用？" class="headerlink" title="不适合什么时候用？"></a>不适合什么时候用？</h3><p>不适合：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 只是写一个简单 Demo</span><br><span class="line">2. 只有 1-2 个固定本地函数</span><br><span class="line">3. 工具调用完全写死，不需要动态发现</span><br><span class="line">4. 外部系统没有复用价值</span><br><span class="line">5. 安全治理能力不足，但要接高风险系统</span><br><span class="line">6. 对延迟极其敏感，不希望引入额外协议层</span><br></pre></td></tr></table></figure>
+
+<p>例如，只是做一个天气查询 Demo，直接写 function calling 就够了，不一定需要 MCP。</p>
+<hr>
+<h2 id="10-最小实验"><a href="#10-最小实验" class="headerlink" title="10. 最小实验"></a>10. 最小实验</h2><h3 id="Happy-Path"><a href="#Happy-Path" class="headerlink" title="Happy Path"></a>Happy Path</h3><p>目标：验证 MCP 的基本工具调用链路。</p>
+<p>实验设计：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 写一个最小 MCP Server</span><br><span class="line">2. 暴露一个 add(a, b) 工具</span><br><span class="line">3. Host / Client 连接 Server</span><br><span class="line">4. 执行 initialize</span><br><span class="line">5. 调用 tools/list 获取工具列表</span><br><span class="line">6. 调用 tools/call 执行 add</span><br><span class="line">7. 返回结果 3</span><br></pre></td></tr></table></figure>
+
+<p>最小链路：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Client -&gt; Server: initialize</span><br><span class="line">Client -&gt; Server: tools/list</span><br><span class="line">Client -&gt; Server: tools/call add &#123;&quot;a&quot;:1,&quot;b&quot;:2&#125;</span><br><span class="line">Server -&gt; Client: result 3</span><br></pre></td></tr></table></figure>
+
+<p>验证点：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">连接成功</span><br><span class="line">能力发现成功</span><br><span class="line">参数校验成功</span><br><span class="line">工具执行成功</span><br><span class="line">结果返回成功</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="Failure-Path"><a href="#Failure-Path" class="headerlink" title="Failure Path"></a>Failure Path</h3><p>目标：验证 MCP Server 的错误处理。</p>
+<p>实验设计：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 调用不存在的工具</span><br><span class="line">2. 传错误参数类型</span><br><span class="line">3. 模拟工具内部异常</span><br><span class="line">4. 模拟 Server 超时</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;add&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;a&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hello&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;b&quot;</span><span class="punctuation">:</span> <span class="number">2</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>期望：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">参数校验失败</span><br><span class="line">返回结构化错误</span><br><span class="line">Host 不崩溃</span><br><span class="line">Agent 可以决定重试、换工具或向用户说明失败原因</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="Security-Path"><a href="#Security-Path" class="headerlink" title="Security Path"></a>Security Path</h3><p>目标：验证高风险工具和越权访问控制。</p>
+<p>实验设计：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 暴露 read_file 工具</span><br><span class="line">2. 只允许访问当前 workspace</span><br><span class="line">3. 尝试读取 ../secret.txt</span><br><span class="line">4. 暴露 delete_file 工具</span><br><span class="line">5. delete_file 被召回后不直接执行，而是进入 pending</span><br><span class="line">6. 用户确认后才执行</span><br></pre></td></tr></table></figure>
+
+<p>验证点：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">路径逃逸被拒绝</span><br><span class="line">高风险工具不自动执行</span><br><span class="line">工具参数展示给用户</span><br><span class="line">执行记录进入审计日志</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="11-工程落地要补什么？"><a href="#11-工程落地要补什么？" class="headerlink" title="11. 工程落地要补什么？"></a>11. 工程落地要补什么？</h2><ul>
+<li><p>日志：</p>
+<p>记录 MCP Server 连接、initialize、tools&#x2F;list、tools&#x2F;call、错误码、调用参数摘要、调用结果摘要。</p>
+</li>
+<li><p>指标：</p>
+<p>记录工具调用次数、成功率、失败率、P95&#x2F;P99 延迟、超时率、重试次数、不同 Server 健康状态。</p>
+</li>
+<li><p>鉴权：</p>
+<p>本地 stdio 要限制 workspace 和环境变量；远程 Streamable HTTP 要做 OAuth、Bearer Token、SSO、租户隔离、权限 scope。MCP 的 Streamable HTTP 传输是远程 Server 常用方式，支持 HTTP POST&#x2F;GET 和可选 SSE，因此生产环境必须认真处理认证和安全边界。(<a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/specification/2025-06-18/basic/transports?utm_source=chatgpt.com">Model Context Protocol</a>)</p>
+</li>
+<li><p>限流：</p>
+<p>按用户、租户、Server、工具维度限流，避免 Agent 循环调用或外部 API 被打爆。</p>
+</li>
+<li><p>超时：</p>
+<p>每个工具设置超时时间，例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">search_web: 10s</span><br><span class="line">query_db: 5s</span><br><span class="line">run_test: 60s</span><br><span class="line">browser_action: 15s</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重试：</p>
+<p>只对幂等、可重试的工具做重试。写操作、发邮件、支付、删除文件等非幂等操作不能盲目重试。</p>
+</li>
+<li><p>回滚：</p>
+<p>对有副作用的工具设计补偿逻辑。例如创建工单后失败，可以关闭工单；写文件前保存旧版本；数据库变更必须走事务或审批。</p>
+</li>
+<li><p>审计：</p>
+<p>记录谁在什么时间通过哪个 Agent 调用了哪个 MCP Server 的哪个工具，参数是什么，结果是什么，是否经过用户确认。</p>
+</li>
+</ul>
+<p>除此之外，生产级 MCP 还应该补：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ToolCatalog</span><br><span class="line">工具风险分级</span><br><span class="line">工具健康检查</span><br><span class="line">熔断机制</span><br><span class="line">Prompt Injection 检测</span><br><span class="line">工具结果清洗</span><br><span class="line">namespace 隔离</span><br><span class="line">token budget 控制</span><br><span class="line">工具 schema 版本管理</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="12-面试表达"><a href="#12-面试表达" class="headerlink" title="12. 面试表达"></a>12. 面试表达</h2><p>1 分钟版本：</p>
+<blockquote>
+<p>MCP 是 Model Context Protocol，本质上是 Agent 和外部工具、数据源、上下文资源之间的标准化连接协议。没有 MCP 之前，每个 Agent 项目都要自己手写 GitHub、数据库、文件系统、搜索等工具适配，集成成本高，而且工具发现、权限、安全和审计都不统一。</p>
+<p>MCP 采用 Host、Client、Server 的架构。Host 是 AI 应用本体，负责模型调用、上下文管理和安全策略；Client 是协议连接层，负责和某个 MCP Server 建立会话、做初始化和能力协商；Server 是能力提供方，暴露 tools、resources、prompts。底层通信基于 JSON-RPC，常见传输方式包括本地 stdio 和远程 Streamable HTTP。</p>
+<p>它的价值是让外部能力从“写死在 Agent 代码里”变成“可发现、可复用、可隔离、可治理的标准能力服务”。但 MCP 也会带来安全和工程治理问题，所以生产落地时不能把所有工具直接暴露给模型，而应该通过 ToolCatalog 做工具召回、权限过滤、健康检查、token budget 控制；对写文件、删数据、发消息这类高风险工具，要进入 pending 状态，用户确认后再执行，并配合日志、指标、限流、超时、审计和工具结果清洗。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Zed</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2026/05/21/mcp%E5%8D%8F%E8%AE%AE%E7%90%86%E8%A7%A3/">http://example.com/2026/05/21/mcp%E5%8D%8F%E8%AE%AE%E7%90%86%E8%A7%A3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/agent/">agent</a></div><div class="post-share"><div class="social-share" data-image="/img/asuka.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/04/10/SSE%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="SSE通信方式"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">SSE通信方式</div></div><div class="info-2"><div class="info-item-1">SSE 面试知识点总结 1. 什么是 SSESSE，全称 Server-Sent Events，是一种基于 HTTP 的服务端向客户端单向推送消息的技术。 它的核心特点是：  客户端发起一次 HTTP 请求 服务端不立即关闭连接 后续通过这个连接持续向客户端推送事件数据 客户端实时接收并处理这些数据  前端通常使用浏览器原生提供的 EventSource 来接收 SSE 消息。  2. 一句话定义面试里可以这样回答：  SSE 是一种基于 HTTP 的服务端单向流式推送技术，适合将服务端持续产生的数据实时发送给客户端，比如大模型流式输出、任务进度通知、日志推送等。   3. SSE 的本质SSE 本质上不是一个全新的复杂协议，而是：  仍然使用 HTTP 响应头通常设置为 Content-Type: text/event-stream 服务端将响应保持打开 按约定格式不断向响应流中写入事件  所以你可以把它理解成： “长连接版的 HTTP 响应流 + 事件格式约定”  4. SSE 的通信模型4.1 单向通信SSE 是 服务端 -&gt; 客户端...</div></div></div></a><a class="pagination-related" href="/2026/05/21/funcioncalling%E5%8D%8F%E8%AE%AE%E7%90%86%E8%A7%A3/" title="funcioncalling协议理解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">funcioncalling协议理解</div></div><div class="info-2"><div class="info-item-1">技术理解卡：Tools 和 Function Calling1. 一句话定义Tools 是 Agent 暴露给大模型的外部能力描述；Function Calling 是大模型根据用户问题选择某个 Tool，并生成结构化调用参数的机制。 一句话理解：  Tools 告诉模型“你能用什么能力”；Function Calling 让模型以结构化方式表达“我要调用哪个能力，以及参数是什么”。  例如： 12345用户：帮我查一下东京今天的天气模型：我需要调用 get_weather(city=&quot;东京&quot;)Runtime：真正执行 get_weather工具：返回天气结果模型：基于工具结果回答用户   2. 没有它之前怎么做？没有 Tools &#x2F; Function Calling 之前，常见做法是： 1Prompt 约定 + 模型自由文本输出 + 正则解析  例如在 prompt 里写： 12如果你需要查询天气，请输出：CALL get_weather(city=&quot;xxx&quot;)  模型可能输出： 1我需要调用...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/04/10/SSE%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="SSE通信方式"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-10</div><div class="info-item-2">SSE通信方式</div></div><div class="info-2"><div class="info-item-1">SSE 面试知识点总结 1. 什么是 SSESSE，全称 Server-Sent Events，是一种基于 HTTP 的服务端向客户端单向推送消息的技术。 它的核心特点是：  客户端发起一次 HTTP 请求 服务端不立即关闭连接 后续通过这个连接持续向客户端推送事件数据 客户端实时接收并处理这些数据  前端通常使用浏览器原生提供的 EventSource 来接收 SSE 消息。  2. 一句话定义面试里可以这样回答：  SSE 是一种基于 HTTP 的服务端单向流式推送技术，适合将服务端持续产生的数据实时发送给客户端，比如大模型流式输出、任务进度通知、日志推送等。   3. SSE 的本质SSE 本质上不是一个全新的复杂协议，而是：  仍然使用 HTTP 响应头通常设置为 Content-Type: text/event-stream 服务端将响应保持打开 按约定格式不断向响应流中写入事件  所以你可以把它理解成： “长连接版的 HTTP 响应流 + 事件格式约定”  4. SSE 的通信模型4.1 单向通信SSE 是 服务端 -&gt; 客户端...</div></div></div></a><a class="pagination-related" href="/2026/05/21/funcioncalling%E5%8D%8F%E8%AE%AE%E7%90%86%E8%A7%A3/" title="funcioncalling协议理解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-21</div><div class="info-item-2">funcioncalling协议理解</div></div><div class="info-2"><div class="info-item-1">技术理解卡：Tools 和 Function Calling1. 一句话定义Tools 是 Agent 暴露给大模型的外部能力描述；Function Calling 是大模型根据用户问题选择某个 Tool，并生成结构化调用参数的机制。 一句话理解：  Tools 告诉模型“你能用什么能力”；Function Calling 让模型以结构化方式表达“我要调用哪个能力，以及参数是什么”。  例如： 12345用户：帮我查一下东京今天的天气模型：我需要调用 get_weather(city=&quot;东京&quot;)Runtime：真正执行 get_weather工具：返回天气结果模型：基于工具结果回答用户   2. 没有它之前怎么做？没有 Tools &#x2F; Function Calling 之前，常见做法是： 1Prompt 约定 + 模型自由文本输出 + 正则解析  例如在 prompt 里写： 12如果你需要查询天气，请输出：CALL get_weather(city=&quot;xxx&quot;)  模型可能输出： 1我需要调用...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/asuka.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zed</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">56</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ze-d"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%90%86%E8%A7%A3%E5%8D%A1%EF%BC%9AMCP"><span class="toc-number">1.</span> <span class="toc-text">技术理解卡：MCP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%80%E5%8F%A5%E8%AF%9D%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.</span> <span class="toc-text">1. 一句话定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%B2%A1%E6%9C%89%E5%AE%83%E4%B9%8B%E5%89%8D%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">2. 没有它之前怎么做？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%97%A7%E6%96%B9%E6%A1%88%E7%9A%84%E6%A0%B8%E5%BF%83%E7%97%9B%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">3. 旧方案的核心痛点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AE%83%E7%9A%84%E6%A0%B8%E5%BF%83%E6%8A%BD%E8%B1%A1"><span class="toc-number">1.4.</span> <span class="toc-text">4. 它的核心抽象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%AE%83%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">1.5.</span> <span class="toc-text">5. 它解决了什么问题？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%AE%83%E5%BC%95%E5%85%A5%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">1.6.</span> <span class="toc-text">6. 它引入了什么问题？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%9F"><span class="toc-number">1.7.</span> <span class="toc-text">7. 为什么这样设计？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89-Host%EF%BC%9F"><span class="toc-number">1.7.1.</span> <span class="toc-text">为什么要有 Host？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89-Client%EF%BC%9F"><span class="toc-number">1.7.2.</span> <span class="toc-text">为什么要有 Client？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89-Server%EF%BC%9F"><span class="toc-number">1.7.3.</span> <span class="toc-text">为什么要有 Server？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E6%98%AF%E7%9B%B4%E6%8E%A5-REST-API%EF%BC%9F"><span class="toc-number">1.7.4.</span> <span class="toc-text">为什么不是直接 REST API？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E6%9B%BF%E4%BB%A3%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94"><span class="toc-number">1.8.</span> <span class="toc-text">8. 替代方案对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E9%80%82%E7%94%A8%E8%BE%B9%E7%95%8C"><span class="toc-number">1.9.</span> <span class="toc-text">9. 适用边界</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E7%94%A8%EF%BC%9F"><span class="toc-number">1.9.1.</span> <span class="toc-text">适合什么时候用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E7%94%A8%EF%BC%9F"><span class="toc-number">1.9.2.</span> <span class="toc-text">不适合什么时候用？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E6%9C%80%E5%B0%8F%E5%AE%9E%E9%AA%8C"><span class="toc-number">1.10.</span> <span class="toc-text">10. 最小实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Happy-Path"><span class="toc-number">1.10.1.</span> <span class="toc-text">Happy Path</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Failure-Path"><span class="toc-number">1.10.2.</span> <span class="toc-text">Failure Path</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Security-Path"><span class="toc-number">1.10.3.</span> <span class="toc-text">Security Path</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E5%B7%A5%E7%A8%8B%E8%90%BD%E5%9C%B0%E8%A6%81%E8%A1%A5%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.11.</span> <span class="toc-text">11. 工程落地要补什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-%E9%9D%A2%E8%AF%95%E8%A1%A8%E8%BE%BE"><span class="toc-number">1.12.</span> <span class="toc-text">12. 面试表达</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/21/funcioncalling%E5%8D%8F%E8%AE%AE%E7%90%86%E8%A7%A3/" title="funcioncalling协议理解">funcioncalling协议理解</a><time datetime="2026-05-21T09:15:14.000Z" title="Created 2026-05-21 17:15:14">2026-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/21/mcp%E5%8D%8F%E8%AE%AE%E7%90%86%E8%A7%A3/" title="mcp协议理解">mcp协议理解</a><time datetime="2026-05-21T08:26:15.000Z" title="Created 2026-05-21 16:26:15">2026-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/04/10/SSE%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="SSE通信方式">SSE通信方式</a><time datetime="2026-04-10T12:33:07.000Z" title="Created 2026-04-10 20:33:07">2026-04-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/27/ACM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A8%A1%E6%9D%BF/" title="ACM输入输出模板">ACM输入输出模板</a><time datetime="2026-03-27T09:18:41.000Z" title="Created 2026-03-27 17:18:41">2026-03-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/12/%E7%BA%BF%E7%A8%8B%E6%89%A7%E8%A1%8C%E7%8E%B0%E5%9C%BA/" title="线程执行现场">线程执行现场</a><time datetime="2026-03-12T08:01:59.000Z" title="Created 2026-03-12 16:01:59">2026-03-12</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bkground.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Zed</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
