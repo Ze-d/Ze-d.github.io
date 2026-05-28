@@ -1,7 +1,7 @@
 ---
 title: Redis和Mysql常见应用场景
 date: 2025-12-12 16:44:20
-tags: [Database,Redis Mysql]
+tags: [Database,Redis,Mysql]
 ---
 
 先把结论说在前面一句话里：

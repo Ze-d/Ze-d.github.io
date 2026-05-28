@@ -1,5 +1,5 @@
 ---
-title: redis基本数据类型
+title: Redis基本数据类型
 date: 2025-12-13 15:16:50
 tags: Redis
 ---
